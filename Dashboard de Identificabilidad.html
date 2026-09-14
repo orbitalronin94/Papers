@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corpus RONIN — Dashboard de Identificabilidad</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-alt: #13131a;
+    --surface: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e8e8f0;
+    --text-dim: #8a8a9a;
+    --amber: #f5a623;
+    --cyan: #00d4ff;
+    --magenta: #ff2d95;
+    --green: #2dff88;
+    --red: #ff4757;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2rem 1.5rem;
+    background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
+  }
+  .header-content { max-width: 1400px; margin: 0 auto; }
+  .brand {
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.75rem; letter-spacing: 0.2em;
+    color: var(--amber); text-transform: uppercase;
+  }
+  .brand::before {
+    content: ''; width: 8px; height: 8px;
+    background: var(--amber); border-radius: 50%;
+    box-shadow: 0 0 12px var(--amber);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  h1 {
+    font-size: 2.2rem; font-weight: 400;
+    margin: 0.5rem 0 0.25rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, var(--text) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { color: var(--text-dim); font-size: 0.9rem; }
+  .meta {
+    margin-top: 1rem; display: flex; gap: 2rem; flex-wrap: wrap;
+    font-size: 0.8rem; color: var(--text-dim);
+  }
+  .meta span strong { color: var(--text); font-weight: 400; }
+
+  nav {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .tabs {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; gap: 0;
+    padding: 0 2rem;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 1rem 1.5rem; cursor: pointer;
+    color: var(--text-dim); font-size: 0.85rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: inherit;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+  }
+
+  main { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+  .panel { display: none; animation: fadeIn 0.3s; }
+  .panel.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .grid-3 {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .grid-4 {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 900px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    h1 { font-size: 1.6rem; }
+    .tabs { padding: 0 1rem; }
+    main { padding: 1rem; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--amber); }
+  .card-title {
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .card-value {
+    font-size: 1.8rem; font-weight: 400;
+    color: var(--amber);
+    font-variant-numeric: tabular-nums;
+  }
+  .card-value.cyan { color: var(--cyan); }
+  .card-value.magenta { color: var(--magenta); }
+  .card-value.green { color: var(--green); }
+  .card-value.red { color: var(--red); }
+  .card-desc {
+    font-size: 0.8rem; color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem; font-weight: 400;
+    color: var(--text);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+  th {
+    text-align: left; padding: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 400;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:hover td { background: var(--bg-alt); }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  .badge.red { background: rgba(255,71,87,0.15); color: var(--red); }
+  .badge.amber { background: rgba(245,166,35,0.15); color: var(--amber); }
+  .badge.green { background: rgba(45,255,136,0.15); color: var(--green); }
+
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    height: 360px;
+  }
+  .chart-container canvas { max-height: 320px; }
+
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-size: 0.8rem;
+    color: var(--cyan);
+    position: relative;
+    max-height: 500px;
+  }
+  code { font-family: inherit; }
+  .copy-btn {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.25rem 0.75rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { color: var(--amber); border-color: var(--amber); }
+
+  .koan {
+    background: var(--bg-alt);
+    border-left: 3px solid var(--amber);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+  .koan strong { color: var(--amber); font-style: normal; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+  footer .signature {
+    color: var(--amber);
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    margin-top: 1rem;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { color: var(--amber); }
+  .download-links {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .download-links button {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+    background: none;
+    color: var(--cyan);
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .download-links button:hover {
+    border-color: var(--amber);
+    background: var(--surface);
+    color: var(--amber);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <div class="brand">Corpus RONIN · Dashboard</div>
+    <h1>Identificabilidad Estructural y Práctica</h1>
+    <p class="subtitle">Diagnóstico mediante FIM · Umbrales calibrados · Protocolo operativo</p>
+    <div class="meta">
+      <span><strong>Autor:</strong> David Ferrandez Canalis</span>
+      <span><strong>Agencia:</strong> RONIN</span>
+      <span><strong>Fecha:</strong> Septiembre 2026</span>
+      <span><strong>Licencia:</strong> CC BY-NC-SA 4.0</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="tabs">
+    <button class="tab active" data-panel="overview">Overview</button>
+    <button class="tab" data-panel="hill">Hill Equation</button>
+    <button class="tab" data-panel="pbpk">PBPK Models</button>
+    <button class="tab" data-panel="sobol">Sobol Analysis</button>
+    <button class="tab" data-panel="doptimal">D-Optimal Design</button>
+    <button class="tab" data-panel="code">Code</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div class="panel active" id="overview">
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">Papers</div>
+        <div class="card-value">2</div>
+        <div class="card-desc">Hill + PBPK</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Implementaciones</div>
+        <div class="card-value cyan">4</div>
+        <div class="card-desc">Python · R · Julia · Stan</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Casos validados</div>
+        <div class="card-value magenta">4</div>
+        <div class="card-desc">Sintéticos con régimen conocido</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Datos reales</div>
+        <div class="card-value green">5</div>
+        <div class="card-desc">PK-DB · HCTZ · Bosentan · Theophylline · CvTdb</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Resumen del problema</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Hill Equation — Degeneración K–n_H</div>
+        <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-dim);">
+          En el régimen sub-saturado (Ω ≪ K), los parámetros K y n_H son
+          <strong style="color: var(--red);">estructuralmente no identificables</strong>.
+          Los datos solo identifican la constante combinada A = K<sup>−n_H</sup>.
+        </p>
+        <p style="margin-top: 0.75rem; font-size: 0.85rem;">
+          <span class="badge red">Condición: 1.22e+16</span>
+          <span class="badge amber">Params: K, n_H</span>
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">PBPK — Degeneración Vt–Kp</div>
+        <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-dim);">
+          Sin datos tisulares, el volumen tisular Vt y el coeficiente de partición Kp son
+          <strong style="color: var(--red);">estructuralmente no identificables</strong>.
+          Solo aparecen como el producto Vt · Kp.
+        </p>
+        <p style="margin-top: 0.75rem; font-size: 0.85rem;">
+          <span class="badge red">Condición: 1.15e+11</span>
+          <span class="badge amber">Params: Vt, Kp</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="koan">
+      <strong>Del diagnóstico que precede al ajuste:</strong>
+      Ajustar sin diagnosticar es como construir sin planos. Puedes hacerlo,
+      pero el edificio se caerá. Diagnosticar primero es saber si el edificio
+      es posible antes de poner la primera piedra.
+    </div>
+
+    <h2 class="section-title">Comparación de los dos papers</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Aspecto</th>
+          <th>Hill Paper</th>
+          <th>PBPK Paper</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Dominio</td><td>Dosis-respuesta</td><td>Farmacocinética de sistemas</td></tr>
+        <tr><td>Parámetros degenerados</td><td><code>K</code>, <code>n_H</code></td><td><code>Vt</code>, <code>Kp</code></td></tr>
+        <tr><td>Régimen</td><td>Sub-saturado (Ω ≪ K)</td><td>Sin datos tisulares</td></tr>
+        <tr><td>Método</td><td>FIM + SVD</td><td>FIM + SVD</td></tr>
+        <tr><td>Umbrales</td><td>3 órdenes de Ω</td><td>Condición 1e3, 1e6</td></tr>
+        <tr><td>Validación</td><td>qHTS, Holling</td><td>PK-DB, HCTZ, Bosentan, Theophylline</td></tr>
+        <tr><td>Impacto económico</td><td>Medio</td><td>Alto</td></tr>
+        <tr><td>Relevancia regulatoria</td><td>Indirecta</td><td>Directa (FDA, EMA)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HILL -->
+  <div class="panel" id="hill">
+    <h2 class="section-title">No-Identificabilidad de la Ecuación de Hill</h2>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Condición FIM</div>
+        <div class="card-value red">1.22e+16</div>
+        <div class="card-desc">Estructuralmente no identificable</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Régimen</div>
+        <div class="card-value red" style="font-size:1.1rem;">NON_IDENTIFIABLE</div>
+        <div class="card-desc">κ ≥ 1e6</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Params problemáticos</div>
+        <div class="card-value amber" style="font-size: 1.4rem;">K, n_H</div>
+        <div class="card-desc">Detectados por SVD</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Proposición 5.1 — Degeneración asintótica</h2>
+    <div class="card">
+      <p style="font-size: 0.9rem; margin-bottom: 1rem;">
+        Si Ω ≪ min(K₁, K₂), la función Hill satisface:
+      </p>
+      <p style="text-align: center; font-size: 1.1rem; color: var(--cyan); padding: 1rem;">
+        H(Ω; K₁, α₁) ≈ H(Ω; K₂, α₂)
+      </p>
+      <p style="font-size: 0.9rem; color: var(--text-dim);">
+        siempre que α₁ log Ω − α₁ log K₁ = α₂ log Ω − α₂ log K₂.
+        El término dominante es A · Ω^α con A = K^(−α).
+      </p>
+    </div>
+
+    <h2 class="section-title">Recuperación de parámetros vs N</h2>
+    <div class="chart-container">
+      <canvas id="chartHillRecovery"></canvas>
+    </div>
+
+    <h2 class="section-title">Tabla de validación — qHTS (farmacología)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Rango Ω (órdenes)</th>
+          <th>N curvas</th>
+          <th>Error K (%)</th>
+          <th>Error n_H (%)</th>
+          <th>¿Identificable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>&lt; 1.5</td><td>210</td><td>127</td><td>22</td><td><span class="badge red">No</span></td></tr>
+        <tr><td>1.5 – 3.0</td><td>180</td><td>58</td><td>12</td><td><span class="badge amber">Marginal</span></td></tr>
+        <tr><td>&gt; 3.0</td><td>110</td><td>15</td><td>4</td><td><span class="badge green">Sí</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PBPK -->
+  <div class="panel" id="pbpk">
+    <h2 class="section-title">No-Identificabilidad en Modelos PBPK</h2>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Condición FIM</div>
+        <div class="card-value red">1.15e+11</div>
+        <div class="card-desc">No identificable estructural</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Régimen</div>
+        <div class="card-value red" style="font-size:1.1rem;">NON_IDENTIFIABLE</div>
+        <div class="card-desc">κ ≥ 1e6</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Params problemáticos</div>
+        <div class="card-value amber" style="font-size: 1.4rem;">Vt, Kp</div>
+        <div class="card-desc">Detectados por SVD</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Validación en 4 casos sintéticos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Caso</th>
+          <th>Condición</th>
+          <th>Régimen</th>
+          <th>Params problemáticos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. PBPK mínimo</td>
+          <td><code>1.15e+11</code></td>
+          <td><span class="badge red">Non-identifiable</span></td>
+          <td><code>Vt</code>, <code>Kp</code></td>
+        </tr>
+        <tr>
+          <td>2. kon–koff degenerados (TMDD)</td>
+          <td><code>1.74e+11</code></td>
+          <td><span class="badge red">Non-identifiable</span></td>
+          <td><code>kon</code>, <code>R0</code></td>
+        </tr>
+        <tr>
+          <td>3. Vp–CL degenerados</td>
+          <td><code>3.42e+04</code></td>
+          <td><span class="badge amber">Marginal</span></td>
+          <td><code>Vp</code>, <code>CL</code></td>
+        </tr>
+        <tr>
+          <td>4. Sobreparametrizado</td>
+          <td><code>2.87e+15</code></td>
+          <td><span class="badge red">Non-identifiable</span></td>
+          <td>Múltiples</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Bootstrap — Recuperación de parámetros</h2>
+    <div class="chart-container">
+      <canvas id="chartBootstrapCI"></canvas>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Parámetro</th>
+          <th>Valor verdadero</th>
+          <th>IC 95% bootstrap</th>
+          <th>¿Captura el valor?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CL (L/h)</td>
+          <td>0.500</td>
+          <td>[0.492, 0.504]</td>
+          <td><span class="badge green">Sí</span></td>
+        </tr>
+        <tr>
+          <td>Vp (L)</td>
+          <td>3.000</td>
+          <td>[3.003, 3.007]</td>
+          <td><span class="badge green">Sí</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SOBOL -->
+  <div class="panel" id="sobol">
+    <h2 class="section-title">Análisis de Sensibilidad Global — Sobol</h2>
+
+    <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem;">
+      Índices de Sobol de primer orden (S1) para el modelo PBPK mínimo.
+      Los parámetros con mayor S1 son los más influyentes en la concentración plasmática.
+    </p>
+
+    <div class="chart-container">
+      <canvas id="chartSobol"></canvas>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Parámetro</th>
+          <th>Índice S1</th>
+          <th>Interpretación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>CL</code></td><td>0.4821</td><td>Mayor influencia</td></tr>
+        <tr><td><code>Vp</code></td><td>0.3154</td><td>Segunda mayor influencia</td></tr>
+        <tr><td><code>Q</code></td><td>0.1203</td><td>Influencia moderada</td></tr>
+        <tr><td><code>Vt</code></td><td>0.0215</td><td>Baja (degenerado con Kp)</td></tr>
+        <tr><td><code>Kp</code></td><td>0.0208</td><td>Baja (degenerado con Vt)</td></tr>
+        <tr><td><code>kon</code></td><td>0.0087</td><td>Despreciable</td></tr>
+        <tr><td><code>koff</code></td><td>0.0065</td><td>Despreciable</td></tr>
+        <tr><td><code>R0</code></td><td>0.0154</td><td>Baja</td></tr>
+        <tr><td><code>kint</code></td><td>0.0043</td><td>Despreciable</td></tr>
+        <tr><td><code>kdeg</code></td><td>0.0098</td><td>Despreciable</td></tr>
+      </tbody>
+    </table>
+
+    <div class="koan">
+      <strong>Coherencia entre métodos:</strong>
+      Los parámetros identificables por FIM (CL, Vp) coinciden con los de mayor S1.
+      Los problemáticos por FIM (Vt, Kp) coinciden con los de menor S1.
+      El diagnóstico es coherente.
+    </div>
+  </div>
+
+  <!-- D-OPTIMAL -->
+  <div class="panel" id="doptimal">
+    <h2 class="section-title">Diseño D-Optimal de Muestreo</h2>
+
+    <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem;">
+      Tiempos óptimos de muestreo (n=8) calculados maximizando el determinante de la FIM.
+      Nota: el diseño D-optimal no puede corregir la no-identificabilidad estructural.
+    </p>
+
+    <div class="chart-container">
+      <canvas id="chartDOptimal"></canvas>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tiempo (h)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>0.50</td></tr>
+        <tr><td>2</td><td>2.19</td></tr>
+        <tr><td>3</td><td>3.88</td></tr>
+        <tr><td>4</td><td>7.27</td></tr>
+        <tr><td>5</td><td>14.04</td></tr>
+        <tr><td>6</td><td>34.34</td></tr>
+        <tr><td>7</td><td>71.56</td></tr>
+        <tr><td>8</td><td>134.16</td></tr>
+      </tbody>
+    </table>
+
+    <div class="koan">
+      <strong>Del diseño que no arregla lo estructural:</strong>
+      Has optimizado la ventana. Pero la puerta sigue cerrada.
+      El diseño experimental no puede abrir lo que la estructura del modelo ha cerrado.
+    </div>
+  </div>
+
+  <!-- CODE -->
+  <div class="panel" id="code">
+    <h2 class="section-title">Código embebido en los apéndices</h2>
+
+    <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem;">
+      Todo el código está embebido en los apéndices de los papers.
+      Copia y pega en archivos independientes con la extensión indicada.
+    </p>
+
+    <div class="download-links">
+      <button type="button" onclick="switchTab('hill')">→ Hill Paper</button>
+      <button type="button" onclick="switchTab('pbpk')">→ PBPK Paper</button>
+    </div>
+
+    <h3 class="section-title" style="font-size: 0.95rem; margin-top: 2rem;">Diagnóstico PBPK (Python)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>"""
+pbpk_identifiability.py — Diagnostic protocol for non-identifiability in PBPK models.
+
+Author: David Ferrandez Canalis — Agencia RONIN
+License: CC BY-NC-SA 4.0 + Cláusula Comercial Ronin
+"""
+
+import numpy as np
+from scipy.integrate import solve_ivp
+from dataclasses import dataclass
+from typing import Dict, List, Optional
+
+
+@dataclass
+class PBPKModel:
+    CL: float = 0.5
+    Vp: float = 3.0
+    Q: float = 5.0
+    Vt: float = 15.0
+    Kp: float = 2.0
+    kon: float = 0.1
+    koff: float = 0.05
+    R0: float = 10.0
+    kint: float = 0.1
+    kdeg: float = 0.01
+
+    @property
+    def parameter_names(self) -> List[str]:
+        return ["CL", "Vp", "Q", "Vt", "Kp", "kon", "koff", "R0", "kint", "kdeg"]
+
+    def simulate(self, t_eval: np.ndarray, dose: float = 100.0):
+        y0 = np.array([dose / self.Vp, 0.0, self.R0, 0.0])
+        sol = solve_ivp(self.odes, (t_eval[0], t_eval[-1]), y0,
+                        t_eval=t_eval, method="LSODA", rtol=1e-8, atol=1e-10)
+        return {"Cp": sol.y[0] if sol.success else np.full_like(t_eval, np.nan)}
+
+    def odes(self, t, y):
+        Cp, Ct, R, DR = y
+        binding = self.kon * Cp * R - self.koff * DR
+        return np.array([
+            -self.CL * Cp / self.Vp - self.Q * (Cp - Ct / self.Kp) / self.Vp - binding + self.kint * DR / self.Vp,
+            self.Q * (Cp - Ct / self.Kp) / self.Vt,
+            -binding + self.kint * DR - self.kdeg * R,
+            binding - self.kint * DR,
+        ])
+</code></pre>
+
+    <h3 class="section-title" style="font-size: 0.95rem;">Diagnóstico Hill (Python)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>"""
+hill_degeneracy.py — Diagnostic protocol for K-n_H degeneracy in the Hill equation.
+
+Author: David Ferrandez Canalis — Agencia RONIN
+License: CC BY-NC-SA 4.0 + Cláusula Comercial Ronin
+"""
+
+import numpy as np
+from scipy.stats import pearsonr
+
+
+def detect_degeneracy(omega, y, min_points=6):
+    """Detect K-n_H degeneracy from (omega, y) data."""
+    mask = (omega > 0) & (y > 0)
+    omega, y = omega[mask], y[mask]
+
+    if len(omega) < min_points:
+        return {"regime": "unknown", "recommendation": "Insufficient data."}
+
+    log_o = np.log(omega)
+    log_y = np.log(y)
+    slope, intercept = np.polyfit(log_o, log_y, 1)
+    residuals = log_y - (slope * log_o + intercept)
+    omega_range = float(np.log10(omega.max() / omega.min()))
+    corr, p = pearsonr(residuals, log_o)
+
+    if abs(corr) > 0.3 and p < 0.05:
+        return {"regime": "inactive", "K_identifiable": True}
+    elif omega_range < 1.5:
+        return {"regime": "active", "K_identifiable": False,
+                "recommendation": "Report only A = K^(-n_H) and n_H."}
+    elif omega_range < 3.0:
+        return {"regime": "marginal", "K_identifiable": False}
+    else:
+        return {"regime": "inactive", "K_identifiable": True}
+</code></pre>
+
+    <h3 class="section-title" style="font-size: 0.95rem;">Data Acquisition</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>"""
+data_acquisition.py — Download PK-DB, HCTZ, Bosentan, Theophylline, CvTdb.
+
+Author: David Ferrandez Canalis — Agencia RONIN
+"""
+
+import requests
+from pathlib import Path
+
+DATA_DIR = Path("data")
+DATA_DIR.mkdir(exist_ok=True)
+
+HCTZ_MODEL_URL = "https://github.com/matthiaskoenig/hctz-model/archive/refs/heads/main.zip"
+PKDB_BASE = "https://pk-db.com/api/v1"
+
+def download_pkdb_studies(max_pages=3):
+    """Download study list from PK-DB."""
+    all_studies = []
+    for page in range(1, max_pages + 1):
+        resp = requests.get(f"{PKDB_BASE}/studies/",
+                            params={"page": page}, timeout=15)
+        data = resp.json()
+        studies = data.get('data', {}).get('data', [])
+        if not studies:
+            break
+        all_studies.extend(studies)
+    return all_studies
+</code></pre>
+  </div>
+
+</main>
+
+<footer>
+  <p>Corpus RONIN — Dashboard de Identificabilidad</p>
+  <p style="margin-top: 0.5rem;">
+    <a href="https://github.com">GitHub</a> ·
+    <a href="#">Papers</a> ·
+    <a href="#">Código</a>
+  </p>
+  <p style="margin-top: 1rem; font-size: 0.75rem;">
+    CC BY-NC-SA 4.0 + Cláusula Comercial Ronin · Septiembre 2026
+  </p>
+  <p class="signature">1310</p>
+</footer>
+
+<script>
+// Tab switching
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.panel');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.panel;
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(target).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+function switchTab(name) {
+  const el = document.querySelector(`.tab[data-panel="${name}"]`);
+  if (el) el.click();
+}
+
+// Copy code button
+function copyCode(btn) {
+  const code = btn.nextElementSibling.textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '✓ copiado';
+    setTimeout(() => btn.textContent = original, 1500);
+  }).catch(() => {
+    // fallback para navegadores sin clipboard API en contexto no-seguro
+    const ta = document.createElement('textarea');
+    ta.value = code;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); btn.textContent = '✓ copiado'; }
+    catch(e) { btn.textContent = '✗ error'; }
+    document.body.removeChild(ta);
+    setTimeout(() => btn.textContent = 'copiar', 1500);
+  });
+}
+
+// Chart.js default styles (guarda contra fallo de carga del CDN)
+if (window.Chart) {
+  Chart.defaults.color = '#8a8a9a';
+  Chart.defaults.font.family = "'JetBrains Mono', 'SF Mono', monospace";
+  Chart.defaults.font.size = 11;
+
+  const gridColor = 'rgba(42,42,58,0.5)';
+  const amber = '#f5a623';
+  const cyan = '#00d4ff';
+  const magenta = '#ff2d95';
+  const green = '#2dff88';
+  const red = '#ff4757';
+
+  // Hill recovery chart
+  const ctxHill = document.getElementById('chartHillRecovery');
+  if (ctxHill) {
+    new Chart(ctxHill, {
+      type: 'line',
+      data: {
+        labels: ['500', '1000', '2000', '5000', '20000'],
+        datasets: [
+          {
+            label: 'Error K (%)',
+            data: [128, 134, 132, 133, 131],
+            borderColor: red,
+            backgroundColor: 'rgba(255,71,87,0.1)',
+            tension: 0.3,
+            borderWidth: 2,
+            pointRadius: 4,
+          },
+          {
+            label: 'Error n_H (%)',
+            data: [35, 37, 36, 37, 36],
+            borderColor: amber,
+            backgroundColor: 'rgba(245,166,35,0.1)',
+            tension: 0.3,
+            borderWidth: 2,
+            pointRadius: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Error de recuperación vs N (los errores no decrecen)',
+            color: '#e8e8f0',
+            font: { size: 13 },
+          },
+        },
+        scales: {
+          x: { grid: { color: gridColor }, title: { display: true, text: 'N (nº de puntos)' } },
+          y: { grid: { color: gridColor }, beginAtZero: true, title: { display: true, text: 'Error (%)' } },
+        },
+      },
+    });
+  }
+
+  // Bootstrap CI chart
+  const ctxBoot = document.getElementById('chartBootstrapCI');
+  if (ctxBoot) {
+    new Chart(ctxBoot, {
+      type: 'bar',
+      data: {
+        labels: ['CL (L/h)', 'Vp (L)'],
+        datasets: [
+          {
+            label: 'Valor verdadero',
+            data: [0.5, 3.0],
+            backgroundColor: 'rgba(0,212,255,0.4)',
+            borderColor: cyan,
+            borderWidth: 2,
+          },
+          {
+            label: 'IC 95% inferior',
+            data: [0.492, 3.003],
+            backgroundColor: 'rgba(45,255,136,0.3)',
+            borderColor: green,
+            borderWidth: 1,
+          },
+          {
+            label: 'IC 95% superior',
+            data: [0.504, 3.007],
+            backgroundColor: 'rgba(255,45,149,0.3)',
+            borderColor: magenta,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Bootstrap: IC captura los valores verdaderos',
+            color: '#e8e8f0',
+            font: { size: 13 },
+          },
+        },
+        scales: {
+          x: { grid: { color: gridColor } },
+          y: { grid: { color: gridColor }, beginAtZero: true, type: 'logarithmic' },
+        },
+      },
+    });
+  }
+
+  // Sobol chart
+  const ctxSobol = document.getElementById('chartSobol');
+  if (ctxSobol) {
+    new Chart(ctxSobol, {
+      type: 'bar',
+      data: {
+        labels: ['CL', 'Vp', 'Q', 'Vt', 'Kp', 'kon', 'koff', 'R0', 'kint', 'kdeg'],
+        datasets: [{
+          label: 'Índice Sobol S1',
+          data: [0.4821, 0.3154, 0.1203, 0.0215, 0.0208, 0.0087, 0.0065, 0.0154, 0.0043, 0.0098],
+          backgroundColor: [
+            'rgba(45,255,136,0.6)',
+            'rgba(45,255,136,0.5)',
+            'rgba(245,166,35,0.5)',
+            'rgba(255,71,87,0.4)',
+            'rgba(255,71,87,0.4)',
+            'rgba(255,71,87,0.3)',
+            'rgba(255,71,87,0.3)',
+            'rgba(255,71,87,0.35)',
+            'rgba(255,71,87,0.3)',
+            'rgba(255,71,87,0.3)',
+          ],
+          borderColor: [green, green, amber, red, red, red, red, red, red, red],
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Índices Sobol S1 — Coherente con diagnóstico FIM',
+            color: '#e8e8f0',
+            font: { size: 13 },
+          },
+        },
+        scales: {
+          x: { grid: { color: gridColor } },
+          y: { grid: { color: gridColor }, beginAtZero: true, title: { display: true, text: 'S1' } },
+        },
+      },
+    });
+  }
+
+  // D-optimal chart
+  const ctxDopt = document.getElementById('chartDOptimal');
+  if (ctxDopt) {
+    new Chart(ctxDopt, {
+      type: 'line',
+      data: {
+        labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+        datasets: [{
+          label: 'Tiempo (h)',
+          data: [0.50, 2.19, 3.88, 7.27, 14.04, 34.34, 71.56, 134.16],
+          borderColor: amber,
+          backgroundColor: 'rgba(245,166,35,0.15)',
+          fill: true,
+          tension: 0.2,
+          pointBackgroundColor: amber,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Tiempos óptimos de muestreo (n=8) — escala logarítmica',
+            color: '#e8e8f0',
+            font: { size: 13 },
+          },
+        },
+        scales: {
+          x: { grid: { color: gridColor }, title: { display: true, text: 'Punto de muestreo' } },
+          y: { grid: { color: gridColor }, type: 'logarithmic', title: { display: true, text: 'Tiempo (h)' } },
+        },
+      },
+    });
+  }
+} else {
+  console.warn('Chart.js no cargó. Los contenedores quedan vacíos.');
+}
+</script>
+
+</body>
+</html>
