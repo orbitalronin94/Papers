@@ -366,15 +366,7 @@ Investigador autodidacta. Sin afiliación institucional. Sin financiación exter
 
 ---
 
-## 🥚 Easter Egg
 
-Si has leído los dos artículos y quieres profundizar, busca el archivo `libro_v_codigo_fuente_realidad.md` en el repo. No está listado en el README. No es necesario para entender los artículos. Es la provocación final del arquitecto.
-
-*If you have read both papers and want to go deeper, look for the file `libro_v_codigo_fuente_realidad.md` in the repo. It is not listed in the README. It is not necessary to understand the papers. It is the final provocation of the architect.*
-
----
-
-**1310.**
 ```
 
 ---
