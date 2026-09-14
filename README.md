@@ -1,5 +1,5 @@
 ```markdown
-# Corpus RONIN — Artículos sobre No-Identificabilidad / RONIN Corpus — Papers on Non-Identifiability
+# Corpus RONIN — Artículos sobre No-Identificabilidad y Tratado del Método / RONIN Corpus — Papers on Non-Identifiability and Treatise on Method
 
 **Autor / Author:** David Ferrandez Canalis — Agencia RONIN
 **Fecha / Date:** Septiembre 2026 / September 2026
@@ -8,7 +8,13 @@
 
 ---
 
-## 📄 Artículos / Papers
+## 📄 Documentos / Documents
+
+Este repositorio contiene **cuatro documentos**: dos artículos técnicos que formalizan el mismo problema matemático en dominios distintos, una perspectiva epistemológica que los unifica, y un tratado de síntesis que narra el periplo completo del programa de investigación que los origina y formaliza el método que emerge de él.
+
+*This repository contains four documents: two technical papers that formalize the same mathematical problem across domains, an epistemological perspective that unifies them, and a synthesis treatise that narrates the complete journey of the research program that originates them and formalizes the method emerging from it.*
+
+---
 
 ### 1. No-Identificabilidad Estructural y Práctica en Modelos PBPK: Diagnóstico mediante Matriz de Información de Fisher, Umbrales Calibrados
 
@@ -21,6 +27,10 @@
 **Palabras clave / Keywords:** PBPK · no-identificabilidad estructural · matriz de información de Fisher · identificabilidad práctica · protocolo de diagnóstico · TMDD · mPBPK · análisis de sensibilidad global · diseño D-optimal · farmacometría
 
 **Público objetivo / Target audience:** Farmacéuticos, farmacométricos, científicos regulatorios, biólogos computacionales. / Pharmaceutical scientists, pharmacometricians, regulatory scientists, computational biologists.
+
+**Tipo / Type:** Original Research.
+
+**Categoría epistémica dominante:** A (demostración analítica de la degeneración), B (calibración de umbrales y validación empírica).
 
 ---
 
@@ -36,6 +46,10 @@
 
 **Público objetivo / Target audience:** Farmacólogos, bioquímicos, ecólogos, bioestadísticos, biólogos de sistemas. / Pharmacologists, biochemists, ecologists, biostatisticians, systems biologists.
 
+**Tipo / Type:** Original Research.
+
+**Categoría epistémica dominante:** A (demostración analítica de la degeneración), B (calibración de umbrales y validación empírica), C (implicaciones regulatorias).
+
 ---
 
 ### 3. Epistemología de la Degeneración: Cuándo un Parámetro No Es una Medición
@@ -50,66 +64,66 @@
 
 **Público objetivo / Target audience:** Farmacólogos, farmacométricos, filósofos de la ciencia, estadísticos, metodólogos. / Pharmacologists, pharmacometricians, philosophers of science, statisticians, methodologists.
 
+**Tipo / Type:** Perspective.
+
+**Categoría epistémica dominante:** A (formalización conceptual), B (inferencia desde los papers técnicos), C (propuestas para discusión).
+
+---
+
+### 4. Tratado del Periplo y del Método: De la Ambición Total a la Precisión Local
+
+**Archivo / File:** [`Tratado del Periplo y del Método.md`](Tratado%20del%20Periplo%20y%20del%20Método.md)
+
+**Resumen / Abstract:** Este tratado no reproduce el corpus que describe. El corpus PUSFRE original —diecinueve documentos, 288 reducciones, 74 teoremas, un lenguaje de programación— vive en **otro repositorio** del mismo autor. Este tratado lo narra desde fuera. Narra el periplo completo del programa de investigación: desde la ambición total del PUSFRE (junio–agosto 2026), pasando por la crisis que la autorrevisión del propio corpus identificó (agosto 2026), hasta la contracción que produjo los tres documentos anteriores (septiembre 2026). Y extrae, de esa contracción, el método que estaba latente en todas las piezas pero que nadie había escrito del todo. El método se formaliza en **7 fases operativas** (declaración categórica, diagnóstico FIM pre-ajuste, SVD, clasificación de régimen, identificación de invariantes, delimitación de dominio, reporte con matriz de confusión) y **4 principios meta-metodológicos** (diagnosticar antes que ajustar, categorizar antes que afirmar, delimitar antes que generalizar, pre-registrar antes que testear). El tratado identifica las **tres deudas** que quedan pendientes (pre-registro ejecutado, validación empírica externa, comparación con modelos alternativos) y las **tres fortalezas** que el método sí tiene (falsabilidad, honestidad estructural, delimitación operativa). Se escribe en una voz distinta a la del corpus original: no es la voz del Arquitecto que ríe, sino la voz del Cronista que mide.
+
+*This treatise does not reproduce the corpus it describes. The original PUSFRE corpus — nineteen documents, 288 reductions, 74 theorems, a programming language — lives in another repository by the same author. This treatise narrates it from the outside. It narrates the complete journey of the research program: from the total ambition of PUSFRE, through the crisis identified by the corpus's own self-review, to the contraction that produced the three previous documents. And it extracts, from that contraction, the method that was latent in all the pieces but that no one had fully written. The method is formalized in 7 operational phases and 4 meta-methodological principles. The treatise identifies the three pending debts and the three strengths of the method. It is written in a different voice: not the Architect who laughs, but the Chronicler who measures.*
+
+**Palabras clave / Keywords:** genealogía · contracción · formalización · método · diagnóstico pre-ajuste · pre-registro · matriz de confusión · PUSFRE · epistemología aplicada · programa de investigación
+
+**Público objetivo / Target audience:** Metodólogos, filósofos de la ciencia, investigadores autodidactas, cualquiera interesado en cómo un programa de investigación madura. / Methodologists, philosophers of science, self-taught researchers, anyone interested in how a research program matures.
+
+**Tipo / Type:** Tratado de síntesis / Meta-metodología.
+
+**Categoría epistémica dominante:** A (formalización lógica del método), B (inferencia desde documentos públicos), C (validación empírica pendiente).
+
+**Nota sobre el corpus original.** El corpus PUSFRE que este tratado describe no está incluido en este repositorio. Vive en otro repositorio del mismo autor. Este tratado no lo cita en extenso, no lo verifica, no lo reproduce. Lo narra desde fuera y extrae de él un método formalizado. Cualquier lector que quiera verificar las afirmaciones sobre el corpus original debe acudir a ese otro repositorio.
+
+*The PUSFRE corpus that this treatise describes is not included in this repository. It lives in another repository by the same author. This treatise does not quote it extensively, does not verify it, does not reproduce it. It narrates it from outside and extracts a formalized method. Any reader wishing to verify claims about the original corpus should consult that other repository.*
+
 ---
 
 ## 🎯 ¿Qué es esto? / What is this?
 
-Este repositorio contiene **tres artículos** que formalizan el mismo problema matemático en dominios distintos, y una **capa epistemológica** que los unifica:
+Este repositorio contiene **cuatro documentos** organizados en tres capas:
 
-> **Múltiples parámetros en un modelo no lineal pueden ser estructuralmente no identificables, lo que significa que ninguna cantidad de datos puede distinguirlos. Un parámetro reportado sin diagnóstico de identificabilidad no es una medición — es una afirmación sin fuente identificada.**
+1. **Capa técnica (Papers 1 y 2).** Dos artículos que formalizan y resuelven la no-identificabilidad en dos dominios específicos: la ecuación de Hill (régimen sub-saturado) y los modelos PBPK (sin datos tisulares). Ambos usan la misma metodología: FIM + SVD + umbrales calibrados + protocolo operativo.
 
-Los dos primeros artículos abordan la ecuación de Hill y los modelos PBPK. El tercero extrae la tesis epistemológica que subyace a ambos y la defiende como propuesta de discusión. Los tres usan la misma metodología:
+2. **Capa epistemológica (Paper 3).** Una *Perspective* que extrae la tesis que subyace a los dos papers técnicos: el diagnóstico de identificabilidad debe preceder al ajuste, no seguirlo.
 
-1. **Matriz de Información de Fisher (FIM)** para cuantificar la identificabilidad.
-2. **Descomposición SVD** para identificar parámetros problemáticos.
-3. **Umbrales calibrados** para clasificar el régimen de identificabilidad.
-4. **Protocolo operativo** (5 pasos) para diagnóstico automático.
-5. **Código completo** en Python, R, Julia y Stan, embebido en los apéndices.
+3. **Capa de síntesis (Documento 4).** Un tratado que narra el periplo completo del programa de investigación que originó los tres papers, y formaliza el método que emerge de él. El tratado hace explícito que el corpus PUSFRE original vive en otro repositorio y que este tratado no lo reproduce.
 
-*This repository contains three papers that formalize the same mathematical problem across domains, plus an epistemological layer unifying them. The first two address the Hill equation and PBPK models. The third extracts and defends the epistemological thesis underlying both.*
+La tesis que unifica los cuatro documentos:
 
----
+> **Múltiples parámetros en un modelo no lineal pueden ser estructuralmente no identificables, lo que significa que ninguna cantidad de datos puede distinguirlos. Un parámetro reportado sin diagnóstico de identificabilidad no es una medición — es una afirmación sin fuente identificada. El diagnóstico debe preceder al ajuste, no seguirlo. Y el método que formaliza esta inversión tiene tres deudas pendientes: pre-registro ejecutado, validación empírica externa, y comparación con modelos alternativos.**
 
-## 📊 Dashboard Interactivo / Interactive Dashboard
-
-**Archivo / File:** [`dashboard.html`](dashboard.html) (renombrable a `index.html` para GitHub Pages)
-
-Dashboard HTML autocontenido que visualiza los resultados de los tres artículos. Sin dependencias externas excepto Chart.js (CDN).
-
-**Secciones / Sections:**
-
-| Sección | Contenido |
-|---------|-----------|
-| **Overview** | Resumen de los papers, comparación lado a lado |
-| **Hill Equation** | Condición 1.22e+16, Proposición 5.1, tabla qHTS, chart de recuperación |
-| **PBPK Models** | Condición 1.15e+11, 4 casos sintéticos, bootstrap CI |
-| **Sobol Analysis** | Índices S1 con barras coloreadas por influencia |
-| **D-Optimal** | Chart logarítmico de tiempos óptimos de muestreo |
-| **Code** | Snippets copiables con botón "copiar" |
-
-**Uso / Usage:**
-
-- **Local:** Abrir `dashboard.html` en cualquier navegador moderno. Funciona sin conexión excepto la primera carga de Chart.js.
-- **GitHub Pages:** Renombrar a `index.html` en la raíz del repo, activar Pages en Settings → Pages.
-- **Enlace desde README:** [Ver dashboard interactivo →](dashboard.html)
-
-*Self-contained HTML dashboard visualizing results from all three papers. No external dependencies except Chart.js (CDN). Rename to `index.html` for GitHub Pages.*
+*This repository contains four documents organized in three layers: technical (Papers 1–2), epistemological (Paper 3), and synthesis (Document 4). The unifying thesis is stated above.*
 
 ---
 
 ## 🔬 Contribuciones Principales / Core Contributions
 
-| Contribución / Contribution | Hill Paper | PBPK Paper | Epistemology Paper |
-|-----------------------------|------------|------------|---------------------|
-| **Problema / Problem** | Degeneración K–n_H en régimen sub-saturado | Degeneración Vt–Kp sin datos tisulares | Cuándo un parámetro no es una medición |
-| **Formalización / Formalization** | FIM + SVD | FIM + SVD | Clase de degeneración + invariante |
-| **Umbrales / Thresholds** | 3 órdenes de Ω | Número de condición 1e3, 1e6 | Operador de diagnóstico Δ |
-| **Protocolo / Protocol** | 5 pasos | 5 pasos | Inversión del orden (diagnóstico → ajuste) |
-| **Validación / Validation** | qHTS, Holling, sintéticos | PK-DB, HCTZ, Bosentan, Theophylline | Objeciones (20) y respuestas |
-| **Implementaciones / Implementations** | Python, R, Julia, Stan | Python, R, Stan | — |
-| **Tipo / Type** | Original Research | Original Research | Perspective |
-| **Impacto económico / Economic impact** | Medio / Medium | Alto / High (regulatory) | Conceptual |
-| **Relevancia regulatoria / Regulatory relevance** | Indirecta / Indirect | Directa / Direct (FDA, EMA) | Preguntas, no prescripciones |
+| Contribución / Contribution | Hill Paper | PBPK Paper | Epistemology Paper | Treatise |
+|-----------------------------|------------|------------|---------------------|----------|
+| **Problema / Problem** | Degeneración K–n_H en régimen sub-saturado | Degeneración Vt–Kp sin datos tisulares | Cuándo un parámetro no es una medición | Cómo un programa de investigación madura |
+| **Formalización / Formalization** | FIM + SVD | FIM + SVD | Clase de degeneración + invariante | 7 fases + 4 principios |
+| **Umbrales / Thresholds** | 3 órdenes de Ω | Número de condición 1e3, 1e6 | Operador de diagnóstico Δ | Matriz de confusión |
+| **Protocolo / Protocol** | 5 pasos | 5 pasos | Inversión del orden (diagnóstico → ajuste) | Diagnosticar, categorizar, delimitar, pre-registrar |
+| **Validación / Validation** | qHTS, Holling, sintéticos | PK-DB, HCTZ, Bosentan, Theophylline | Objeciones (20) y respuestas | Análisis del corpus original |
+| **Implementaciones / Implementations** | Python, R, Julia, Stan | Python, R, Stan | — | — |
+| **Tipo / Type** | Original Research | Original Research | Perspective | Tratado de síntesis |
+| **Categoría dominante** | A + B | A + B | A + B + C | A + B + C |
+| **Impacto económico / Economic impact** | Medio / Medium | Alto / High (regulatory) | Conceptual | Metodológico |
+| **Relevancia regulatoria / Regulatory relevance** | Indirecta / Indirect | Directa / Direct (FDA, EMA) | Preguntas, no prescripciones | Marco para futuras prácticas |
 
 ---
 
@@ -122,16 +136,17 @@ La no-identificabilidad no es una curiosidad teórica. Tiene consecuencias direc
 - **En modelado PBPK:** Vt y Kp se reportan como independientes cuando solo son identificables como producto. Es matemáticamente incorrecto.
 - **En ecología:** Parámetros de respuesta funcional Holling (tasa de ataque, tiempo de manejo) reportados como independientes cuando solo su combinación es identificable.
 - **En metodología científica:** El diagnóstico de identificabilidad debería preceder al ajuste, no seguirlo. Un parámetro sin diagnóstico, sin prior, y sin justificación no es una medición.
+- **En programas de investigación autodidactas:** La maduración no viene por acumulación, sino por contracción. La ambición total no es un defecto: es una fase. Pero no es la fase final.
 
-El protocolo de diagnóstico en estos artículos te dice, en segundos, si tus parámetros son identificables.
+El protocolo de diagnóstico en los papers técnicos te dice, en segundos, si tus parámetros son identificables. El tratado te dice cómo un programa de investigación puede llegar a formular ese protocolo, y qué le falta para que sea un resultado empírico y no una propuesta.
 
-*Non-identifiability is not a theoretical curiosity. It has direct consequences in pharmacology, drug development, PBPK modeling, ecology, and scientific methodology. The diagnostic protocol in these papers tells you, in seconds, whether your parameters are identifiable.*
+*Non-identifiability has direct consequences in pharmacology, drug development, PBPK modeling, ecology, and scientific methodology. The diagnostic protocol in the technical papers tells you, in seconds, whether your parameters are identifiable. The treatise tells you how a research program can arrive at that protocol, and what it still lacks.*
 
 ---
 
 ## 💻 Código / Code
 
-Todo el código está embebido en los apéndices de los artículos. Está diseñado para ser copiado y pegado en cualquier entorno. Sin dependencias externas complejas.
+Todo el código está embebido en los apéndices de los papers técnicos. El tratado no incluye código propio porque es un documento de síntesis y formalización metodológica.
 
 **Archivos principales / Main files:**
 
@@ -143,7 +158,7 @@ Todo el código está embebido en los apéndices de los artículos. Está diseñ
 
 **Dependencias / Dependencies:** numpy, scipy, pandas, requests. Opcional: SALib, cmdstanpy, PyMC.
 
-**Reproducibilidad / Reproducibility:** Los artículos incluyen semillas, versiones y salidas esperadas. Copia el código, instala dependencias, ejecuta. Los resultados deben coincidir con las tablas de los artículos.
+**Reproducibilidad / Reproducibility:** Los artículos incluyen semillas, versiones y salidas esperadas. Copia el código, instala dependencias, ejecuta. Los resultados deben coincidir con las tablas de los artículos. El tratado no requiere ejecución; su formalización es lógica, no computacional.
 
 ---
 
@@ -203,6 +218,12 @@ El diseño D-optimal selecciona los tiempos de muestreo que maximizan el determi
 
 *D-optimal design selects sampling times that maximize the determinant of the FIM. It is the standard for experimental design in pharmacometrics. However, D-optimal design cannot correct structural non-identifiability.*
 
+### ¿Qué es el PUSFRE y por qué el tratado lo menciona? / What is PUSFRE and why does the treatise mention it?
+
+El PUSFRE (Principio Universal de Sistemas Finitos con Recursos Escasos) es el corpus original del que surgieron los tres papers técnicos y epistemológicos. Es un programa de investigación ambicioso que intentó modelar todo sistema finito con recursos escasos mediante una ecuación maestra. El corpus completo —diecinueve documentos, 288 reducciones, 74 teoremas, un lenguaje de programación— vive en **otro repositorio** del mismo autor. El tratado (Documento 4) narra el periplo del PUSFRE desde la ambición total hasta la precisión local, y extrae de él el método que este repositorio formaliza.
+
+*PUSFRE (Universal Principle of Finite Systems with Scarce Resources) is the original corpus from which the three technical and epistemological papers emerged. It is an ambitious research program that attempted to model any finite system with scarce resources through a master equation. The complete corpus — nineteen documents, 288 reductions, 74 theorems, a programming language — lives in another repository by the same author. The treatise (Document 4) narrates the journey of PUSFRE from total ambition to local precision, and extracts from it the method that this repository formalizes.*
+
 ### ¿Puedo usar este código en mi investigación? / Can I use this code in my research?
 
 Sí, bajo los términos de la licencia (CC BY-NC-SA 4.0). Para uso comercial, contacta con el autor.
@@ -211,11 +232,11 @@ Sí, bajo los términos de la licencia (CC BY-NC-SA 4.0). Para uso comercial, co
 
 ### ¿Estos artículos están revisados por pares? / Are these papers peer-reviewed?
 
-No. Son autopublicados. El código está disponible para replicación. La metodología es estándar. Los resultados son reproducibles. La revisión por pares está pendiente. El tercer artículo se presenta explícitamente como *Perspective*, no como *Original Research*.
+No. Son autopublicados. El código está disponible para replicación. La metodología es estándar. Los resultados son reproducibles. La revisión por pares está pendiente. El tercer artículo se presenta explícitamente como *Perspective*, no como *Original Research*. El cuarto es un tratado de síntesis y meta-metodología.
 
-*No. They are self-published. The code is available for replication. The methodology is standard. The results are reproducible. Peer review is pending. The third paper is explicitly presented as a Perspective, not Original Research.*
+*No. They are self-published. The code is available for replication. The methodology is standard. The results are reproducible. Peer review is pending. The third paper is explicitly presented as a Perspective, not Original Research. The fourth is a synthesis and meta-methodology treatise.*
 
-### ¿Cómo puedo citar estos artículos? / How can I cite these papers?
+### ¿Cómo puedo citar estos documentos? / How can I cite these documents?
 
 Ver la sección "Citación" más abajo. / See the "Citation" section below.
 
@@ -233,27 +254,30 @@ Para el artículo de PBPK: *CPT: Pharmacometrics & Systems Pharmacology*, *Journ
 
 Para el artículo de epistemología: *European Journal for Philosophy of Science*, *Philosophy of Science*, *Synthese*, o *Perspectives on Science* (como Perspective).
 
-*For the Hill paper: CPT, JPKPD, or PLOS ONE. For the PBPK paper: CPT, JPKPD, or Bulletin of Mathematical Biology. For the epistemology paper: EJPS, Philosophy of Science, Synthese, or Perspectives on Science (as Perspective).*
+Para el tratado: sin revista objetivo definida. Es un documento de síntesis. Podría publicarse como *Perspective* en una revista de metodología científica o como preprint independiente.
+
+*For the Hill paper: CPT, JPKPD, or PLOS ONE. For the PBPK paper: CPT, JPKPD, or Bulletin of Mathematical Biology. For the epistemology paper: EJPS, Philosophy of Science, Synthese, or Perspectives on Science (as Perspective). For the treatise: no target journal defined. It is a synthesis document. It could be published as a Perspective in a methodology journal or as an independent preprint.*
 
 ### ¿Hay artículos similares en la literatura? / Are there similar papers in the literature?
 
 Sí / Yes:
 
-- Weiss (1997): *The Hill equation revisited: uses and misuses*. Advertencia sobre el coeficiente de Hill.
-- Bonate (2011): *Pharmacokinetic-Pharmacodynamic Modeling and Simulation*. Advertencia sobre no-identificabilidad en PBPK.
+- Weiss (1997): *The Hill equation revisited: uses and misuses*.
+- Bonate (2011): *Pharmacokinetic-Pharmacodynamic Modeling and Simulation*.
 - Brown et al. (2022): Practical non-identifiability in PBPK models. *CPT: Pharmacometrics & Systems Pharmacology*.
 - Kechagia et al. (2025): Model identifiability in PBPK models. *PAGE 2025*.
 - Lavezzi et al. (2025): Structural and practical identifiability in mPBPK-TMDD models. *PAGE 2025*.
 - Gelman (2013): Bayesian inference and regularization. *The American Statistician*.
 - Parker (2020): Model evaluation, adequacy-for-purpose. *Philosophy of Science*.
+- Lakatos (1970): *Falsification and the methodology of scientific research programmes*.
 
-Los primeros cinco establecen el problema cualitativamente. Los dos papers técnicos de este repositorio lo formalizan cuantitativamente y proporcionan un protocolo operativo. El tercero extrae la tesis epistemológica y responde a veinte objeciones previsibles.
+Los primeros cinco establecen el problema cualitativamente. Los dos papers técnicos de este repositorio lo formalizan cuantitativamente. El tercero extrae la tesis epistemológica. El cuarto formaliza el método y lo sitúa en el contexto de la maduración de un programa de investigación autodidacta.
 
-*The first five establish the problem qualitatively. The two technical papers in this repository formalize it quantitatively and provide an operative protocol. The third extracts the epistemological thesis and responds to twenty foreseeable objections.*
+*The first five establish the problem qualitatively. The two technical papers formalize it quantitatively. The third extracts the epistemological thesis. The fourth formalizes the method and situates it in the context of the maturation of a self-taught research program.*
 
 ---
 
-## 📖 Cómo leer estos artículos / How to Read These Papers
+## 📖 Cómo leer estos documentos / How to Read These Documents
 
 ### Para farmacólogos y bioquímicos / For pharmacologists and biochemists
 
@@ -275,9 +299,15 @@ Empieza con la Sección 3 (Marco Teórico) de cualquiera de los dos primeros art
 
 ### Para filósofos de la ciencia / For philosophers of science
 
-Empieza directamente con el tercer artículo. Sección 1.2 (Tesis), Sección 2 (Marco epistémico), Sección 7 (Objeciones y respuestas). Los dos papers técnicos son el material empírico que motiva la tesis.
+Empieza directamente con el tercer artículo. Sección 1.2 (Tesis), Sección 2 (Marco epistémico), Sección 7 (Objeciones y respuestas). Los dos papers técnicos son el material empírico que motiva la tesis. El cuarto documento proporciona el contexto genealógico y la formalización del método.
 
-*Start directly with the third paper. Section 1.2 (Thesis), Section 2 (Epistemic framework), Section 7 (Objections and responses). The two technical papers are the empirical material motivating the thesis.*
+*Start directly with the third paper. Section 1.2 (Thesis), Section 2 (Epistemic framework), Section 7 (Objections and responses). The two technical papers are the empirical material motivating the thesis. The fourth document provides the genealogical context and the formalization of the method.*
+
+### Para metodólogos e investigadores autodidactas / For methodologists and self-taught researchers
+
+Empieza directamente con el cuarto documento. Narra el periplo completo y formaliza el método. Luego lee los tres anteriores como casos concretos del método. El cuarto documento también identifica las tres deudas pendientes y las tres fortalezas del método.
+
+*Start directly with the fourth document. It narrates the complete journey and formalizes the method. Then read the three previous ones as concrete cases of the method. The fourth document also identifies the three pending debts and the three strengths of the method.*
 
 ### Para desarrolladores / For developers
 
@@ -287,9 +317,9 @@ Empieza con los apéndices de los papers técnicos. El código es autocontenido.
 
 ### Para críticos / For critics
 
-Empieza con la Sección 7 (Limitaciones) de cualquiera de los papers técnicos, y con la Sección 7 (Objeciones y respuestas) del tercer artículo. Las objeciones previsibles están enumeradas y respondidas, incluidas las que el autor no puede resolver.
+Empieza con la Sección 7 (Limitaciones) de cualquiera de los papers técnicos, y con la Sección 7 (Objeciones y respuestas) del tercer artículo. Las objeciones previsibles están enumeradas y respondidas, incluidas las que el autor no puede resolver. El cuarto documento identifica explícitamente las deudas pendientes del método.
 
-*Start with Section 7 (Limitations) of either technical paper, and Section 7 (Objections and responses) of the third paper. Foreseeable objections are enumerated and answered, including those the author cannot resolve.*
+*Start with Section 7 (Limitations) of either technical paper, and Section 7 (Objections and responses) of the third paper. Foreseeable objections are enumerated and answered, including those the author cannot resolve. The fourth document explicitly identifies the pending debts of the method.*
 
 ---
 
@@ -310,9 +340,14 @@ Empieza con la Sección 7 (Limitaciones) de cualquiera de los papers técnicos, 
 │   Regulatorias.md                              # Artículo Hill (ES + EN)
 ├── Epistemología de la Degeneración_
 │   Cuándo un Parámetro No Es una Medición.md    # Artículo epistemología (ES + EN)
+├── Tratado del Periplo y del Método.md          # Tratado de síntesis (ES)
 ├── LICENSE
 └── (opcional) code/, data/, tests/
 ```
+
+**Nota sobre el corpus PUSFRE original / Note on the original PUSFRE corpus:** El corpus PUSFRE que el tratado describe no está incluido en este repositorio. Vive en otro repositorio del mismo autor. Consúltalo por separado si quieres verificar las afirmaciones sobre él.
+
+*The PUSFRE corpus that the treatise describes is not included in this repository. It lives in another repository by the same author. Consult it separately if you wish to verify claims about it.*
 
 ---
 
@@ -346,6 +381,12 @@ No incluye código propio. Es un trabajo de síntesis y perspectiva. Las impleme
 
 *No proprietary code. It is a synthesis and perspective piece. Implementations are in the two technical papers and in the structural identifiability literature.*
 
+### Tratado del Periplo y del Método / Treatise
+
+No incluye código propio. Es un trabajo de síntesis y formalización metodológica. La formalización del método es lógica, no computacional. La deuda pendiente (pre-registro ejecutado) requiere trabajo empírico futuro.
+
+*No proprietary code. It is a synthesis and methodological formalization piece. The formalization of the method is logical, not computational. The pending debt (executed pre-registration) requires future empirical work.*
+
 ### Dashboard interactivo / Interactive dashboard
 
 Abrir `dashboard.html` en cualquier navegador moderno. Renombrar a `index.html` para GitHub Pages.
@@ -364,7 +405,7 @@ Descarga / Downloads: 60 estudios PK-DB, modelo HCTZ, modelo Bosentan, dataset T
 
 ## 📝 Citación / Citation
 
-Si usas estos artículos en tu investigación, cita / If you use these papers in your research, please cite:
+Si usas estos documentos en tu investigación, cita / If you use these documents in your research, please cite:
 
 ```bibtex
 @article{ferrandez2026pbpk,
@@ -391,6 +432,15 @@ Si usas estos artículos en tu investigación, cita / If you use these papers in
   doi={10.1310/ronin-degeneracy-epistemology-2026},
   note={Perspective}
 }
+
+@article{ferrandez2026treatise,
+  title={Tratado del Periplo y del Método: De la Ambición Total a la Precisión Local},
+  author={Ferrandez Canalis, David},
+  journal={Agencia RONIN Preprints},
+  year={2026},
+  doi={10.1310/ronin-periplo-metodo-2026},
+  note={Tratado de síntesis / Meta-metodología}
+}
 ```
 
 ---
@@ -405,6 +455,9 @@ Este es un repositorio autopublicado. El autor agradece / This is a self-publish
 - Replicación independiente de resultados / Independent replication.
 - Feedback de expertos de dominio / Feedback from domain experts.
 - Objeciones al marco epistemológico / Objections to the epistemological framework.
+- **Ejecución del pre-registro propuesto en el tratado / Execution of the pre-registration proposed in the treatise.**
+- **Validación empírica externa del método / External empirical validation of the method.**
+- **Comparación del modelo multiplicativo con alternativas / Comparison of the multiplicative model with alternatives.**
 
 Para contribuir, abre un issue o envía un pull request. / To contribute, open an issue or submit a pull request.
 
@@ -447,11 +500,13 @@ Para uso comercial, contacta con el autor. / For commercial use, contact the aut
 - **Kechagia et al. (2025):** Model identifiability in PBPK models. *PAGE 2025*.
 - **Lavezzi et al. (2025):** Structural and practical identifiability in mPBPK-TMDD models. *PAGE 2025*.
 
-### Filosofía de la ciencia
+### Filosofía y metodología de la ciencia
 
 - **Frigg (2010):** Models and fiction. *Synthese*.
 - **Gelman (2013):** Bayesian inference and regularization. *The American Statistician*.
 - **Parker (2020):** Model evaluation, adequacy-for-purpose. *Philosophy of Science*.
+- **Lakatos (1970):** *Falsification and the methodology of scientific research programmes*.
+- **Popper (1934):** *Logik der Forschung*.
 
 ### Herramientas y datos
 
@@ -460,6 +515,12 @@ Para uso comercial, contacta con el autor. / For commercial use, contact the aut
 - **CvTdb:** Base de datos de concentración-tiempo de la EPA. [Figshare](https://doi.org/10.23645/epacomptox.29610452)
 - **StructuralIdentifiability.jl:** Identificabilidad estructural en Julia. [GitHub](https://github.com/SciML/StructuralIdentifiability.jl)
 - **GenSSI 2.0:** Identificabilidad estructural en MATLAB. [GitHub](https://github.com/genssi-developer/GenSSI)
+
+### Corpus PUSFRE original / Original PUSFRE corpus
+
+El corpus PUSFRE que el tratado describe no está incluido en este repositorio. Vive en otro repositorio del mismo autor. Consúltalo por separado.
+
+*The PUSFRE corpus that the treatise describes is not included in this repository. It lives in another repository by the same author. Consult it separately.*
 
 ---
 
@@ -480,5 +541,3 @@ Investigador autodidacta. Sin afiliación institucional. Sin financiación exter
 
 ---
 ```
-
----
