@@ -38,13 +38,27 @@
 
 ---
 
+### 3. Epistemología de la Degeneración: Cuándo un Parámetro No Es una Medición
+
+**Archivo / File:** [`Epistemología de la Degeneración_ Cuándo un Parámetro No Es una Medición.md`](Epistemología%20de%20la%20Degeneración_%20Cuándo%20un%20Parámetro%20No%20Es%20una%20Medición.md)
+
+**Resumen / Abstract:** Este trabajo no introduce un método nuevo. Introduce una pregunta nueva. Los dos papers previos del autor formalizan y resuelven la no-identificabilidad en dos dominios específicos (Hill, PBPK). Este tercer trabajo extrae la tesis epistemológica que subyace a ambos: **el diagnóstico de identificabilidad debe preceder al ajuste, y no seguirlo**. Cuando este orden se invierte, los parámetros reportados no son mediciones — son proyecciones de las suposiciones del analista. El trabajo formaliza esta tesis, define la clase general de degeneraciones, introduce el concepto de *invariante de degeneración*, delimita el dominio de validez del marco (no toda degeneración es patológica), y responde a veinte objeciones previsibles, incluidas las que el autor no puede resolver. Se presenta explícitamente como *Perspective*, no como *Original Research*. La conclusión principal es que la identificabilidad no es una propiedad del modelo, sino una **relación** entre el modelo, los datos, y la pregunta que se hace.
+
+*The third paper extracts the epistemological thesis underlying the two technical papers: identifiability diagnosis must precede fitting, not follow it. It is explicitly presented as a Perspective, not Original Research. The main conclusion is that identifiability is not a property of the model but a relation between model, data, and question.*
+
+**Palabras clave / Keywords:** identificabilidad · degeneración paramétrica · diagnóstico pre-ajuste · invariante de degeneración · parámetro fantasma · epistemología de la inferencia · perspectiva
+
+**Público objetivo / Target audience:** Farmacólogos, farmacométricos, filósofos de la ciencia, estadísticos, metodólogos. / Pharmacologists, pharmacometricians, philosophers of science, statisticians, methodologists.
+
+---
+
 ## 🎯 ¿Qué es esto? / What is this?
 
-Este repositorio contiene dos artículos que formalizan el mismo problema matemático en dos dominios distintos:
+Este repositorio contiene **tres artículos** que formalizan el mismo problema matemático en dominios distintos, y una **capa epistemológica** que los unifica:
 
-> **Múltiples parámetros en un modelo no lineal pueden ser estructuralmente no identificables, lo que significa que ninguna cantidad de datos puede distinguirlos.**
+> **Múltiples parámetros en un modelo no lineal pueden ser estructuralmente no identificables, lo que significa que ninguna cantidad de datos puede distinguirlos. Un parámetro reportado sin diagnóstico de identificabilidad no es una medición — es una afirmación sin fuente identificada.**
 
-El primer artículo aborda la ecuación de Hill. El segundo aborda modelos PBPK. Ambos usan la misma metodología:
+Los dos primeros artículos abordan la ecuación de Hill y los modelos PBPK. El tercero extrae la tesis epistemológica que subyace a ambos y la defiende como propuesta de discusión. Los tres usan la misma metodología:
 
 1. **Matriz de Información de Fisher (FIM)** para cuantificar la identificabilidad.
 2. **Descomposición SVD** para identificar parámetros problemáticos.
@@ -52,22 +66,50 @@ El primer artículo aborda la ecuación de Hill. El segundo aborda modelos PBPK.
 4. **Protocolo operativo** (5 pasos) para diagnóstico automático.
 5. **Código completo** en Python, R, Julia y Stan, embebido en los apéndices.
 
-*This repository contains two papers that formalize the same mathematical problem in two different domains: the Hill equation and PBPK models. Both use FIM, SVD, calibrated thresholds, and a 5-step diagnostic protocol. Complete code is embedded in the appendices.*
+*This repository contains three papers that formalize the same mathematical problem across domains, plus an epistemological layer unifying them. The first two address the Hill equation and PBPK models. The third extracts and defends the epistemological thesis underlying both.*
+
+---
+
+## 📊 Dashboard Interactivo / Interactive Dashboard
+
+**Archivo / File:** [`dashboard.html`](dashboard.html) (renombrable a `index.html` para GitHub Pages)
+
+Dashboard HTML autocontenido que visualiza los resultados de los tres artículos. Sin dependencias externas excepto Chart.js (CDN).
+
+**Secciones / Sections:**
+
+| Sección | Contenido |
+|---------|-----------|
+| **Overview** | Resumen de los papers, comparación lado a lado |
+| **Hill Equation** | Condición 1.22e+16, Proposición 5.1, tabla qHTS, chart de recuperación |
+| **PBPK Models** | Condición 1.15e+11, 4 casos sintéticos, bootstrap CI |
+| **Sobol Analysis** | Índices S1 con barras coloreadas por influencia |
+| **D-Optimal** | Chart logarítmico de tiempos óptimos de muestreo |
+| **Code** | Snippets copiables con botón "copiar" |
+
+**Uso / Usage:**
+
+- **Local:** Abrir `dashboard.html` en cualquier navegador moderno. Funciona sin conexión excepto la primera carga de Chart.js.
+- **GitHub Pages:** Renombrar a `index.html` en la raíz del repo, activar Pages en Settings → Pages.
+- **Enlace desde README:** [Ver dashboard interactivo →](dashboard.html)
+
+*Self-contained HTML dashboard visualizing results from all three papers. No external dependencies except Chart.js (CDN). Rename to `index.html` for GitHub Pages.*
 
 ---
 
 ## 🔬 Contribuciones Principales / Core Contributions
 
-| Contribución / Contribution | Artículo Hill / Hill Paper | Artículo PBPK / PBPK Paper |
-|-----------------------------|----------------------------|----------------------------|
-| **Problema / Problem** | Degeneración K–n_H en régimen sub-saturado | Degeneración Vt–Kp sin datos tisulares |
-| **Formalización / Formalization** | FIM + SVD | FIM + SVD |
-| **Umbrales / Thresholds** | 3 órdenes de Ω | Número de condición 1e3, 1e6 |
-| **Protocolo / Protocol** | 5 pasos | 5 pasos |
-| **Validación / Validation** | qHTS, Holling, sintéticos | PK-DB, HCTZ, Bosentan, Theophylline |
-| **Implementaciones / Implementations** | Python, R, Julia, Stan | Python, R, Stan |
-| **Impacto económico / Economic impact** | Medio / Medium | Alto / High (regulatory) |
-| **Relevancia regulatoria / Regulatory relevance** | Indirecta / Indirect | Directa / Direct (FDA, EMA) |
+| Contribución / Contribution | Hill Paper | PBPK Paper | Epistemology Paper |
+|-----------------------------|------------|------------|---------------------|
+| **Problema / Problem** | Degeneración K–n_H en régimen sub-saturado | Degeneración Vt–Kp sin datos tisulares | Cuándo un parámetro no es una medición |
+| **Formalización / Formalization** | FIM + SVD | FIM + SVD | Clase de degeneración + invariante |
+| **Umbrales / Thresholds** | 3 órdenes de Ω | Número de condición 1e3, 1e6 | Operador de diagnóstico Δ |
+| **Protocolo / Protocol** | 5 pasos | 5 pasos | Inversión del orden (diagnóstico → ajuste) |
+| **Validación / Validation** | qHTS, Holling, sintéticos | PK-DB, HCTZ, Bosentan, Theophylline | Objeciones (20) y respuestas |
+| **Implementaciones / Implementations** | Python, R, Julia, Stan | Python, R, Stan | — |
+| **Tipo / Type** | Original Research | Original Research | Perspective |
+| **Impacto económico / Economic impact** | Medio / Medium | Alto / High (regulatory) | Conceptual |
+| **Relevancia regulatoria / Regulatory relevance** | Indirecta / Indirect | Directa / Direct (FDA, EMA) | Preguntas, no prescripciones |
 
 ---
 
@@ -79,10 +121,11 @@ La no-identificabilidad no es una curiosidad teórica. Tiene consecuencias direc
 - **En desarrollo de fármacos:** Decisiones regulatorias basadas en parámetros que no son identificables. Es un riesgo de compliance.
 - **En modelado PBPK:** Vt y Kp se reportan como independientes cuando solo son identificables como producto. Es matemáticamente incorrecto.
 - **En ecología:** Parámetros de respuesta funcional Holling (tasa de ataque, tiempo de manejo) reportados como independientes cuando solo su combinación es identificable.
+- **En metodología científica:** El diagnóstico de identificabilidad debería preceder al ajuste, no seguirlo. Un parámetro sin diagnóstico, sin prior, y sin justificación no es una medición.
 
-El protocolo de diagnóstico en estos artículos te dice, en segundos, si tus parámetros son identificables. El método es ~165x más rápido que el bootstrap.
+El protocolo de diagnóstico en estos artículos te dice, en segundos, si tus parámetros son identificables.
 
-*Non-identifiability is not a theoretical curiosity. It has direct consequences in pharmacology, drug development, PBPK modeling, and ecology. The diagnostic protocol in these papers tells you, in seconds, whether your parameters are identifiable. It is ~165x faster than bootstrap.*
+*Non-identifiability is not a theoretical curiosity. It has direct consequences in pharmacology, drug development, PBPK modeling, ecology, and scientific methodology. The diagnostic protocol in these papers tells you, in seconds, whether your parameters are identifiable.*
 
 ---
 
@@ -95,6 +138,8 @@ Todo el código está embebido en los apéndices de los artículos. Está diseñ
 - `pbpk_identifiability.py` — Protocolo de diagnóstico para modelos PBPK.
 - `hill_degeneracy.py` — Protocolo de diagnóstico para la ecuación de Hill.
 - `data_acquisition.py` — Descarga programática de PK-DB, HCTZ, Bosentan, Theophylline, CvTdb.
+- `hill_degeneracy.stan` — Modelo bayesiano para diagnóstico de degeneración.
+- `HillDegeneracy.jl` — Implementación en Julia.
 
 **Dependencias / Dependencies:** numpy, scipy, pandas, requests. Opcional: SALib, cmdstanpy, PyMC.
 
@@ -134,6 +179,18 @@ La identificabilidad estructural es una propiedad del modelo: si los parámetros
 
 *Structural identifiability is a property of the model: whether parameters are unique in principle. Practical identifiability is a property of the experiment: whether the available data contain sufficient information. A model can be structurally identifiable but practically non-identifiable.*
 
+### ¿Qué es un parámetro fantasma? / What is a ghost parameter?
+
+Un **parámetro fantasma** es un parámetro no identificable en un experimento dado, sin prior explícito ni justificación paramétrica documentada que determine su valor reportado. Aparece en el modelo pero no en los datos. El analista honesto lo entierra con un prior explícito. El deshonesto lo reporta con un intervalo de confianza como si fuera una medición.
+
+*A ghost parameter is a non-identifiable parameter in a given experiment, without an explicit prior or documented parametric justification determining its reported value. It appears in the model but not in the data. The honest analyst buries it with an explicit prior. The dishonest one reports it with a confidence interval as if it were a measurement.*
+
+### ¿Qué es la "inversión del orden"? / What is the "inversion of order"?
+
+La práctica estándar es: `datos → modelo → ajuste → parámetros → diagnóstico`. La inversión propuesta es: `modelo → diagnóstico → (si procede) → datos → ajuste → parámetros`. El diagnóstico de identificabilidad debería preceder al ajuste por defecto, no seguirlo. Esto no es un cambio de método, es un cambio de orden de énfasis.
+
+*Standard practice is: `data → model → fit → parameters → diagnosis`. The proposed inversion is: `model → diagnosis → (if applicable) → data → fit → parameters`. Identifiability diagnosis should precede fitting by default, not follow it. This is not a change of method but a change of order of emphasis.*
+
 ### ¿Qué es el análisis de sensibilidad de Sobol? / What is Sobol sensitivity analysis?
 
 El método de Sobol descompone la varianza de la salida en contribuciones de cada parámetro y sus interacciones. Es el estándar de oro para el análisis de sensibilidad global. La FDA lo exige en las presentaciones PBPK.
@@ -154,9 +211,9 @@ Sí, bajo los términos de la licencia (CC BY-NC-SA 4.0). Para uso comercial, co
 
 ### ¿Estos artículos están revisados por pares? / Are these papers peer-reviewed?
 
-No. Son autopublicados. El código está disponible para replicación. La metodología es estándar. Los resultados son reproducibles. La revisión por pares está pendiente.
+No. Son autopublicados. El código está disponible para replicación. La metodología es estándar. Los resultados son reproducibles. La revisión por pares está pendiente. El tercer artículo se presenta explícitamente como *Perspective*, no como *Original Research*.
 
-*No. They are self-published. The code is available for replication. The methodology is standard. The results are reproducible. Peer review is pending.*
+*No. They are self-published. The code is available for replication. The methodology is standard. The results are reproducible. Peer review is pending. The third paper is explicitly presented as a Perspective, not Original Research.*
 
 ### ¿Cómo puedo citar estos artículos? / How can I cite these papers?
 
@@ -174,7 +231,9 @@ Para el artículo de Hill: *CPT: Pharmacometrics & Systems Pharmacology*, *Journ
 
 Para el artículo de PBPK: *CPT: Pharmacometrics & Systems Pharmacology*, *Journal of Pharmacokinetics and Pharmacodynamics*, o *Bulletin of Mathematical Biology*.
 
-*For the Hill paper: CPT, JPKPD, or PLOS ONE. For the PBPK paper: CPT, JPKPD, or Bulletin of Mathematical Biology.*
+Para el artículo de epistemología: *European Journal for Philosophy of Science*, *Philosophy of Science*, *Synthese*, o *Perspectives on Science* (como Perspective).
+
+*For the Hill paper: CPT, JPKPD, or PLOS ONE. For the PBPK paper: CPT, JPKPD, or Bulletin of Mathematical Biology. For the epistemology paper: EJPS, Philosophy of Science, Synthese, or Perspectives on Science (as Perspective).*
 
 ### ¿Hay artículos similares en la literatura? / Are there similar papers in the literature?
 
@@ -185,10 +244,12 @@ Sí / Yes:
 - Brown et al. (2022): Practical non-identifiability in PBPK models. *CPT: Pharmacometrics & Systems Pharmacology*.
 - Kechagia et al. (2025): Model identifiability in PBPK models. *PAGE 2025*.
 - Lavezzi et al. (2025): Structural and practical identifiability in mPBPK-TMDD models. *PAGE 2025*.
+- Gelman (2013): Bayesian inference and regularization. *The American Statistician*.
+- Parker (2020): Model evaluation, adequacy-for-purpose. *Philosophy of Science*.
 
-Estos artículos establecen el problema cualitativamente. Nuestros artículos lo formalizan cuantitativamente y proporcionan un protocolo operativo.
+Los primeros cinco establecen el problema cualitativamente. Los dos papers técnicos de este repositorio lo formalizan cuantitativamente y proporcionan un protocolo operativo. El tercero extrae la tesis epistemológica y responde a veinte objeciones previsibles.
 
-*These papers establish the problem qualitatively. Ours formalize it quantitatively and provide an operative protocol.*
+*The first five establish the problem qualitatively. The two technical papers in this repository formalize it quantitatively and provide an operative protocol. The third extracts the epistemological thesis and responds to twenty foreseeable objections.*
 
 ---
 
@@ -208,21 +269,27 @@ Empieza con el artículo de PBPK. Sección 1 (Introducción), Sección 4 (Protoc
 
 ### Para bioestadísticos / For biostatisticians
 
-Empieza con la Sección 3 (Marco Teórico) de cualquiera de los dos artículos. La FIM, SVD y Sobol son métodos estándar. La novedad es la aplicación a PBPK y Hill.
+Empieza con la Sección 3 (Marco Teórico) de cualquiera de los dos primeros artículos. La FIM, SVD y Sobol son métodos estándar. La novedad es la aplicación a PBPK y Hill. Luego lee el tercer artículo como síntesis.
 
-*Start with Section 3 (Theoretical Framework) of either paper. The FIM, SVD, and Sobol are standard. The novelty is the application.*
+*Start with Section 3 (Theoretical Framework) of either of the first two papers. The FIM, SVD, and Sobol are standard. The novelty is the application. Then read the third paper as a synthesis.*
+
+### Para filósofos de la ciencia / For philosophers of science
+
+Empieza directamente con el tercer artículo. Sección 1.2 (Tesis), Sección 2 (Marco epistémico), Sección 7 (Objeciones y respuestas). Los dos papers técnicos son el material empírico que motiva la tesis.
+
+*Start directly with the third paper. Section 1.2 (Thesis), Section 2 (Epistemic framework), Section 7 (Objections and responses). The two technical papers are the empirical material motivating the thesis.*
 
 ### Para desarrolladores / For developers
 
-Empieza con los apéndices. El código es autocontenido. Copia, pega, ejecuta. Los tests deben pasar.
+Empieza con los apéndices de los papers técnicos. El código es autocontenido. Copia, pega, ejecuta. Los tests deben pasar. El dashboard HTML está en `dashboard.html`.
 
-*Start with the appendices. The code is self-contained. Copy, paste, run. Tests should pass.*
+*Start with the appendices of the technical papers. The code is self-contained. Copy, paste, run. Tests should pass. The HTML dashboard is in `dashboard.html`.*
 
 ### Para críticos / For critics
 
-Empieza con la Sección 7 (Limitaciones) de cualquiera de los dos artículos.
+Empieza con la Sección 7 (Limitaciones) de cualquiera de los papers técnicos, y con la Sección 7 (Objeciones y respuestas) del tercer artículo. Las objeciones previsibles están enumeradas y respondidas, incluidas las que el autor no puede resolver.
 
-*Start with Section 7 (Limitations) of either paper.*
+*Start with Section 7 (Limitations) of either technical paper, and Section 7 (Objections and responses) of the third paper. Foreseeable objections are enumerated and answered, including those the author cannot resolve.*
 
 ---
 
@@ -231,6 +298,7 @@ Empieza con la Sección 7 (Limitaciones) de cualquiera de los dos artículos.
 ```
 .
 ├── README.md                                    # Este archivo / This file
+├── dashboard.html                               # Dashboard interactivo (Chart.js)
 ├── No-Identificabilidad Estructural y Práctica
 │   en Modelos PBPK_ Diagnóstico mediante
 │   Matriz de Información de Fisher, Umbrales
@@ -240,6 +308,8 @@ Empieza con la Sección 7 (Limitaciones) de cualquiera de los dos artículos.
 │   Sub-Saturado_ Análisis Estructural,
 │   Protocolo de Diagnóstico e Implicaciones
 │   Regulatorias.md                              # Artículo Hill (ES + EN)
+├── Epistemología de la Degeneración_
+│   Cuándo un Parámetro No Es una Medición.md    # Artículo epistemología (ES + EN)
 ├── LICENSE
 └── (opcional) code/, data/, tests/
 ```
@@ -269,6 +339,18 @@ python pbpk_identifiability.py
 ```
 
 Salida esperada / Expected output: `regime = "non_identifiable"`, `condition = 1.15e+11`, `problematic = ['Vt', 'Kp']`.
+
+### Artículo de epistemología / Epistemology paper
+
+No incluye código propio. Es un trabajo de síntesis y perspectiva. Las implementaciones están en los dos papers técnicos y en la literatura de identificabilidad estructural.
+
+*No proprietary code. It is a synthesis and perspective piece. Implementations are in the two technical papers and in the structural identifiability literature.*
+
+### Dashboard interactivo / Interactive dashboard
+
+Abrir `dashboard.html` en cualquier navegador moderno. Renombrar a `index.html` para GitHub Pages.
+
+*Open `dashboard.html` in any modern browser. Rename to `index.html` for GitHub Pages.*
 
 ### Adquisición de datos / Data acquisition
 
@@ -300,6 +382,15 @@ Si usas estos artículos en tu investigación, cita / If you use these papers in
   year={2026},
   doi={10.1310/ronin-hill-degeneracy-2026}
 }
+
+@article{ferrandez2026epistemology,
+  title={Epistemología de la Degeneración: Cuándo un Parámetro No Es una Medición},
+  author={Ferrandez Canalis, David},
+  journal={Agencia RONIN Preprints},
+  year={2026},
+  doi={10.1310/ronin-degeneracy-epistemology-2026},
+  note={Perspective}
+}
 ```
 
 ---
@@ -313,6 +404,7 @@ Este es un repositorio autopublicado. El autor agradece / This is a self-publish
 - Sugerencias de extensiones / Suggestions for extensions.
 - Replicación independiente de resultados / Independent replication.
 - Feedback de expertos de dominio / Feedback from domain experts.
+- Objeciones al marco epistemológico / Objections to the epistemological framework.
 
 Para contribuir, abre un issue o envía un pull request. / To contribute, open an issue or submit a pull request.
 
@@ -337,15 +429,37 @@ Para uso comercial, contacta con el autor. / For commercial use, contact the aut
 
 ## 🔗 Recursos Relacionados / Related Resources
 
+### Identificabilidad estructural y práctica
+
+- **Godfrey & DiStefano (1987):** Identifiability of model parameters. *Identifiability of Parametric Models*.
+- **Ljung (1999):** *System Identification: Theory for the User*. Prentice Hall.
+- **Walter & Pronzato (1997):** *Identification of Parametric Models from Experimental Data*. Springer.
+- **Raue et al. (2009):** Profile likelihood for identifiability. *Bioinformatics*.
+- **Villaverde et al. (2019):** STRIKE-GOLDD. *Complexity*.
+- **AutoRepar (Jouganous et al., 2017):** Reparameterization of non-identifiable models. *Journal of Theoretical Biology*.
+
+### Aplicaciones
+
 - **Weiss (1997):** Advertencia original sobre el coeficiente de Hill. [PubMed](https://pubmed.ncbi.nlm.nih.gov/9359030/)
+- **Goutelle et al. (2008):** The Hill equation: a review. *Fundamental & Clinical Pharmacology*.
 - **Bonate (2011):** *Pharmacokinetic-Pharmacodynamic Modeling and Simulation*. Springer.
 - **Brown et al. (2022):** Practical non-identifiability in PBPK models. *CPT: Pharmacometrics & Systems Pharmacology*.
 - **Kechagia et al. (2025):** Model identifiability in PBPK models. *PAGE 2025*.
 - **Lavezzi et al. (2025):** Structural and practical identifiability in mPBPK-TMDD models. *PAGE 2025*.
-- **AutoRepar (Jouganous et al., 2017):** Reparameterization of non-identifiable models. *Journal of Theoretical Biology*.
+
+### Filosofía de la ciencia
+
+- **Frigg (2010):** Models and fiction. *Synthese*.
+- **Gelman (2013):** Bayesian inference and regularization. *The American Statistician*.
+- **Parker (2020):** Model evaluation, adequacy-for-purpose. *Philosophy of Science*.
+
+### Herramientas y datos
+
 - **SALib:** Librería Python para análisis de sensibilidad. [GitHub](https://github.com/SALib/SALib)
 - **PK-DB:** Base de datos pública de farmacocinética. [pk-db.com](https://pk-db.com)
 - **CvTdb:** Base de datos de concentración-tiempo de la EPA. [Figshare](https://doi.org/10.23645/epacomptox.29610452)
+- **StructuralIdentifiability.jl:** Identificabilidad estructural en Julia. [GitHub](https://github.com/SciML/StructuralIdentifiability.jl)
+- **GenSSI 2.0:** Identificabilidad estructural en MATLAB. [GitHub](https://github.com/genssi-developer/GenSSI)
 
 ---
 
@@ -365,9 +479,6 @@ Investigador autodidacta. Sin afiliación institucional. Sin financiación exter
 14 de septiembre de 2026 / September 14, 2026.
 
 ---
-
-
 ```
 
 ---
-
