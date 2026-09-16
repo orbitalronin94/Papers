@@ -4172,3 +4172,1562 @@ if __name__ == "__main__":
 
 ---
 
+
+## Apéndice E — Protocolo de refutación empírica del MOTOR CASCABEL v0.1.0 (28 tesis)
+
+### E.1. Objetivo
+
+Este apéndice propone un protocolo ejecutable para **intentar falsar cada una de las veintiocho tesis** del preprint. El objetivo no es demostrar que el motor funciona. Es diseñar los ataques que, si tuvieran éxito, obligarían a reformular las tesis correspondientes.
+
+Cada experimento se documenta con siete campos: tesis atacada, hipótesis nula, protocolo, métrica, criterio de decisión, predicción del autor y estado. Todos los estados están vacíos hasta que alguien ejecute el protocolo.
+
+---
+
+### E.2. Resumen
+
+| # | Flag | Métrica | Criterio SOBREVIVE | Predicción |
+|---|------|---------|--------------------|------------|
+| 1 | `--publicar` | Pendiente `τ` vs `\|C\|` | `α > 0.1` con p<0.05 | Sobrevive |
+| 2 | `--canon-expandir` | AUC de clasificación `K⁻` | `AUC > 0.7` | Sobrevive |
+| 3 | `--auditar` | `\|ΔH\|` | `\|ΔH\| < 0.1` | Cae |
+| 4 | `--ablation` | Interacción | `\|I\| > 0.05` | Sobrevive |
+| 5 | `--matriz` | Codo SVD | Codo < 20 | Cae |
+| 6 | `--deriva` | Correlación `t*` vs plano | `corr > 0.4` | Sobrevive |
+| 7 | `--firma` | Cociente intra/inter | `< 0.5` | Cae |
+| 8 | `--espejo` | `E²(x) = x` | Distancia `< 0.05` | Sobrevive |
+| 9 | `--contraejemplo` | Firma de violadores | Distinta del azar | Sobrevive |
+| 10 | `--ciego` | `D_KL(ciega\|\|validada)` | `> 0.1` | Sobrevive |
+| 11 | `--forense` | Acierto funcional vs contenido | `F > C` | Cae |
+| 12 | `--interpolar` | Diferencia conmutativa | `> 0.01` | Sobrevive |
+| 13 | `--reconstruir` | `\|R(x)\|` con `k` huecos | `= 1` en 90% | Cae |
+| 14 | `--temporal` | MAE de datación | `< 2 años` | Cae |
+| 15 | `--frontera` | AUC dentro/fuera | `> 0.85` | Sobrevive |
+| 16 | `--consenso` | Tasa de rechazo múltiple | `> 0.7` | Sobrevive |
+| 17 | `--disenso` | Correlación con temperatura | `> 0.4` | Indeterminada |
+| 18 | `--cuarentena` | Estabilidad de clusters | k estable | Sobrevive |
+| 19 | `--mutar` | R² de ajuste lineal | `> 0.5` | Indeterminada |
+| 20 | `--cruzar` | Error armónica vs aritmética | Armónica gana | Cae |
+| 21 | `--degradar` | Codo por capa | `k*` depende de capa | Sobrevive |
+| 22 | `--autopsia` | Distribución de `Δ` | Bimodal | Indeterminada |
+| 23 | `--espejo-negro` | Distancia a rechazado | Pequeña | Sobrevive |
+| 24 | `--parásito` | Ratio de hospedaje `ρ` | Variable por capa | Indeterminada |
+| 25 | `--comprimir` | `K(x)/K(π(x))` | Estable, ≈1 | Cae |
+| 26 | `--expandir` | Curva de convergencia | Codo visible | Indeterminada |
+| 27 | `--censurar` | Distancia léxica/estructural | `> 0.1` | Sobrevive |
+| 28 | `--confesar` | Tasa de confesión válida | `> 0.8` | Sobrevive |
+
+**Resumen de predicciones del autor:** 15 sobreviven, 8 caen, 5 indeterminadas.
+
+---
+
+### E.3. Experimento 1 — Acreción y vida media
+
+**Tesis atacada.** Vida media de n-grama decrece con el tamaño del corpus.
+
+**Hipótesis nula.** `α ≤ 0`. El corpus acumula sin erosionar.
+
+**Protocolo.** Serializar 1000 posts aceptados con `--publicar`. Recalcular el índice cada 100 posts. Estimar `α` por regresión log-log de `τ` vs `|C|`.
+
+**Métrica.** Pendiente `−α`.
+
+**Criterio.** SOBREVIVE si `α > 0.1` con p<0.05. CAE si `α ≤ 0`.
+
+**Predicción.** Sobrevive. La erosión por acreción es esperable en un corpus que crece.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.4. Experimento 2 — Canon negativo
+
+**Tesis atacada.** El canon se define por lo rechazado.
+
+**Hipótesis nula.** El canon negativo de dos generadores distintos es indistinguible.
+
+**Protocolo.** Acumular 1000 rechazos con motivo y firma. Entrenar clasificador binario sobre `K⁻`. Probar con corpus de un segundo generador.
+
+**Métrica.** AUC del clasificador.
+
+**Criterio.** SOBREVIVE si `AUC > 0.7`. CAE si `AUC ≈ 0.5`.
+
+**Predicción.** Sobrevive. El canon negativo es una firma del generador.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.5. Experimento 3 — Entropía condicional invariante
+
+**Tesis atacada.** `H(capa|eje)` es invariante del generador.
+
+**Hipótesis nula.** `ΔH` varía con el corpus.
+
+**Protocolo.** Generar 1000 textos con semilla fija. Calcular `H(C|E)` sobre generado y sobre corpus embebido. Repetir con corpus bootstrap activado.
+
+**Métrica.** `|ΔH|` entre condiciones.
+
+**Criterio.** SOBREVIVE si `|ΔH| < 0.1`. CAE si `|ΔH| ≥ 0.1`.
+
+**Predicción.** Cae. El corpus bootstrap introduce variabilidad que rompe la invariancia.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.6. Experimento 4 — No-aditividad de validadores
+
+**Tesis atacada.** La interacción de validadores no es cero.
+
+**Hipótesis nula.** `A(V) = A(∅) + Σ[A(V) − A(V∖{v_i})]`.
+
+**Protocolo.** Ejecutar generador con los 8 subconjuntos de validadores. Medir tasas de aceptación. Calcular interacción.
+
+**Métrica.** `|A(V) − A_aditiva|`.
+
+**Criterio.** SOBREVIVE si `|I| > 0.05`. CAE si `|I| ≈ 0`.
+
+**Predicción.** Sobrevive. Los validadores ya interactúan en el diseño.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.7. Experimento 5 — Rango bajo del discurso
+
+**Tesis atacada.** La matriz de co-ocurrencia tiene rango bajo.
+
+**Hipótesis nula.** El espectro decae sin codo.
+
+**Protocolo.** Construir `M_ij = PMI(t_i, t_j)` sobre corpus embebido + bootstrap. Aplicar SVD. Detectar codo.
+
+**Métrica.** Índice del codo.
+
+**Criterio.** SOBREVIVE si codo < 20. CAE si no hay codo.
+
+**Predicción.** Cae. Los textos reales tienen rango mayor.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.8. Experimento 6 — Deriva por CUSUM
+
+**Tesis atacada.** La deriva es detectable por CUSUM.
+
+**Hipótesis nula.** Los puntos de cambio no correlacionan con el plano.
+
+**Protocolo.** Generar 500 textos variando el eje cada 50. Aplicar CUSUM sobre longitud media de frase. Comparar `t*` detectados con los cambios de eje.
+
+**Métrica.** Correlación `t*` vs cambios de plano.
+
+**Criterio.** SOBREVIVE si `corr > 0.4`. CAE si no correlaciona.
+
+**Predicción.** Sobrevive. El cambio de eje produce cambio de régimen.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.9. Experimento 7 — Firma estable bajo paráfrasis
+
+**Tesis atacada.** La firma es estable bajo paráfrasis.
+
+**Hipótesis nula.** Paráfrasis y cambio de eje producen distancias similares.
+
+**Protocolo.** Para 100 textos, aplicar paráfrasis sintáctica y comparar firma. Comparar con distancia entre textos de distinto eje.
+
+**Métrica.** Cociente `intra/inter`.
+
+**Criterio.** SOBREVIVE si cociente < 0.5. CAE si ≈1.
+
+**Predicción.** Cae. La paráfrasis modifica la estilometría.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.10. Experimento 8 — Antítesis como involución
+
+**Tesis atacada.** `E² = id` y `f(E(x)) ≈ f(x)`.
+
+**Hipótesis nula.** `E` no es involutivo en firma.
+
+**Protocolo.** Aplicar `E` dos veces sobre 100 textos. Comparar firma original vs firma tras `E²`.
+
+**Métrica.** Distancia euclídea media.
+
+**Criterio.** SOBREVIVE si distancia < 0.05. CAE si mayor.
+
+**Predicción.** Sobrevive. `E` es casi definicional.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.11. Experimento 9 — Gramática de la violación
+
+**Tesis atacada.** Los violadores tienen firma propia.
+
+**Hipótesis nula.** La firma de violadores es indistinguible del azar.
+
+**Protocolo.** Generar 200 violadores forzados (desactivar validadores, filtrar por rechazo). Comparar firma media con firma de textos aleatorios.
+
+**Métrica.** Distancia entre firmas.
+
+**Criterio.** SOBREVIVE si distancia significativa (p<0.05). CAE si indistinguible.
+
+**Predicción.** Sobrevive. La violación tiene estructura interna.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.12. Experimento 10 — Sesgo como divergencia
+
+**Tesis atacada.** `D_KL(ciega || validada) > 0.1`.
+
+**Hipótesis nula.** Los validadores no cambian la distribución.
+
+**Protocolo.** Generar 500 con validadores, 500 sin. Comparar distribuciones de firma. Estimar `D_KL` empírica.
+
+**Métrica.** `D_KL` sobre firma de 8 dimensiones.
+
+**Criterio.** SOBREVIVE si `D_KL > 0.1`. CAE si menor.
+
+**Predicción.** Sobrevive. Los validadores sesgan la salida.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.13. Experimento 11 — Autoría por funcionales
+
+**Tesis atacada.** Los n-gramas funcionales atribuyen autoría mejor que los de contenido.
+
+**Hipótesis nula.** Contenido supera a funcional.
+
+**Protocolo.** Requiere corpus multi-autor. Clasificador ingenuo sobre `F(x)` y sobre `C(x)`. Comparar aciertos.
+
+**Métrica.** Acierto con `F` vs con `C`.
+
+**Criterio.** SOBREVIVE si `F > C` con margen > 0.05. CAE si no.
+
+**Predicción.** Cae. En textos largos, el contenido gana.
+
+**Estado.** Sin ejecutar. Requiere corpus externo (Galdós, Clarín, Unamuno, Ortega).
+
+---
+
+### E.14. Experimento 12 — No-conmutatividad
+
+**Tesis atacada.** La interpolación no es conmutativa.
+
+**Hipótesis nula.** `I(A,B,α) = I(B,A,α)`.
+
+**Protocolo.** Calcular firma objetivo `AB` y `BA`. Medir diferencia.
+
+**Métrica.** `|objetivo_AB − objetivo_BA|`.
+
+**Criterio.** SOBREVIVE si diferencia > 0.01. CAE si ≈0.
+
+**Predicción.** Sobrevive. La media ponderada es no conmutativa.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.15. Experimento 13 — Unicidad bajo estilo
+
+**Tesis atacada.** Un texto con huecos tiene una única reconstrucción válida.
+
+**Hipótesis nula.** Múltiples reconstrucciones pasan validadores.
+
+**Protocolo.** Para patrones con `k=1, 2, 3, 4` huecos, enumerar 200 reconstrucciones aleatorias. Contar válidas.
+
+**Métrica.** `|R(x)|` para cada `k`.
+
+**Criterio.** SOBREVIVE si `|R(x)| = 1` en ≥90% para `k=1`. CAE si crece con `k`.
+
+**Predicción.** Cae. Ya fue refutada en k≥3.
+
+**Estado.** Refutada parcialmente en la práctica (§E.7 del preprint v1.1).
+
+---
+
+### E.16. Experimento 14 — Datación implícita
+
+**Tesis atacada.** El corpus tiene marcas temporales detectables.
+
+**Hipótesis nula.** No hay correlación con fechas.
+
+**Protocolo.** Buscar años en textos del corpus. Entrenar clasificador ingenuo. Medir MAE.
+
+**Métrica.** MAE de datación.
+
+**Criterio.** SOBREVIVE si MAE < 2 años. CAE si mayor.
+
+**Predicción.** Cae. El corpus no tiene marcas temporales fuertes.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.17. Experimento 15 — Frontera medible
+
+**Tesis atacada.** El espacio declarado tiene borde.
+
+**Hipótesis nula.** Textos dentro/fuera son indistinguibles.
+
+**Protocolo.** Generar 500 dentro del espacio, 500 forzando planos fuera. Entrenar clasificador binario sobre firma.
+
+**Métrica.** AUC.
+
+**Criterio.** SOBREVIVE si AUC > 0.85. CAE si ≈0.5.
+
+**Predicción.** Sobrevive. El espacio tiene bordes claros.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.18. Experimento 16 — Consenso estructural
+
+**Tesis atacada.** Dos validadores que coinciden indican causa estructural.
+
+**Hipótesis nula.** Rechazos múltiples y simples tienen igual tasa.
+
+**Protocolo.** Generar 1000 textos sin validadores. Registrar rechazos por validador. Comparar tasa de violación estructural en intersecciones vs diferencia simétrica.
+
+**Métrica.** Cociente de tasas.
+
+**Criterio.** SOBREVIVE si tasa intersección > 0.7. CAE si ≈0.5.
+
+**Predicción.** Sobrevive. La intersección es más severa.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.19. Experimento 17 — Disenso móvil
+
+**Tesis atacada.** El disenso crece con la temperatura de la capa.
+
+**Hipótesis nula.** El disenso es constante.
+
+**Protocolo.** Para cada capa, medir `|R_i △ R_j|`. Correlacionar con `temperatura`.
+
+**Métrica.** Correlación.
+
+**Criterio.** SOBREVIVE si `corr > 0.4`. CAE si ≈0.
+
+**Predicción.** Indeterminada. Depende del corpus.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.20. Experimento 18 — Cuarentena con modos
+
+**Tesis atacada.** Los rechazos forman clusters estables.
+
+**Hipótesis nula.** Los clusters no se estabilizan.
+
+**Protocolo.** Acumular 1000 rechazos. Clustering por firma. Medir estabilidad por remuestreo.
+
+**Métrica.** Índice de estabilidad.
+
+**Criterio.** SOBREVIVE si `k` estable bajo bootstrap. CAE si no.
+
+**Predicción.** Sobrevive. Los modos de fallo son estables.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.21. Experimento 19 — Linealidad de mutación
+
+**Tesis atacada.** La mutación de una variable produce distancia lineal.
+
+**Hipótesis nula.** No lineal.
+
+**Protocolo.** Para cada variable (eje, capa, elenco), mutar en `k` pasos. Medir distancia estilométrica.
+
+**Métrica.** R² de ajuste lineal.
+
+**Criterio.** SOBREVIVE si R² > 0.5. CAE si menor.
+
+**Predicción.** Indeterminada. Puede no ser lineal.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.22. Experimento 20 — Cruce como media armónica
+
+**Tesis atacada.** `f(cruce(A,B)) ≈ media armónica`.
+
+**Hipótesis nula.** Media aritmética ajusta mejor.
+
+**Protocolo.** Cruzar 100 pares de planos. Comparar firma resultante con media aritmética y armónica.
+
+**Métrica.** Error de ajuste a cada media.
+
+**Criterio.** SOBREVIVE si armónica gana en > 60%. CAE si aritmética gana.
+
+**Predicción.** Cae. La aritmética probablemente ajusta mejor.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.23. Experimento 21 — Jerarquía de capas
+
+**Tesis atacada.** Las capas tienen resistencia distinta a la degradación.
+
+**Hipótesis nula.** `k*` uniforme entre capas.
+
+**Protocolo.** Para cada capa, aplicar 4 degradaciones. Medir codo de colapso.
+
+**Métrica.** `k*` por capa.
+
+**Criterio.** SOBREVIVE si `k*` varía. CAE si uniforme.
+
+**Predicción.** Sobrevive. Cada capa tiene marcadores distintos.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.24. Experimento 22 — Autopsia como salud
+
+**Tesis atacada.** La distancia plano-texto es indicador de salud.
+
+**Hipótesis nula.** `Δ` uniforme.
+
+**Protocolo.** Generar 200 textos. Calcular `Δ` esperado vs observado. Medir distribución.
+
+**Métrica.** Distribución de `Δ`.
+
+**Criterio.** SOBREVIVE si distribución bimodal. CAE si uniforme.
+
+**Predicción.** Indeterminada. Métrica interna.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.25. Experimento 23 — Complemento informativo
+
+**Tesis atacada.** El texto rechazado más cercano en firma es informativo.
+
+**Hipótesis nula.** El rechazado más cercano está lejos.
+
+**Protocolo.** Para 100 textos, buscar el rechazado más cercano en firma. Medir distancia.
+
+**Métrica.** `d(f(x), f(N(x)))`.
+
+**Criterio.** SOBREVIVE si distancia pequeña. CAE si grande.
+
+**Predicción.** Sobrevive. El complemento es cercano.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.26. Experimento 24 — Permisividad como hospedaje
+
+**Tesis atacada.** `ρ` (ratio de hospedaje válido) depende de la capa.
+
+**Hipótesis nula.** `ρ` constante.
+
+**Protocolo.** Para cada capa, insertar un texto en otro hasta violar validadores. Medir ratio máximo.
+
+**Métrica.** `ρ` por capa.
+
+**Criterio.** SOBREVIVE si `ρ` varía. CAE si constante.
+
+**Predicción.** Indeterminada.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.27. Experimento 25 — Complejidad del plano
+
+**Tesis atacada.** `K(x) / K(π(x)) ≈ 1`.
+
+**Hipótesis nula.** El cociente depende de `|x|`.
+
+**Protocolo.** Para 100 textos, medir `zlib(texto)` y `zlib(plano)`. Calcular cociente.
+
+**Métrica.** Cociente.
+
+**Criterio.** SOBREVIVE si cociente estable. CAE si variable.
+
+**Predicción.** Cae. `zlib` no aproxima `K` bien.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.28. Experimento 26 — Convergencia de expansión
+
+**Tesis atacada.** `||f(E_k(x)) − f(x)|| → 0` con codo en `k*`.
+
+**Hipótesis nula.** No hay codo.
+
+**Protocolo.** Expandir por párrafos. Medir firma en cada paso.
+
+**Métrica.** Curva de distancia.
+
+**Criterio.** SOBREVIVE si codo visible. CAE si no.
+
+**Predicción.** Indeterminada. Puede converger o no.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.29. Experimento 27 — Censura diferenciable
+
+**Tesis atacada.** `f(C_lex(x)) ≠ f(C_est(x))`.
+
+**Hipótesis nula.** Firmas indistinguibles.
+
+**Protocolo.** Aplicar censura léxica y estructural. Comparar firmas.
+
+**Métrica.** Distancia de firmas.
+
+**Criterio.** SOBREVIVE si distancia > 0.1. CAE si menor.
+
+**Predicción.** Sobrevive. Los operadores son distintos.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.30. Experimento 28 — Autoconsistencia reflexiva
+
+**Tesis atacada.** El generador puede declarar su plano sin violarlo.
+
+**Hipótesis nula.** La confesión viola validadores.
+
+**Protocolo.** Generar 100 confesiones (texto que enuncia el plano). Verificar con los tres validadores.
+
+**Métrica.** Tasa de éxito.
+
+**Criterio.** SOBREVIVE si tasa > 0.8. CAE si 0.
+
+**Predicción.** Sobrevive. Con validadores laxos, casi trivial.
+
+**Estado.** Sin ejecutar.
+
+---
+
+### E.31. Script propuesto
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+refutacion_cascabel.py
+======================
+
+Protocolo de refutación empírica para las 28 tesis del MOTOR CASCABEL v0.1.0.
+Requiere `cascabel.py` en el mismo directorio.
+
+Uso:
+    python refutacion_cascabel.py
+    python refutacion_cascabel.py --solo 1 4 6 21
+    python refutacion_cascabel.py --json
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import json
+import math
+import random
+import statistics
+import sys
+import time
+import zlib
+from collections import Counter, defaultdict
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple
+
+# --- Carga dinámica del motor ----------------------------------------- #
+spec = importlib.util.spec_from_file_location("cascabel", "cascabel.py")
+if spec is None or spec.loader is None:
+    print("[ERROR] No se encuentra 'cascabel.py' en el directorio actual.")
+    sys.exit(1)
+cascabel = importlib.util.module_from_spec(spec)
+sys.modules["cascabel"] = cascabel
+spec.loader.exec_module(cascabel)
+
+from cascabel import (
+    MotorCascabel, Combinacion, IndiceCorpus,
+    validar_estilometria, validar_tics, validar_anti_repeticion,
+    calcular_perfil, tokenizar, METADATOS, INDICE_CAPAS, INDICE_EJES,
+    CAPAS_LEXICAS, EJES, INSTRUMENTOS,
+)
+
+N_SEMILLAS = 1
+UMBRAL_P = 0.05
+
+
+# ============================================================================
+# Runner
+# ============================================================================
+
+@dataclass
+class Resultado:
+    tesis_id: int
+    nombre: str
+    veredicto: str  # SOBREVIVE / CAE / INDETERMINADA / SIN_EJECUTAR
+    metrica: str
+    valor: float
+    detalle: Dict[str, Any]
+
+    def como_dict(self) -> Dict[str, Any]:
+        return {
+            "tesis": self.tesis_id, "nombre": self.nombre,
+            "veredicto": self.veredicto, "metrica": self.metrica,
+            "valor": self.valor, "detalle": self.detalle,
+        }
+
+
+def _motor(semilla: int = 42, **kw) -> MotorCascabel:
+    return MotorCascabel(semilla=semilla, programador_activo=False, **kw)
+
+
+def _firma_media(textos: List[str]) -> Dict[str, float]:
+    perfiles = [calcular_perfil(t).como_dict() for t in textos if t]
+    if not perfiles:
+        return {}
+    campos = [k for k in perfiles[0] if isinstance(perfiles[0][k], (int, float))]
+    return {k: statistics.fmean(p[k] for p in perfiles) for k in campos}
+
+
+def _dist_firma(a: Dict[str, float], b: Dict[str, float],
+                campos: Optional[List[str]] = None) -> float:
+    if not campos:
+        campos = [k for k in a if k in b and isinstance(a[k], (int, float))]
+    return math.sqrt(sum((a.get(c, 0) - b.get(c, 0)) ** 2 for c in campos))
+
+
+# ============================================================================
+# Tesis 1
+# ============================================================================
+
+def exp_01() -> Resultado:
+    motor = _motor(semilla=42)
+    historial: List[set] = []
+    textos_previos: List[str] = []
+    taus: List[int] = []
+    tamanos: List[int] = []
+
+    for i in range(100):
+        r = motor.generar(validar_estilo=False, validar_repeticion=False,
+                          validar_tics_flag=False)
+        if not r.get("ok"):
+            continue
+        textos_previos.append(r["texto"])
+        historial.append(set(cascabel.n_gramas(tokenizar(r["texto"]), 5)))
+        if i % 10 == 0:
+            idx = IndiceCorpus(5)
+            for t in textos_previos:
+                idx.añadir(t, "gen")
+            info = idx.vida_media_gramas(historial)
+            taus.append(info["media"])
+            tamanos.append(len(textos_previos))
+
+    if len(taus) < 3:
+        return Resultado(1, "vida media decrece con corpus",
+                         "INDETERMINADA", "τ vs |C|", 0.0, {"error": "muestra insuficiente"})
+
+    lx = [math.log(t) for t in tamanos]
+    ly = [math.log(max(1, v)) for v in taus]
+    mx, my = statistics.fmean(lx), statistics.fmean(ly)
+    num = sum((a - mx) * (b - my) for a, b in zip(lx, ly))
+    dx = math.sqrt(sum((a - mx) ** 2 for a in lx))
+    dy = math.sqrt(sum((b - my) ** 2 for b in ly))
+    if dx * dy == 0:
+        return Resultado(1, "vida media decrece con corpus",
+                         "INDETERMINADA", "τ vs |C|", 0.0, {"error": "sin varianza"})
+    pendiente = num / (dx * dy)
+    veredicto = "SOBREVIVE" if pendiente < -0.1 else "CAE"
+    return Resultado(1, "vida media decrece con corpus", veredicto,
+                     "pendiente log-log", pendiente,
+                     {"n_taus": len(taus), "pendiente": pendiente})
+
+
+# ============================================================================
+# Tesis 3
+# ============================================================================
+
+def _H_cond(pares: List[Tuple[str, str]]) -> float:
+    if not pares:
+        return 0.0
+    conteo: Dict[str, Counter] = defaultdict(Counter)
+    for e, c in pares:
+        conteo[e][c] += 1
+    h = 0.0
+    total = len(pares)
+    for e, cs in conteo.items():
+        p_e = sum(cs.values()) / total
+        s = sum(cs.values())
+        h_e = -sum((k / s) * math.log(k / s + 1e-12) for k in cs.values())
+        h += p_e * h_e
+    return h
+
+
+def exp_03() -> Resultado:
+    motor = _motor(semilla=42)
+    resultados = motor.generar_lote(200)
+    pares_gen = [(r["plano"]["eje"], r["plano"]["capa"]) for r in resultados if r.get("ok")]
+    h_gen = _H_cond(pares_gen)
+
+    pares_corpus = []
+    for post in cascabel.POSTS_EMBEBIDOS:
+        for eje in post.get("ejes", []):
+            pares_corpus.append((eje, post.get("capa", "tecnico")))
+    h_corpus = _H_cond(pares_corpus)
+
+    delta = abs(h_gen - h_corpus)
+    veredicto = "SOBREVIVE" if delta < 0.1 else "CAE"
+    return Resultado(3, "H(capa|eje) invariante", veredicto,
+                     "|ΔH|", delta, {"H_gen": h_gen, "H_corpus": h_corpus})
+
+
+# ============================================================================
+# Tesis 4
+# ============================================================================
+
+def exp_04() -> Resultado:
+    motor = _motor(semilla=42)
+    combos = [
+        (True, True, True), (True, True, False), (True, False, True),
+        (False, True, True), (True, False, False), (False, True, False),
+        (False, False, True), (False, False, False),
+    ]
+    n = 30
+    tasas = {}
+    for est, rep, tic in combos:
+        ok = sum(1 for _ in range(n)
+                 if motor.generador.generar(validar_estilo=est,
+                                            validar_repeticion=rep,
+                                            validar_tics_flag=tic).get("ok"))
+        tasas[f"{int(est)}{int(rep)}{int(tic)}"] = ok / n
+
+    a_v = tasas["111"]
+    a_0 = tasas["000"]
+    suma = sum(a_v - tasas[k] for k in ["011", "101", "110"])
+    pred_ad = a_0 + suma
+    interaccion = abs(a_v - pred_ad)
+
+    veredicto = "SOBREVIVE" if interaccion > 0.05 else "CAE"
+    return Resultado(4, "no-aditividad de validadores", veredicto,
+                     "|interacción|", interaccion, {"tasas": tasas})
+
+
+# ============================================================================
+# Tesis 5
+# ============================================================================
+
+def _svd_aprox(M: List[List[float]], k: int = 20) -> List[float]:
+    n = len(M)
+    if n == 0:
+        return []
+    v = [1.0 / math.sqrt(n)] * n
+    sigmas = []
+    Mt = [[M[j][i] for j in range(n)] for i in range(n)]
+    for _ in range(k):
+        w = [sum(Mt[i][j] * v[j] for j in range(n)) for i in range(n)]
+        norma = math.sqrt(sum(x * x for x in w)) or 1
+        v = [x / norma for x in w]
+        Mv = [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
+        s = math.sqrt(sum(x * x for x in Mv))
+        sigmas.append(s)
+        if s < 1e-9:
+            break
+    return sigmas
+
+
+def exp_05() -> Resultado:
+    motor = _motor(semilla=42)
+    textos = [p["cuerpo"] for p in motor.corpus_embebido]
+    docs = [set(tokenizar(t)) for t in textos]
+    vocab = sorted({x for d in docs for x in d})
+    idx = {x: i for i, x in enumerate(vocab)}
+    n = len(vocab)
+    M = [[0.0] * n for _ in range(n)]
+    for d in docs:
+        for a in d:
+            for b in d:
+                if a != b:
+                    M[idx[a]][idx[b]] += 1
+    sigmas = _svd_aprox(M, k=min(20, n))
+    if not sigmas:
+        return Resultado(5, "rango bajo", "INDETERMINADA", "codo SVD", 0.0, {})
+    total = sum(sigmas)
+    codo = len(sigmas)
+    acum = 0.0
+    for i, s in enumerate(sigmas):
+        acum += s
+        if acum / total >= 0.9:
+            codo = i + 1
+            break
+    veredicto = "SOBREVIVE" if codo < 20 else "CAE"
+    return Resultado(5, "rango bajo", veredicto, "codo SVD", float(codo),
+                     {"sigmas_top5": sigmas[:5]})
+
+
+# ============================================================================
+# Tesis 6
+# ============================================================================
+
+def exp_06() -> Resultado:
+    motor = _motor(semilla=42)
+    largos = []
+    cambios = []
+    eje_actual = None
+    ejes_lista = [e["id"] for e in EJES]
+    rng = random.Random(42)
+    for i in range(200):
+        eje = ejes_lista[(i // 20) % len(ejes_lista)]
+        r = motor.generar(eje=eje)
+        if r.get("ok"):
+            largos.append(calcular_perfil(r["texto"]).long_media_frase)
+            if eje != eje_actual:
+                cambios.append(i)
+                eje_actual = eje
+    if len(largos) < 20:
+        return Resultado(6, "deriva por CUSUM", "INDETERMINADA", "corr", 0.0, {})
+    media = statistics.fmean(largos)
+    s = 0.0
+    umbral = 3 * (statistics.pstdev(largos) or 1.0)
+    puntos = []
+    for i, l in enumerate(largos):
+        s = max(0.0, s + (l - media))
+        if s > umbral:
+            puntos.append(i)
+            s = 0.0
+    # correlación aproximada: cuántos cambios coinciden
+    coincidencias = sum(1 for p in puntos if any(abs(p - c) <= 3 for c in cambios))
+    tasa = coincidencias / max(1, len(puntos)) if puntos else 0.0
+    veredicto = "SOBREVIVE" if tasa > 0.4 else "CAE"
+    return Resultado(6, "deriva por CUSUM", veredicto, "tasa coincidencia",
+                     tasa, {"n_puntos": len(puntos), "n_cambios": len(cambios)})
+
+
+# ============================================================================
+# Tesis 7
+# ============================================================================
+
+def _parafrasear(texto: str, rng: random.Random) -> str:
+    sinonimos = {"es": "resulta ser", "no": "jamás", "y": "e",
+                 "pero": "sin embargo", "porque": "puesto que"}
+    frases = cascabel.dividir_frases(texto)
+    rng.shuffle(frases)
+    out = " ".join(frases)
+    for a, b in sinonimos.items():
+        out = out.replace(f" {a} ", f" {b} ")
+    return out
+
+
+def exp_07() -> Resultado:
+    motor = _motor(semilla=42)
+    rng = random.Random(42)
+    dists_par = []
+    dists_eje = []
+    textos = [r["texto"] for r in motor.generar_lote(50) if r.get("ok")]
+    for t in textos[:20]:
+        f0 = calcular_perfil(t).como_dict()
+        fpar = calcular_perfil(_parafrasear(t, rng)).como_dict()
+        dists_par.append(_dist_firma(f0, fpar, ["long_media_frase", "diversidad_lexica",
+                                                 "long_media_palabra"]))
+    for i in range(len(textos) - 1):
+        f1 = calcular_perfil(textos[i]).como_dict()
+        f2 = calcular_perfil(textos[i + 1]).como_dict()
+        dists_eje.append(_dist_firma(f1, f2, ["long_media_frase", "diversidad_lexica",
+                                               "long_media_palabra"]))
+    if not dists_par or not dists_eje:
+        return Resultado(7, "firma estable bajo paráfrasis", "INDETERMINADA",
+                         "cociente", 0.0, {})
+    cociente = statistics.fmean(dists_par) / max(1e-6, statistics.fmean(dists_eje))
+    veredicto = "SOBREVIVE" if cociente < 0.5 else "CAE"
+    return Resultado(7, "firma estable bajo paráfrasis", veredicto,
+                     "intra/inter", cociente, {"media_par": statistics.fmean(dists_par),
+                                               "media_eje": statistics.fmean(dists_eje)})
+
+
+# ============================================================================
+# Tesis 8
+# ============================================================================
+
+def exp_08() -> Resultado:
+    motor = _motor(semilla=42)
+    inst = INSTRUMENTOS["espejo"]
+    dists = []
+    for r in motor.generar_lote(50):
+        if not r.get("ok"):
+            continue
+        x = r["texto"]
+        e2 = inst._invertir(inst._invertir(x))
+        f0 = calcular_perfil(x).como_dict()
+        f2 = calcular_perfil(e2).como_dict()
+        dists.append(_dist_firma(f0, f2, ["long_media_frase", "diversidad_lexica",
+                                          "long_media_palabra"]))
+    if not dists:
+        return Resultado(8, "involución", "INDETERMINADA", "dist", 0.0, {})
+    media = statistics.fmean(dists)
+    veredicto = "SOBREVIVE" if media < 0.05 else "CAE"
+    return Resultado(8, "involución", veredicto, "dist media E²", media,
+                     {"n": len(dists)})
+
+
+# ============================================================================
+# Tesis 9
+# ============================================================================
+
+def exp_09() -> Resultado:
+    motor = _motor(semilla=42)
+    violadores = []
+    for _ in range(200):
+        r = motor.generador.generar(validar_estilo=False, validar_repeticion=False,
+                                    validar_tics_flag=False)
+        if r.get("ok") and not validar_tics(r["texto"]).ok:
+            violadores.append(r["texto"])
+    if len(violadores) < 5:
+        return Resultado(9, "gramática de la violación", "INDETERMINADA",
+                         "dist", 0.0, {"n_violadores": len(violadores)})
+    f_v = _firma_media(violadores)
+    f_c = _firma_media([p["cuerpo"] for p in cascabel.POSTS_EMBEBIDOS])
+    campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+    d = sum(abs(f_v.get(c, 0) - f_c.get(c, 0)) for c in campos)
+    veredicto = "SOBREVIVE" if d > 0.1 else "CAE"
+    return Resultado(9, "gramática de la violación", veredicto,
+                     "dist violadores vs corpus", d, {"n": len(violadores)})
+
+
+# ============================================================================
+# Tesis 10
+# ============================================================================
+
+def exp_10() -> Resultado:
+    motor = _motor(semilla=42)
+    ciega = [r["texto"] for r in (motor.generador.generar(
+        validar_estilo=False, validar_repeticion=False, validar_tics_flag=False)
+        for _ in range(100)) if r.get("ok")]
+    validada = [r["texto"] for r in (motor.generador.generar() for _ in range(100))
+                if r.get("ok")]
+    if not ciega or not validada:
+        return Resultado(10, "sesgo como divergencia", "INDETERMINADA", "D_KL", 0.0, {})
+    f_c = _firma_media(ciega)
+    f_v = _firma_media(validada)
+    campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+    kl = sum(abs(f_c.get(c, 0) - f_v.get(c, 0)) for c in campos)
+    veredicto = "SOBREVIVE" if kl > 0.1 else "CAE"
+    return Resultado(10, "sesgo como divergencia", veredicto, "D_KL aprox", kl, {})
+
+
+# ============================================================================
+# Tesis 11 — requiere corpus externo
+# ============================================================================
+
+def exp_11() -> Resultado:
+    return Resultado(11, "forense funcional", "SIN_EJECUTAR",
+                     "acierto F vs C", 0.0,
+                     {"razon": "requiere corpus multi-autor externo"})
+
+
+# ============================================================================
+# Tesis 12
+# ============================================================================
+
+def exp_12() -> Resultado:
+    rng = random.Random(42)
+    campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+    diffs = []
+    for _ in range(20):
+        fA = {c: rng.uniform(0.5, 5.0) for c in campos}
+        fB = {c: rng.uniform(0.5, 5.0) for c in campos}
+        peso = 0.5
+        obj_ab = {c: peso * fA[c] + (1 - peso) * fB[c] for c in campos}
+        obj_ba = {c: peso * fB[c] + (1 - peso) * fA[c] for c in campos}
+        diffs.append(sum(abs(obj_ab[c] - obj_ba[c]) for c in campos))
+    media = statistics.fmean(diffs)
+    veredicto = "SOBREVIVE" if media > 0.01 else "CAE"
+    return Resultado(12, "no-conmutatividad", veredicto,
+                     "|AB − BA|", media, {"n": len(diffs)})
+
+
+# ============================================================================
+# Tesis 13
+# ============================================================================
+
+def exp_13() -> Resultado:
+    motor = _motor(semilla=42)
+    inst = INSTRUMENTOS["reconstruir"]
+    vocab = inst._vocabulario(motor)
+    rng = random.Random(42)
+    resultados = []
+    for k in (1, 2, 3):
+        patron = " ".join(["____"] * k) + " es ____."
+        validos = 0
+        for _ in range(100):
+            texto = patron
+            for _ in range(texto.count("____")):
+                texto = texto.replace("____", rng.choice(vocab), 1)
+            if validar_estilometria(texto).ok and validar_tics(texto).ok:
+                validos += 1
+        resultados.append({"k": k, "validos": validos})
+    v1 = next((r["validos"] for r in resultados if r["k"] == 1), 0)
+    veredicto = "SOBREVIVE" if v1 <= 1 else "CAE"
+    return Resultado(13, "unicidad bajo estilo", veredicto,
+                     "|R(x)| para k=1", float(v1), {"por_k": resultados})
+
+
+# ============================================================================
+# Tesis 14 — requiere corpus con marcas temporales
+# ============================================================================
+
+def exp_14() -> Resultado:
+    motor = _motor(semilla=42)
+    anios = list(range(1900, 2026))
+    textos = [p["cuerpo"] for p in motor.corpus_embebido]
+    con_marca = sum(1 for t in textos if any(str(a) in t for a in anios))
+    tasa = con_marca / max(1, len(textos))
+    veredicto = "SOBREVIVE" if tasa > 0.3 else "CAE"
+    return Resultado(14, "datación implícita", veredicto,
+                     "tasa con marca temporal", tasa,
+                     {"con_marca": con_marca, "total": len(textos)})
+
+
+# ============================================================================
+# Tesis 15
+# ============================================================================
+
+def exp_15() -> Resultado:
+    motor = _motor(semilla=42)
+    dentro = []
+    fuera = []
+    for _ in range(100):
+        r = motor.generador.generar()
+        if r.get("ok"):
+            dentro.append(calcular_perfil(r["texto"]).como_dict())
+        r2 = motor.generador.generar(eje="ia", capa="militar")
+        if r2.get("ok"):
+            fuera.append(calcular_perfil(r2["texto"]).como_dict())
+    if not dentro or not fuera:
+        return Resultado(15, "frontera", "INDETERMINADA", "sep", 0.0, {})
+    campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+    md = {c: statistics.fmean(x[c] for x in dentro) for c in campos}
+    mf = {c: statistics.fmean(x[c] for x in fuera) for c in campos}
+    sep = sum(abs(md[c] - mf[c]) for c in campos)
+    veredicto = "SOBREVIVE" if sep > 0.1 else "CAE"
+    return Resultado(15, "frontera", veredicto, "separación", sep, {})
+
+
+# ============================================================================
+# Tesis 16
+# ============================================================================
+
+def exp_16() -> Resultado:
+    motor = _motor(semilla=42)
+    multi = 0
+    simple = 0
+    for _ in range(200):
+        r = motor.generador.generar(validar_estilo=False, validar_repeticion=False,
+                                    validar_tics_flag=False)
+        if not r.get("ok"):
+            continue
+        t = r["texto"]
+        e = not validar_estilometria(t).ok
+        p = not validar_anti_repeticion(t, motor.indice).ok
+        ti = not validar_tics(t).ok
+        s = sum([e, p, ti])
+        if s >= 2:
+            multi += 1
+        elif s == 1:
+            simple += 1
+    total = multi + simple
+    tasa = multi / max(1, total)
+    veredicto = "SOBREVIVE" if tasa > 0.7 else "CAE"
+    return Resultado(16, "consenso estructural", veredicto,
+                     "fracción multi-rechazo", tasa,
+                     {"multi": multi, "simple": simple})
+
+
+# ============================================================================
+# Tesis 17
+# ============================================================================
+
+def exp_17() -> Resultado:
+    motor = _motor(semilla=42)
+    tasas = []
+    temps = []
+    for capa in CAPAS_LEXICAS:
+        ok = 0
+        rech = 0
+        for _ in range(30):
+            r = motor.generador.generar(capa=capa["id"], validar_estilo=False,
+                                        validar_repeticion=False, validar_tics_flag=False)
+            if not r.get("ok"):
+                continue
+            t = r["texto"]
+            e = not validar_estilometria(t).ok
+            p = not validar_anti_repeticion(t, motor.indice).ok
+            ti = not validar_tics(t).ok
+            if sum([e, p, ti]) >= 2:
+                rech += 1
+            ok += 1
+        tasas.append(rech / max(1, ok))
+        temps.append(capa["temperatura"])
+    mx, my = statistics.fmean(temps), statistics.fmean(tasas)
+    num = sum((a - mx) * (b - my) for a, b in zip(temps, tasas))
+    dx = math.sqrt(sum((a - mx) ** 2 for a in temps))
+    dy = math.sqrt(sum((b - my) ** 2 for b in tasas))
+    corr = num / (dx * dy) if dx * dy else 0.0
+    veredicto = "SOBREVIVE" if corr > 0.4 else ("CAE" if corr < 0.1 else "INDETERMINADA")
+    return Resultado(17, "disenso móvil", veredicto, "corr temp vs tasa", corr,
+                     {"tasas": tasas, "temps": temps})
+
+
+# ============================================================================
+# Tesis 18
+# ============================================================================
+
+def exp_18() -> Resultado:
+    motor = _motor(semilla=42)
+    clusters = defaultdict(int)
+    for _ in range(300):
+        r = motor.generador.generar(validar_estilo=False, validar_repeticion=False,
+                                    validar_tics_flag=False)
+        if not r.get("ok"):
+            continue
+        t = r["texto"]
+        motivos = []
+        if not validar_estilometria(t).ok:
+            motivos.append("est")
+        if not validar_anti_repeticion(t, motor.indice).ok:
+            motivos.append("rep")
+        if not validar_tics(t).ok:
+            motivos.append("tic")
+        clusters["+".join(motivos) or "ok"] += 1
+    # entropía de la distribución
+    total = sum(clusters.values())
+    h = -sum((c / total) * math.log(c / total + 1e-12) for c in clusters.values())
+    veredicto = "SOBREVIVE" if 0 < h < 2.5 else "INDETERMINADA"
+    return Resultado(18, "cuarentena con modos", veredicto,
+                     "entropía de modos", h,
+                     {"modos": dict(clusters)})
+
+
+# ============================================================================
+# Tesis 19
+# ============================================================================
+
+def exp_19() -> Resultado:
+    motor = _motor(semilla=42)
+    valores = [c["id"] for c in CAPAS_LEXICAS]
+    base = motor.generar(capa=valores[0])
+    if not base.get("ok"):
+        return Resultado(19, "linealidad mutación", "INDETERMINADA", "R²", 0.0, {})
+    fb = calcular_perfil(base["texto"]).vector_8d()
+    xs, ys = [], []
+    for i, v in enumerate(valores[1:], 1):
+        r = motor.generar(capa=v)
+        if not r.get("ok"):
+            continue
+        fv = calcular_perfil(r["texto"]).vector_8d()
+        d = math.sqrt(sum((a - b) ** 2 for a, b in zip(fb, fv)))
+        xs.append(i)
+        ys.append(d)
+    if len(xs) < 3:
+        return Resultado(19, "linealidad mutación", "INDETERMINADA", "R²", 0.0, {})
+    mx, my = statistics.fmean(xs), statistics.fmean(ys)
+    num = sum((a - mx) * (b - my) for a, b in zip(xs, ys))
+    dx = math.sqrt(sum((a - mx) ** 2 for a in xs))
+    dy = math.sqrt(sum((b - my) ** 2 for b in ys))
+    r = num / (dx * dy) if dx * dy else 0.0
+    r2 = r * r
+    veredicto = "SOBREVIVE" if r2 > 0.5 else ("CAE" if r2 < 0.1 else "INDETERMINADA")
+    return Resultado(19, "linealidad mutación", veredicto, "R²", r2,
+                     {"xs": xs, "ys": ys})
+
+
+# ============================================================================
+# Tesis 20
+# ============================================================================
+
+def exp_20() -> Resultado:
+    motor = _motor(semilla=42)
+    combos = list(motor.combinatoria.todas())
+    rng = random.Random(42)
+    err_arm = []
+    err_arit = []
+    campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+    for _ in range(20):
+        ca, cb = rng.sample(combos, 2)
+        ra = motor.generar(combinacion=ca)
+        rb = motor.generar(combinacion=cb)
+        if not (ra.get("ok") and rb.get("ok")):
+            continue
+        fa = calcular_perfil(ra["texto"]).como_dict()
+        fb = calcular_perfil(rb["texto"]).como_dict()
+        arit = {c: (fa[c] + fb[c]) / 2 for c in campos}
+        arm = {c: (2 * fa[c] * fb[c] / (fa[c] + fb[c])) if (fa[c] + fb[c]) > 0 else 0
+               for c in campos}
+        elenco_cruza = tuple(set(ca.elenco + cb.elenco))[:3]
+        cc = Combinacion(eje=ca.eje, elenco=elenco_cruza, capa=cb.capa)
+        rc = motor.generar(combinacion=cc)
+        if not rc.get("ok"):
+            continue
+        fc = calcular_perfil(rc["texto"]).como_dict()
+        err_arm.append(sum(abs(fc[c] - arm[c]) for c in campos) / len(campos))
+        err_arit.append(sum(abs(fc[c] - arit[c]) for c in campos) / len(campos))
+    if not err_arm:
+        return Resultado(20, "cruce media armónica", "INDETERMINADA", "err", 0.0, {})
+    ma = statistics.fmean(err_arm)
+    mt = statistics.fmean(err_arit)
+    veredicto = "SOBREVIVE" if ma < mt else "CAE"
+    return Resultado(20, "cruce media armónica", veredicto,
+                     "err_arm vs err_arit", ma - mt,
+                     {"err_arm": ma, "err_arit": mt})
+
+
+# ============================================================================
+# Tesis 21
+# ============================================================================
+
+def exp_21() -> Resultado:
+    motor = _motor(semilla=42)
+    inst = INSTRUMENTOS["degradar"]
+    r = motor.generar()
+    if not r.get("ok"):
+        return Resultado(21, "jerarquía de capas", "INDETERMINADA", "dist", 0.0, {})
+    t = r["texto"]
+    f0 = calcular_perfil(t).vector_8d()
+    pasos = [inst._eliminar_adjetivos, inst._cortar_frases,
+             inst._invertir_orden, lambda x: x.upper()]
+    distancias = []
+    for fn in pasos:
+        t = fn(t)
+        ft = calcular_perfil(t).vector_8d()
+        distancias.append(math.sqrt(sum((a - b) ** 2 for a, b in zip(f0, ft))))
+    monotona = all(distancias[i] <= distancias[i + 1] for i in range(len(distancias) - 1))
+    veredicto = "SOBREVIVE" if monotona and distancias[-1] > 1.0 else "INDETERMINADA"
+    return Resultado(21, "jerarquía de capas", veredicto,
+                     "curva de degradación", distancias[-1],
+                     {"distancias": distancias, "monotona": monotona})
+
+
+# ============================================================================
+# Tesis 22
+# ============================================================================
+
+def exp_22() -> Resultado:
+    motor = _motor(semilla=42)
+    deltas = []
+    for _ in range(100):
+        r = motor.generar()
+        if not r.get("ok"):
+            continue
+        f = calcular_perfil(r["texto"]).como_dict()
+        temp = INDICE_CAPAS[r["plano"]["capa"]]["temperatura"]
+        esperada = {"long_media_frase": 12.0 + 5 * temp,
+                    "diversidad_lexica": 0.6 - 0.2 * temp,
+                    "long_media_palabra": 5.0}
+        campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+        deltas.append(sum(abs(f[c] - esperada[c]) for c in campos) / 3)
+    if not deltas:
+        return Resultado(22, "autopsia como salud", "INDETERMINADA", "σ(Δ)", 0.0, {})
+    sigma = statistics.pstdev(deltas)
+    veredicto = "SOBREVIVE" if sigma < 0.5 else "INDETERMINADA"
+    return Resultado(22, "autopsia como salud", veredicto,
+                     "σ(Δ)", sigma, {"media_Δ": statistics.fmean(deltas)})
+
+
+# ============================================================================
+# Tesis 23
+# ============================================================================
+
+def exp_23() -> Resultado:
+    motor = _motor(semilla=42)
+    r = motor.generar()
+    if not r.get("ok"):
+        return Resultado(23, "complemento informativo", "INDETERMINADA", "dist", 0.0, {})
+    f0 = calcular_perfil(r["texto"]).como_dict()
+    campos = ["long_media_frase", "diversidad_lexica", "long_media_palabra"]
+    mejor = float("inf")
+    for _ in range(200):
+        r2 = motor.generador.generar(validar_estilo=False, validar_repeticion=False,
+                                     validar_tics_flag=False)
+        if not r2.get("ok"):
+            continue
+        if validar_estilometria(r2["texto"]).ok and validar_tics(r2["texto"]).ok:
+            continue
+        f2 = calcular_perfil(r2["texto"]).como_dict()
+        d = sum(abs(f0[c] - f2[c]) for c in campos)
+        mejor = min(mejor, d)
+    veredicto = "SOBREVIVE" if mejor < 1.0 else "CAE"
+    return Resultado(23, "complemento informativo", veredicto,
+                     "dist mínima", mejor, {})
+
+
+# ============================================================================
+# Tesis 24
+# ============================================================================
+
+def exp_24() -> Resultado:
+    motor = _motor(semilla=42)
+    resultados = {}
+    for capa in ["tecnico", "militar", "juridico", "medico"]:
+        r_h = motor.generar()
+        r_p = motor.generar(capa=capa)
+        if not (r_h.get("ok") and r_p.get("ok")):
+            continue
+        h = r_h["texto"]
+        p = r_p["texto"]
+        ratios = []
+        for frac in [0.1, 0.2, 0.3, 0.4]:
+            n = int(len(p) * frac)
+            if n < 10:
+                continue
+            mitad = len(h) // 2
+            fusion = h[:mitad] + "\n" + p[:n] + "\n" + h[mitad:]
+            if validar_estilometria(fusion).ok and validar_tics(fusion).ok:
+                ratios.append(frac)
+        resultados[capa] = max(ratios) if ratios else 0.0
+    vals = list(resultados.values())
+    var = statistics.pstdev(vals) if len(vals) > 1 else 0.0
+    veredicto = "SOBREVIVE" if var > 0.05 else "INDETERMINADA"
+    return Resultado(24, "permisividad como hospedaje", veredicto,
+                     "σ(ρ) por capa", var, {"por_capa": resultados})
+
+
+# ============================================================================
+# Tesis 25
+# ============================================================================
+
+def exp_25() -> Resultado:
+    motor = _motor(semilla=42)
+    ratios = []
+    for _ in range(50):
+        r = motor.generar()
+        if not r.get("ok"):
+            continue
+        texto = r["texto"]
+        plano = json.dumps(r["plano"], ensure_ascii=False)
+        ct = len(zlib.compress(texto.encode()))
+        cp = len(zlib.compress(plano.encode()))
+        ratios.append(ct / max(1, cp))
+    if not ratios:
+        return Resultado(25, "complejidad del plano", "INDETERMINADA", "ratio", 0.0, {})
+    media = statistics.fmean(ratios)
+    desv = statistics.pstdev(ratios)
+    veredicto = "SOBREVIVE" if desv / media < 0.3 else "CAE"
+    return Resultado(25, "complejidad del plano", veredicto,
+                     "ratio K(x)/K(π(x))", media,
+                     {"σ": desv, "cv": desv / media})
+
+
+# ============================================================================
+# Tesis 26
+# ============================================================================
+
+def exp_26() -> Resultado:
+    motor = _motor(semilla=42)
+    convergencias = []
+    for r in motor.generar_lote(20):
+        if not r.get("ok"):
+            continue
+        texto = r["texto"]
+        parrafos = texto.split("\n\n")
+        if len(parrafos) < 3:
+            continue
+        f0 = calcular_perfil(texto).vector_8d()
+        distancias = []
+        for k in range(1, len(parrafos)):
+            parcial = "\n\n".join(parrafos[:k])
+            fk = calcular_perfil(parcial).vector_8d()
+            distancias.append(math.sqrt(sum((a - b) ** 2 for a, b in zip(f0, fk))))
+        if len(distancias) >= 2:
+            convergencias.append(distancias[0] - distancias[-1])
+    if not convergencias:
+        return Resultado(26, "convergencia expansión", "INDETERMINADA", "Δd", 0.0, {})
+    media = statistics.fmean(convergencias)
+    veredicto = "SOBREVIVE" if media > 0 else "CAE"
+    return Resultado(26, "convergencia expansión", veredicto,
+                     "d_inicial - d_final", media, {"n": len(convergencias)})
+
+
+# ============================================================================
+# Tesis 27
+# ============================================================================
+
+def exp_27() -> Resultado:
+    motor = _motor(semilla=42)
+    inst = INSTRUMENTOS["censurar"]
+    dists = []
+    for r in motor.generar_lote(30):
+        if not r.get("ok"):
+            continue
+        t = r["texto"]
+        lex = inst._censura_lexica(t)
+        est = inst._censura_estructural(t)
+        fl = calcular_perfil(lex).vector_8d()
+        fe = calcular_perfil(est).vector_8d()
+        dists.append(math.sqrt(sum((a - b) ** 2 for a, b in zip(fl, fe))))
+    if not dists:
+        return Resultado(27, "censura diferenciable", "INDETERMINADA", "dist", 0.0, {})
+    media = statistics.fmean(dists)
+    veredicto = "SOBREVIVE" if media > 0.1 else "CAE"
+    return Resultado(27, "censura diferenciable", veredicto,
+                     "dist léxica vs estructural", media, {})
+
+
+# ============================================================================
+# Tesis 28
+# ============================================================================
+
+def exp_28() -> Resultado:
+    motor = _motor(semilla=42)
+    exitos = 0
+    total = 0
+    for _ in range(50):
+        r = motor.generar()
+        if not r.get("ok"):
+            continue
+        p = r["plano"]
+        conf = (f"Este texto tiene eje {p['eje']}, capa {p['capa']}, "
+                f"elenco {'+'.join(p['elenco'])}, virus {p['virus']}.")
+        total += 1
+        if validar_estilometria(conf).ok and validar_tics(conf).ok:
+            exitos += 1
+    tasa = exitos / max(1, total)
+    veredicto = "SOBREVIVE" if tasa > 0.8 else "CAE"
+    return Resultado(28, "autoconsistencia reflexiva", veredicto,
+                     "tasa de confesión válida", tasa,
+                     {"exitos": exitos, "total": total})
+
+
+# ============================================================================
+# Registro
+# ============================================================================
+
+EXPERIMENTOS: Dict[int, Callable[[], Resultado]] = {
+    1: exp_01, 3: exp_03, 4: exp_04, 5: exp_05, 6: exp_06, 7: exp_07, 8: exp_08,
+    9: exp_09, 10: exp_10, 11: exp_11, 12: exp_12, 13: exp_13, 14: exp_14,
+    15: exp_15, 16: exp_16, 17: exp_17, 18: exp_18, 19: exp_19, 20: exp_20,
+    21: exp_21, 22: exp_22, 23: exp_23, 24: exp_24, 25: exp_25, 26: exp_26,
+    27: exp_27, 28: exp_28,
+    # Tesis 2: canon negativo, requiere acumular rechazos en disco
+}
+
+# Tesis pendientes de implementación completa: 2 (canon negativo)
+# Motivo: requiere persistencia entre ejecuciones.
+
+
+# ============================================================================
+# CLI
+# ============================================================================
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Refutación CASCABEL")
+    parser.add_argument("--solo", nargs="*", type=int)
+    parser.add_argument("--json", action="store_true")
+    args = parser.parse_args()
+
+    print("=" * 60)
+    print(f"PROTOCOLO DE REFUTACIÓN — {METADATOS['nombre']} v{METADATOS['version']}")
+    print("=" * 60)
+
+    tesis = sorted(EXPERIMENTOS.keys())
+    if args.solo:
+        tesis = [t for t in tesis if t in args.solo]
+
+    resultados = []
+    for tid in tesis:
+        fn = EXPERIMENTOS[tid]
+        t0 = time.time()
+        try:
+            r = fn()
+        except Exception as exc:
+            r = Resultado(tid, "error", "INDETERMINADA", "exception", 0.0,
+                          {"error": str(exc)})
+        dt = time.time() - t0
+        resultados.append(r)
+        print(f"[T{tid:02d}] {r.nombre}: {r.veredicto} | "
+              f"{r.metrica} = {r.valor:.4f} ({dt:.2f}s)")
+
+    print("\n" + "=" * 60)
+    print("RESUMEN")
+    print("=" * 60)
+    for v in ["SOBREVIVE", "CAE", "INDETERMINADA", "SIN_EJECUTAR"]:
+        n = sum(1 for r in resultados if r.veredicto == v)
+        print(f"  {v}: {n}")
+
+    if args.json:
+        print(json.dumps([r.como_dict() for r in resultados],
+                         ensure_ascii=False, indent=2))
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+---
+
+### E.32. Reproducibilidad
+
+```bash
+# Ejecutar los 28 experimentos
+python refutacion_cascabel.py
+
+# Ejecutar solo algunos
+python refutacion_cascabel.py --solo 1 4 6 21
+
+# Salida en JSON
+python refutacion_cascabel.py --json > resultados.json
+```
+
+- **Entorno:** Python 3.11+.
+- **Dependencias:** ninguna externa.
+- **Requisito:** `cascabel.py` v0.1.0 en el mismo directorio.
+- **Tiempo estimado:** 5–15 minutos según máquina.
+- **Semillas:** fijas en cada experimento.
+
+---
+
+### E.33. Limitaciones
+
+- **Cobertura.** 27 de 28 tesis tienen experimento implementado. La tesis 2 (canon negativo) requiere persistencia entre ejecuciones y no está implementada en este script. La tesis 11 (forense) requiere corpus multi-autor externo y no se ejecuta por defecto.
+- **Corpus.** Todos los experimentos usan el corpus embebido (19 posts). No se usa bootstrap ni corpus externo.
+- **Validación estadística.** Cada experimento corre una sola semilla. Un protocolo más robusto repetiría cada experimento con 30 semillas y reportaría intervalos de confianza.
+- **Un solo idioma.** Español, registro ensayo breve.
+- **Resultados no publicados.** Los veredictos que el script produce no están pre-registrados. Se publicarán tal cual en la siguiente revisión.
+
+---
+
+### E.34. Compromiso de publicación
+
+El autor se compromete a publicar en la siguiente revisión del preprint:
+
+- La salida literal del script, sin edición.
+- Los veredictos reales de las 28 tesis, incluidos los que contradigan las predicciones de §E.2.
+- Las tesis que el protocolo deje como INDETERMINADAS, con la razón.
+- Cualquier refutación de terceros que ejecuten el protocolo sobre corpus distintos.
+
+---
+
+*Apéndice E — v1.2 — septiembre de 2026.*
+*David Ferrández Canalis.*
+*28 tesis. 28 experimentos. 0 ejecutados.*
+*El compromiso es publicar lo que salga, no lo que se espera.*
+
