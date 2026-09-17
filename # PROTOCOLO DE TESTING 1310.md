@@ -1236,11 +1236,6 @@ class ReporteNegocio(BaseModel):
 | **Optimización** | 12+ meses | Red teaming continuo. Experience paper publicado. | Casos de éxito documentados. |
 
 
-## CIERRE
-
-El Protocolo de Testing 1310 formaliza cada prueba como un objeto tipado, con refutador obligatorio, severidad, estándar de ciberseguridad, firma de integridad, roles segregados, validación semántica y sello 1310. El Auditor verifica. El sistema reporta. Y la suite crece por refutación, no por acumulación.
-
-**El sello 1310 es obligatorio.** Acredita que el test ha superado el protocolo de falsabilidad. Sin sello, no hay test. Hay script.
 
 **La extensión para QA con IA:** el protocolo está diseñado para que un LLM pueda operarlo sin ambigüedad. El humano define el contrato (refutador, severidad, estándar). El LLM genera el test. El ValidadorSemantico verifica que el refutador sea falsable. El Auditor verifica integridad. El Ejecutor corre. El Cronista documenta. Y todo tiene coste, versión y trazabilidad.
 
@@ -1248,8 +1243,6 @@ El Protocolo de Testing 1310 formaliza cada prueba como un objeto tipado, con re
 
 *El que diseña el test también escribe el pipeline. Y el que lo ejecuta, también. Pero el que elige el nivel, decide qué protocolo necesita. Y el que valida el refutador, decide si el test es un test o es una ilusión.*
 
-
----
 
 # ANEXO A — ALTERNATIVAS DESCARTADAS DURANTE EL DISEÑO
 
@@ -1404,6 +1397,13 @@ El Protocolo de Testing 1310 formaliza cada prueba como un objeto tipado, con re
 **Descartado:** un test tautológico no verifica nada. Alternativa: estado `TAUTOLOGICO` que no cuenta para cobertura.
 
 ---
+
+## CIERRE
+
+El Protocolo de Testing 1310 formaliza cada prueba como un objeto tipado, con refutador obligatorio, severidad, estándar de ciberseguridad, firma de integridad, roles segregados, validación semántica y sello 1310. El Auditor verifica. El sistema reporta. Y la suite crece por refutación, no por acumulación.
+
+**El sello 1310 es obligatorio.** Acredita que el test ha superado el protocolo de falsabilidad. Sin sello, no hay test. Hay script.
+
 
 **1310.**
 
