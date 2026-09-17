@@ -1,8 +1,8 @@
-# PROTOCOLO DE TESTING 1310 — VERSIÓN 1.0
+# PROTOCOLO DE TESTING 1310 — VERSIÓN 1.0 EXTENDIDA
 
-**Manual operativo para un sistema de testing tipado, falsable, íntegro y auditable.**
+**Manual operativo para un sistema de testing tipado, falsable, íntegro y auditable, con extensión para QA asistido por IA.**
 
-**Pydantic v2 + matemática + ciberseguridad + estado del arte 2025-2026.**
+**Pydantic v2 + matemática + ciberseguridad + estado del arte 2025-2026 + multi-agente + validación semántica.**
 
 
 ## PARTE 0 — PRINCIPIO Y GUÍA DE DECISIÓN
@@ -13,20 +13,19 @@ Un test no es una opinión. Es un **testimonio falsable** sobre el comportamient
 
 **El sello 1310 no es decorativo.** Acredita que el test ha superado el protocolo de falsabilidad: tiene refutador explícito, condición de fallo, hash pre-registrado y auditoría de integridad. Un test sin sello 1310 es un script que se ejecuta. Un test con sello 1310 es un testimonio que se puede refutar.
 
+**Este protocolo está diseñado para que un LLM pueda operarlo sin ambigüedad.** No es un protocolo para humanos que escriben tests a mano. Es un protocolo para humanos que escriben **el contrato** y agentes que generan, ejecutan y validan los tests que lo cumplen.
+
 ### Árbol de decisión: ¿qué nivel necesito?
 
 **Pregunta 1: ¿Tu software, si falla, puede causar daño físico, financiero o legal?**
-
-- **SÍ** → Nivel Full. No hay discusión. Banca, salud, automoción, defensa, IoT médico.
+- **SÍ** → Nivel Full. Banca, salud, automoción, defensa, IoT médico.
 - **NO** → Pregunta 2.
 
 **Pregunta 2: ¿Tienes requisitos regulatorios que auditar (PCI DSS, GDPR, DORA, IEC 62304, ISO 26262)?**
-
 - **SÍ** → Nivel Standard o Full según criticidad.
 - **NO** → Pregunta 3.
 
 **Pregunta 3: ¿Tu equipo tiene menos de 10 personas y necesita shipear cada semana?**
-
 - **SÍ** → Nivel Lite.
 - **NO** → Nivel Standard.
 
@@ -36,9 +35,9 @@ Un test no es una opinión. Es un **testimonio falsable** sobre el comportamient
 
 | Nivel | Público | Qué incluye | Qué NO incluye |
 |---|---|---|---|
-| **Lite** | Startups, equipos de 1-10 personas | Plugin de pytest. Refutador en docstring. Hash automático. | Roles, SBOM, SLSA, ML, HIL, auditoría regulatoria. |
-| **Standard** | Empresas medianas, SaaS B2B, equipos de 10-50 | Lite + roles + estándares + reporte de negocio + ML básico. | SLSA 3+, HIL, TLPT, MC/DC. |
-| **Full** | Banca, salud, automoción, defensa, regulados | Standard + SBOM + SLSA 3+ + MC/DC + HIL + TLPT + segregación auditable + ML completo. | Nada. Es el protocolo completo. |
+| **Lite** | Startups, equipos de 1-10 personas | Plugin de pytest. Refutador en docstring. Hash automático. Coste de generación. | Roles, SBOM, SLSA, ML, HIL, auditoría regulatoria. |
+| **Standard** | Empresas medianas, SaaS B2B, equipos de 10-50 | Lite + roles + estándares + reporte de negocio + ML básico + multi-agente. | SLSA 3+, HIL, TLPT, MC/DC. |
+| **Full** | Banca, salud, automoción, defensa, regulados | Standard + SBOM + SLSA 3+ + MC/DC + HIL + TLPT + segregación auditable + ML completo + validación semántica. | Nada. Es el protocolo completo. |
 
 
 ## PARTE 1 — CÓMO FUNCIONA EL PROTOCOLO
@@ -63,14 +62,15 @@ El refutador es la parte más importante del protocolo. Responde a la pregunta: 
 
 Sin refutador, un test es una tautología. Verifica lo que verifica porque lo verifica. No aporta información.
 
-**Ejemplo malo:**
+**El problema de los tests generados por IA:** estudios empíricos muestran que los LLMs generan tests que compilan y alcanzan cobertura razonable pero **fallan en detectar bugs**, y frecuentemente exhiben "design smells" que socavan su efectividad. Cuando se usan ingenuamente, estos asistentes tienden a generar **tests tautológicos que reformulan la lógica de implementación en lugar de desafiarla**.
+
+**Ejemplo malo (sin refutador):**
 ```python
 def test_suma():
     assert 2 + 2 == 4
 ```
-Esto no es un test. Es una comprobación de que Python funciona.
 
-**Ejemplo bueno:**
+**Ejemplo bueno (con refutador):**
 ```python
 def test_transferencia_no_permite_saldo_negativo():
     """
@@ -84,16 +84,15 @@ def test_transferencia_no_permite_saldo_negativo():
     assert cuenta.saldo == 50
 ```
 
-El refutador dice: "si esto pasa, el test falla". La condición de fallo dice exactamente qué se considera un fallo.
-
 ### 1.3 El Auditor, explicado
 
 El Auditor 1310 no es un juez. Es un **verificador de integridad**.
 
-Sus tres funciones:
+Sus funciones:
 1. **Verificar el hash.** Compara el hash actual del test con el pre-registrado.
-2. **Decidir si un fallo es significativo.** Usa el historial de ejecuciones.
-3. **Reportar.** Genera un JSON con el estado de la suite, impacto de negocio y estándares cubiertos.
+2. **Validar el refutador semánticamente.** No basta con que exista. Tiene que ser falsable de verdad.
+3. **Decidir si un fallo es significativo.** Usa el historial de ejecuciones.
+4. **Reportar.** Genera un JSON con el estado de la suite, impacto de negocio y estándares cubiertos.
 
 **El Auditor no puede validar un test que él mismo propuso.**
 
@@ -143,6 +142,8 @@ class EstadoTest(str, Enum):
     SKIPPED = "skipped"
     QUARANTINED = "quarantined"
     OBSOLETO = "obsoleto"
+    TAUTOLOGICO = "tautologico"
+    REFUTADOR_INVALIDO = "refutador_invalido"
 
 class EstandarCiberseguridad(str, Enum):
     NIST_800_218 = "nist_sp_800_218"
@@ -186,11 +187,25 @@ class Rol(str, Enum):
     EJECUTOR = "ejecutor"
     AUDITOR = "auditor_1310"
     CRONISTA = "cronista"
+    GENERADOR_LLM = "generador_llm"
+    VALIDADOR_SEMANTICO = "validador_semantico"
 
 class NivelProtocolo(str, Enum):
     LITE = "lite"
     STANDARD = "standard"
     FULL = "full"
+
+class ModeloLLM(str, Enum):
+    GPT_4 = "gpt-4"
+    GPT_4O_MINI = "gpt-4o-mini"
+    CLAUDE_SONNET = "claude-sonnet-4.6"
+    CLAUDE_OPUS = "claude-opus-4.7"
+    GEMINI_PRO = "gemini-2.5-pro"
+    GEMINI_FLASH = "gemini-3-flash"
+    QWEN_CODER = "qwen3-coder"
+    DEVSTRAL_SMALL = "devstral-small-2"
+    SEED = "seed-1.6"
+    DEEPSEEK = "deepseek-v3.1"
 ```
 
 ### 2.2 Firma del test
@@ -210,13 +225,15 @@ class FirmaTest(BaseModel):
     dependencias_externas: Annotated[int, Field(ge=0)]
     aislamiento: Probability
     flakiness: Probability
+    integridad_tautologica: Probability  # 0.0 = tautológico, 1.0 = falsable
 
-    def vector_8d(self) -> tuple[float, ...]:
+    def vector_10d(self) -> tuple[float, ...]:
         return (
             self.cobertura_lineas, self.cobertura_ramas,
             self.mutacion_killed, self.determinismo,
             float(self.tiempo_ejecucion_ms), float(self.dependencias_externas),
             self.aislamiento, self.flakiness,
+            self.integridad_tautologica, self.cobertura_mcdc,
         )
 ```
 
@@ -245,6 +262,7 @@ class TestInmutable(BaseModel):
 
     refutador: Annotated[str, Field(min_length=10)]
     condicion_de_fallo: Annotated[str, Field(min_length=5)]
+    refutador_es_falsable: bool = False  # validado por ValidadorSemantico
 
     severidad: Severidad
     estandares: list[EstandarCiberseguridad] = Field(default_factory=list)
@@ -257,6 +275,14 @@ class TestInmutable(BaseModel):
     hash_sha256: SHA256
     fecha: Annotated[str, Field(pattern=r"^\d{4}-\d{2}-\d{2}$")]
     sello: Literal[1310] = 1310
+
+    # Generación por IA
+    generado_por_llm: bool = False
+    modelo_llm: Optional[ModeloLLM] = None
+    prompt_version: Optional[str] = None
+    coste_generacion: Optional[float] = None
+    tokens_entrada: Optional[int] = None
+    tokens_salida: Optional[int] = None
 
     @field_validator("refutador")
     @classmethod
@@ -289,37 +315,260 @@ class TestEstado(BaseModel):
 
 **Regla de versionado:** un test con `test_padre` no reemplaza al padre. Lo versiona. El padre se marca como `OBSOLETO` y se mantiene en el corpus para trazabilidad.
 
-### 2.4 Análisis de riesgo con FMEA/FTA
+### 2.4 Coste de generación por LLM
+
+**El problema:** generar 100 tests con GPT-4 cuesta dinero. El coste por test varía enormemente según el modelo y la estrategia. Sakura con Qwen3-Coder cuesta **$0.07 por test**, aproximadamente la mitad de Gemini CLI con Gemini 2.5 Pro, mientras que Devstral Small 2 iguala el precio de la gama Flash a **$0.02 por test**. TestForge genera tests para un archivo completo a **$0.63 por archivo**. DiffTestGen incurre en **$0.041 por instancia** comparado con $0.045 de Testora++. Claude-Sonnet-4.5 con single prompting reduce el coste de **$0.95 a $0.20 por instancia**.
 
 ```python
-class FMEA(BaseModel):
+class CosteGeneracion(BaseModel):
     model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
 
-    id: Annotated[str, Field(pattern=r"^FMEA-\d{3}$")]
-    modo_fallo: str
-    efecto: str
-    severidad: Annotated[int, Field(ge=1, le=10)]
-    ocurrencia: Annotated[int, Field(ge=1, le=10)]
-    deteccion: Annotated[int, Field(ge=1, le=10)]
-    rpn: Annotated[int, Field(ge=1, le=1000)] = 0
+    test_id: str
+    modelo: ModeloLLM
+    tokens_entrada: Annotated[int, Field(ge=0)]
+    tokens_salida: Annotated[int, Field(ge=0)]
 
-    def calcular_rpn(self) -> int:
-        return self.severidad * self.ocurrencia * self.deteccion
+    # Precios por millón de tokens (USD)
+    precio_entrada: float
+    precio_salida: float
+
+    # Estrategia de generación
+    estrategia: Literal["single_prompt", "multi_prompt", "agentic", "hibrida"]
+    num_intentos: Annotated[int, Field(ge=1)] = 1
+
+    @property
+    def coste_total(self) -> float:
+        return (
+            (self.tokens_entrada / 1_000_000) * self.precio_entrada
+            + (self.tokens_salida / 1_000_000) * self.precio_salida
+        )
+
+    @property
+    def coste_por_intento(self) -> float:
+        return self.coste_total / self.num_intentos
+
+    @classmethod
+    def desde_modelo(cls, test_id: str, modelo: ModeloLLM,
+                     tokens_in: int, tokens_out: int,
+                     estrategia: str = "single_prompt") -> "CosteGeneracion":
+        PRECIOS = {
+            ModeloLLM.GPT_4: (30.0, 60.0),
+            ModeloLLM.GPT_4O_MINI: (0.15, 0.60),
+            ModeloLLM.CLAUDE_SONNET: (3.0, 15.0),
+            ModeloLLM.CLAUDE_OPUS: (10.0, 50.0),
+            ModeloLLM.GEMINI_PRO: (1.25, 10.0),
+            ModeloLLM.GEMINI_FLASH: (0.10, 0.40),
+            ModeloLLM.QWEN_CODER: (0.07, 0.07),
+            ModeloLLM.DEVSTRAL_SMALL: (0.02, 0.02),
+            ModeloLLM.SEED: (0.19, 0.19),
+            ModeloLLM.DEEPSEEK: (0.27, 1.10),
+        }
+        p_in, p_out = PRECIOS.get(modelo, (1.0, 3.0))
+        return cls(
+            test_id=test_id, modelo=modelo,
+            tokens_entrada=tokens_in, tokens_salida=tokens_out,
+            precio_entrada=p_in, precio_salida=p_out,
+            estrategia=estrategia
+        )
 
 
-class ArbolFallo(BaseModel):
-    model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
+class PresupuestoGeneracion(BaseModel):
+    model_config = ConfigDict(strict=True, extra="forbid")
 
-    id: Annotated[str, Field(pattern=r"^FTA-\d{3}$")]
-    evento_top: str
-    eventos_basicos: list[str]
-    compuertas: list[Literal["AND", "OR"]]
-    probabilidad_top: Optional[float] = None
+    limite_total: float = 100.0
+    limite_por_test: float = 1.0
+    gasto_acumulado: float = 0.0
+    tests_generados: int = 0
+
+    @property
+    def coste_medio(self) -> float:
+        return self.gasto_acumulado / self.tests_generados if self.tests_generados else 0.0
+
+    def puede_generar(self, coste_estimado: float) -> bool:
+        return (self.gasto_acumulado + coste_estimado <= self.limite_total
+                and coste_estimado <= self.limite_por_test)
 ```
 
-**Regla:** si `severidad >= 9` y `rpn >= 100`, el test debe tener `fmea_ref` y `riesgo_ref`.
+**Regla 1310:** si el coste de generación de un test supera el coste estimado del bug que previene, el test no se genera con ese modelo. Se usa un modelo más barato o se escribe a mano. El protocolo distingue entre **tests de generación barata** (Qwen3-Coder, Devstral) y **tests de generación premium** (Claude Opus, GPT-4).
 
-### 2.5 Historial de ejecuciones y flakiness
+**Un test suite con 100 casos usando GPT-4 puede costar entre $5 y $50 por ejecución**. El coste debe presupuestarse, no descubrirse.
+
+### 2.5 Versionado de prompts de generación
+
+**El problema:** si el prompt del Propositor cambia, los tests generados cambian. Eso es un cambio de versión del protocolo, no del test. El protocolo debe distinguirlo.
+
+**Estado del arte 2026:** Los prompts son código — necesitan control de versiones, testing y despliegues graduales como el software. Las mejores prácticas incluyen versionar los prompts de generación junto con el código. Cuando los patrones de test cambian, los prompts se actualizan en consecuencia.
+
+```python
+class PromptGeneracion(BaseModel):
+    model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
+
+    id: Annotated[str, Field(pattern=r"^PRM-\d{3}$")]
+    version: Annotated[str, Field(pattern=r"^\d+\.\d+\.\d+$")]
+    contenido: str
+    modelo_objetivo: ModeloLLM
+    hash_sha256: SHA256
+
+    # Métricas de calidad del prompt
+    tests_generados: int = 0
+    tests_validos: int = 0
+    tests_tautologicos: int = 0
+    coste_medio_por_test: float = 0.0
+
+    @property
+    def tasa_validez(self) -> float:
+        return self.tests_validos / self.tests_generados if self.tests_generados else 0.0
+
+    @property
+    def tasa_tautologia(self) -> float:
+        return self.tests_tautologicos / self.tests_generados if self.tests_generados else 0.0
+
+
+class HistorialPrompts(BaseModel):
+    model_config = ConfigDict(strict=True, extra="forbid")
+
+    prompts: list[PromptGeneracion] = Field(default_factory=list)
+
+    def mejor_prompt(self, modelo: ModeloLLM) -> Optional[PromptGeneracion]:
+        candidatos = [p for p in self.prompts if p.modelo_objetivo == modelo]
+        if not candidatos:
+            return None
+        return max(candidatos, key=lambda p: p.tasa_validez)
+
+    def detectar_regresion(self, prompt_nuevo: PromptGeneracion,
+                           prompt_anterior: PromptGeneracion,
+                           umbral: float = 0.05) -> bool:
+        """Detecta si un nuevo prompt degrada la calidad."""
+        return (prompt_anterior.tasa_validez - prompt_nuevo.tasa_validez) > umbral
+```
+
+**Regla 1310:** un cambio de prompt que reduce la tasa de validez en más de un 5% se considera regresión. El prompt anterior se mantiene como fallback. No se actualiza el prompt en producción sin A/B testing previo.
+
+### 2.6 Validación semántica de refutadores
+
+**El problema:** un LLM puede escribir "REFUTADOR: si el resultado es incorrecto, el test falla". Eso no es un refutador. Es una tautología. El validador actual solo detecta palabras prohibidas (`depende`, `quizás`). No detecta tautologías semánticas.
+
+**Estado del arte 2026:** **VALTEST** utiliza **entropía semántica** para validar automáticamente casos de test generados por LLMs. Mide la incertidumbre en las partes semánticas de un caso de test y usa esas señales para identificar tests inválidos antes de que se usen en tareas downstream. Estudios empíricos muestran que los LLMs generan oráculos con puntuación de mutación promedio del **43%**, similar al **45%** de los oráculos diseñados por humanos.
+
+```python
+class ValidadorSemantico(BaseModel):
+    model_config = ConfigDict(strict=True, extra="forbid")
+
+    modelo_validador: ModeloLLM = ModeloLLM.GPT_4O_MINI
+    umbral_entropia: float = 0.7
+    umbral_confianza: float = 0.85
+
+    def validar_refutador(self, refutador: str,
+                          condicion_fallo: str,
+                          contexto_codigo: str) -> "ResultadoValidacion":
+        """
+        Valida si un refutador es semánticamente falsable.
+        Usa entropía semántica para detectar tautologías.
+        """
+        ...
+
+    def detectar_tautologia_estructural(self, refutador: str,
+                                         codigo: str) -> bool:
+        """
+        Detecta si el refutador reformula la implementación
+        en lugar de desafiarla (tautología estructural).
+        """
+        ...
+
+    def detectar_tautologia_semantica(self, refutador: str) -> bool:
+        """
+        Detecta si el refutador es vacuamente cierto
+        (ej: 'si el resultado es incorrecto, falla').
+        """
+        ...
+
+
+class ResultadoValidacion(BaseModel):
+    model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
+
+    es_falsable: bool
+    entropia_semantica: Probability
+    confianza: Probability
+    razon: str
+    tipo_tautologia: Optional[Literal[
+        "vacuamente_cierto", "reformulacion", "mock_passthrough",
+        "assert_interno", "snapshot_inutil"
+    ]] = None
+```
+
+**Tipos de test tautológico que el ValidadorSemantico debe detectar:**
+
+| Tipo | Descripción | Ejemplo |
+|---|---|---|
+| **Vacuamente cierto** | El refutador no puede ser falso en ninguna circunstancia | "Si el resultado es incorrecto, el test falla" |
+| **Reformulación** | El refutador usa la misma lógica que la implementación | `assert construir_query(x) == construir_query(x)` |
+| **Mock passthrough** | El test verifica que el mock devuelve lo que se le configuró | `mock.return_value = 5; assert obj.metodo() == 5` |
+| **Assert interno** | El test verifica estado interno, no comportamiento | `assert obj._cache == {}` |
+| **Snapshot inútil** | El snapshot no verifica nada útil | `expect(foo()).toMatchSnapshot()` sin revisión |
+
+**Regla 1310:** si el ValidadorSemantico detecta una tautología, el test pasa a estado `TAUTOLOGICO`. No se ejecuta. No cuenta para cobertura. No bloquea release. Pero se registra en el corpus negativo como fallo del Propositor.
+
+### 2.7 Multi-agente: roles como agentes
+
+**El problema:** un LLM puede generar un test, pero no puede validarlo sin sesgo. La segregación de funciones que en un equipo humano es un problema organizativo, en un sistema multi-agente es una arquitectura natural.
+
+**Estado del arte 2026:** TestAgent propone un enfoque de generación de tests basado en LLM que aborda las limitaciones de los enfoques actuales emulando prácticas humanas de testing mediante un mecanismo de **colaboración multi-agente**. Diseña tres agentes especializados. Investigaciones recientes argumentan que los frameworks multi-agente generan mejores tests unitarios que un único prompt bien elaborado, refinando iterativamente la cobertura y verificando oráculos de forma cruzada.
+
+```python
+class AgenteTesting(BaseModel):
+    model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
+
+    id: Annotated[str, Field(pattern=r"^AGT-\d{3}$")]
+    rol: Rol
+    modelo: ModeloLLM
+    prompt_ref: Optional[str] = None
+
+    # Permisos
+    puede_proponer: bool = False
+    puede_ejecutar: bool = False
+    puede_validar: bool = False
+    puede_generar: bool = False
+    puede_validar_semanticamente: bool = False
+
+
+class SistemaMultiAgente(BaseModel):
+    model_config = ConfigDict(strict=True, extra="forbid")
+
+    agentes: list[AgenteTesting] = Field(default_factory=list)
+    max_iteraciones: Annotated[int, Field(ge=1, le=10)] = 3
+
+    def orquestar_generacion(self, requisito: str,
+                              codigo: str) -> list[TestInmutable]:
+        """
+        Orquesta el ciclo:
+        1. GeneradorLLM propone tests.
+        2. ValidadorSemantico valida refutadores.
+        3. Auditor verifica integridad.
+        4. Ejecutor corre.
+        5. Si falla, vuelve a 1 con feedback.
+        """
+        ...
+
+    def _agente_por_rol(self, rol: Rol) -> Optional[AgenteTesting]:
+        for a in self.agentes:
+            if a.rol == rol:
+                return a
+        return None
+```
+
+**Roles mapeados a agentes:**
+
+| Rol humano | Agente LLM | Función |
+|---|---|---|
+| Propositor | GeneradorLLM | Genera tests desde requisitos y código |
+| Validador | ValidadorSemantico | Valida que los refutadores sean falsables |
+| Ejecutor | Ejecutor | Corre los tests en CI/CD |
+| Auditor | Auditor1310 | Verifica integridad, hash, roles |
+| Cronista | Cronista | Documenta resultados, mantiene corpus negativo |
+
+**Regla 1310:** un test generado por `GeneradorLLM` no puede ser validado semánticamente por el mismo modelo. Si el Generador usa GPT-4, el Validador usa Claude o Gemini. La diversidad de modelos es la garantía de independencia.
+
+### 2.8 Historial de ejecuciones y flakiness
 
 ```python
 class HistorialEjecuciones(BaseModel):
@@ -344,25 +593,7 @@ class HistorialEjecuciones(BaseModel):
         return len(ultimos_3) == 3 and all(not r for r in ultimos_3)
 ```
 
-**Implementación escalable:** el historial vive en SQLite (`.testing1310/historial.db`). La tabla `ejecuciones` tiene `test_id`, `timestamp`, `passed`. La ventana de 20 se calcula con `ORDER BY timestamp DESC LIMIT 20`.
-
-### 2.6 Anomalías y gestión de fallos
-
-```python
-class Anomalia(BaseModel):
-    model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
-    test_id: str
-    fecha: str
-    severidad: Severidad
-    causa_raiz: str
-    accion_correctiva: str
-    fecha_cierre: Optional[str] = None
-    verificado_por: Literal["auditor_1310", "qa_lead", "regulatory_affairs"]
-    requisito_ref: Optional[str] = None
-    riesgo_ref: Optional[str] = None
-```
-
-**Regla:** un test `FAILED` en dominio regulado no se cierra sin `causa_raiz`, `accion_correctiva` y `verificado_por`.
+**Implementación escalable:** el historial vive en SQLite (`.testing1310/historial.db`). La ventana de 20 se calcula con `ORDER BY timestamp DESC LIMIT 20`.
 
 
 ## PARTE 3 — LA MATEMÁTICA DEL TESTING
@@ -404,7 +635,7 @@ class SCRTesting(BaseModel):
 
 ### 3.3 Property-Based Testing con refinamiento adversarial
 
-**Estado del arte 2026:** PROBE introduce Refinamiento Adversarial: un agente Validador genera contra-implementaciones para exponer lagunas en la especificación. PROBE incrementa las puntuaciones de mutación en un 9.79% e identificó 45 bugs previamente desconocidos en bibliotecas de primer nivel.
+**Estado del arte 2026:** PROBE introduce Refinamiento Adversarial: un agente Validador genera contra-implementaciones (código semánticamente incorrecto que satisface la propiedad generada) para exponer lagunas en la especificación. PROBE incrementa las puntuaciones de mutación en un 9.79% e identificó 45 bugs previamente desconocidos en bibliotecas de primer nivel.
 
 ```python
 class PropiedadPBT(BaseModel):
@@ -446,6 +677,26 @@ class PropiedadLLM(BaseModel):
     direccion: Literal["mayor_que", "menor_que"]
 ```
 
+### 3.6 Semantic Entropy para validación de tests
+
+**Estado del arte 2026:** VALTEST introduce un marco que aprovecha la entropía semántica para validar automáticamente casos de test generados por LLMs. Los resultados sugieren que la entropía semántica es una señal fiable para identificar tests inválidos. La entropía semántica se calcula generando múltiples respuestas para la misma pregunta y midiendo la incertidumbre entre clusters semánticos.
+
+```python
+class EntropiaSemantica(BaseModel):
+    model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
+
+    test_id: str
+    num_muestras: Annotated[int, Field(ge=5, le=50)] = 10
+    entropia: Annotated[float, Field(ge=0.0, le=1.0)]
+    clusters_semanticos: Annotated[int, Field(ge=1)]
+    confianza: Probability
+
+    @property
+    def test_valido(self) -> bool:
+        """Entropía baja = test consistente = válido."""
+        return self.entropia < 0.7 and self.confianza > 0.85
+```
+
 
 ## PARTE 4 — INTEGRIDAD Y CIBERSEGURIDAD
 
@@ -479,7 +730,7 @@ class IntegridadTest(BaseModel):
 | A09: Logging Failures | **Sí** | Custom | Integration |
 | A10: Mishandling Exceptional Conditions | **NO** (requiere humano) | Custom | Integration + Chaos |
 
-**Regla de honestidad:** A06 y A10 no son automatizables. El protocolo lo dice explícitamente. Un checklist que promete automatizar lo que no se puede automatizar es un checklist que miente.
+**Regla de honestidad:** A06 y A10 no son automatizables. El protocolo lo dice explícitamente.
 
 ### 4.3 NIST SP 800-218A — AI SSDF Profile
 
@@ -508,8 +759,6 @@ class TestChaosAI(BaseModel):
 
 ### 4.5 Red teaming adversarial continuo
 
-El protocolo 1310 no asume que el atacante sigue OWASP. El red teaming adversarial continuo es un tipo de test de primera clase.
-
 ```python
 class RedTeamingContinuo(BaseModel):
     model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
@@ -526,8 +775,6 @@ class RedTeamingContinuo(BaseModel):
         ...
 ```
 
-**Estado del arte 2025:** TELUS Digital lanzó Fuel iX Fortify, que genera miles de ataques adversariales noveles automáticamente. Rapid7 lanzó Vector Command Advanced con red teaming continuo. La tendencia es clara: **el red teaming se automatiza y se integra en el SDLC**.
-
 ### 4.6 Ciclos regulatorios
 
 ```python
@@ -541,22 +788,13 @@ class CicloRegulatorio(BaseModel):
 CICLOS_REGULATORIOS = {
     EstandarCiberseguridad.PCI_DSS: CicloRegulatorio(
         estandar=EstandarCiberseguridad.PCI_DSS,
-        frecuencia="trimestral",
-        tipo_test=TipoTest.SECURITY,
-        obligatorio=True
-    ),
+        frecuencia="trimestral", tipo_test=TipoTest.SECURITY, obligatorio=True),
     EstandarCiberseguridad.DORA: CicloRegulatorio(
         estandar=EstandarCiberseguridad.DORA,
-        frecuencia="trienal",
-        tipo_test=TipoTest.SECURITY,
-        obligatorio=True
-    ),
+        frecuencia="trienal", tipo_test=TipoTest.SECURITY, obligatorio=True),
     EstandarCiberseguridad.IEC_62304: CicloRegulatorio(
         estandar=EstandarCiberseguridad.IEC_62304,
-        frecuencia="anual",
-        tipo_test=TipoTest.INTEGRATION,
-        obligatorio=True
-    ),
+        frecuencia="anual", tipo_test=TipoTest.INTEGRATION, obligatorio=True),
 }
 ```
 
@@ -584,7 +822,8 @@ class Sello(BaseModel):
 ```python
 class HeteronimoTesting(BaseModel):
     model_config = ConfigDict(frozen=True, strict=True, extra="forbid")
-    nombre: Literal["arquitecto", "ejecutor", "auditor_1310", "cronista"]
+    nombre: Literal["arquitecto", "ejecutor", "auditor_1310", "cronista",
+                    "generador_llm", "validador_semantico"]
     funcion: str
     puede_proponer: bool
     puede_ejecutar: bool
@@ -610,20 +849,26 @@ class CapaTesting(BaseModel):
 PROPUESTO
   │  (asignar id, versión, categoría, refutador, estándares)
   ▼
+GENERADO_POR_LLM  ← si generado_por_llm=True
+  │  (validar refutador con ValidadorSemantico)
+  ▼
 PRE_REGISTRADO  ← hash SHA-256 calculado sobre TestInmutable
   │  (congelado, no editable)
   ▼
 EN_EJECUCION
   │  (CI/CD ejecuta el test)
   ▼
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-▼              ▼              ▼              ▼
-PASSED         FAILED         BLOCKED        QUARANTINED
+┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+▼              ▼              ▼              ▼              ▼
+PASSED         FAILED         BLOCKED        QUARANTINED    TAUTOLOGICO
 ```
 
 ```python
 TRANSICIONES: dict[EstadoTest, set[EstadoTest]] = {
-    EstadoTest.PROPUESTO: {EstadoTest.PRE_REGISTRADO},
+    EstadoTest.PROPUESTO: {EstadoTest.PRE_REGISTRADO, EstadoTest.GENERADO_POR_LLM},
+    EstadoTest.GENERADO_POR_LLM: {EstadoTest.PRE_REGISTRADO,
+                                   EstadoTest.TAUTOLOGICO,
+                                   EstadoTest.REFUTADOR_INVALIDO},
     EstadoTest.PRE_REGISTRADO: {EstadoTest.EN_EJECUCION},
     EstadoTest.EN_EJECUCION: {EstadoTest.PASSED, EstadoTest.FAILED,
                                EstadoTest.BLOCKED, EstadoTest.QUARANTINED},
@@ -631,17 +876,19 @@ TRANSICIONES: dict[EstadoTest, set[EstadoTest]] = {
     EstadoTest.FAILED: {EstadoTest.EN_EJECUCION, EstadoTest.QUARANTINED},
     EstadoTest.BLOCKED: {EstadoTest.EN_EJECUCION},
     EstadoTest.QUARANTINED: {EstadoTest.EN_EJECUCION},
+    EstadoTest.TAUTOLOGICO: {EstadoTest.PROPUESTO},  # requiere reescritura
+    EstadoTest.REFUTADOR_INVALIDO: {EstadoTest.PROPUESTO},
     EstadoTest.SKIPPED: {EstadoTest.EN_EJECUCION},
     EstadoTest.OBSOLETO: set(),
 }
 ```
 
-Un test **FAILED** no se elimina. Se marca. Y se documenta el fallo. Eso es el **corpus negativo**: el activo más valioso.
+Un test **TAUTOLOGICO** no se elimina. Se marca. Y se documenta en el corpus negativo como fallo del Propositor. Un test **FAILED** no se elimina. Se marca. Y se documenta el fallo.
 
 
 ## PARTE 7 — EL AUDITOR 1310
 
-### 7.1 Auditor con versionado y riesgo
+### 7.1 Auditor con versionado, riesgo y validación semántica
 
 ```python
 class Auditor1310(BaseModel):
@@ -651,6 +898,8 @@ class Auditor1310(BaseModel):
     resultados: list[dict] = Field(default_factory=list)
     historiales: dict[str, HistorialEjecuciones] = Field(default_factory=dict)
     fmeas: dict[str, FMEA] = Field(default_factory=dict)
+    validador: ValidadorSemantico = Field(default_factory=ValidadorSemantico)
+    presupuesto: PresupuestoGeneracion = Field(default_factory=PresupuestoGeneracion)
 
     def pre_registrar(self, t: TestInmutable) -> SHA256:
         h = hashlib.sha256(t.model_dump_json().encode()).hexdigest()
@@ -662,6 +911,15 @@ class Auditor1310(BaseModel):
         return (h_actual == self.pre_registro[t.id]
                 and e.hash_inmutable == self.pre_registro[t.id])
 
+    def validar_refutador(self, t: TestInmutable) -> bool:
+        resultado = self.validador.validar_refutador(
+            t.refutador, t.condicion_de_fallo, t.enunciado
+        )
+        if not resultado.es_falsable:
+            t.estado = EstadoTest.TAUTOLOGICO
+            return False
+        return True
+
     def decidir_bloqueo(self, test_id: str, estado: TestEstado) -> bool:
         historial = self.historiales.get(test_id)
         test = self._test_de(test_id)
@@ -670,6 +928,14 @@ class Auditor1310(BaseModel):
         if test.severidad == Severidad.CRITICA:
             return True
         return estado == EstadoTest.FAILED and test.categoria == CategoriaTest.A
+
+    def generar_con_presupuesto(self, requisito: str, codigo: str,
+                                 modelo: ModeloLLM) -> Optional[TestInmutable]:
+        """Genera un test solo si hay presupuesto."""
+        coste_estimado = self._estimar_coste(modelo, requisito, codigo)
+        if not self.presupuesto.puede_generar(coste_estimado):
+            return None
+        return self._generar(requisito, codigo, modelo)
 ```
 
 ### 7.2 Roles y segregación de funciones
@@ -681,20 +947,40 @@ class Permisos(BaseModel):
     puede_proponer: bool
     puede_ejecutar: bool
     puede_validar: bool
+    puede_generar: bool
+    puede_validar_semanticamente: bool
 
 PERMISOS = {
-    Rol.PROPOSITOR: Permisos(rol=Rol.PROPOSITOR, puede_proponer=True,
-                             puede_ejecutar=False, puede_validar=False),
-    Rol.EJECUTOR: Permisos(rol=Rol.EJECUTOR, puede_proponer=False,
-                           puede_ejecutar=True, puede_validar=False),
-    Rol.AUDITOR: Permisos(rol=Rol.AUDITOR, puede_proponer=False,
-                          puede_ejecutar=False, puede_validar=True),
-    Rol.CRONISTA: Permisos(rol=Rol.CRONISTA, puede_proponer=False,
-                           puede_ejecutar=False, puede_validar=False),
+    Rol.PROPOSITOR: Permisos(rol=Rol.PROPOSITOR,
+                             puede_proponer=True, puede_ejecutar=False,
+                             puede_validar=False, puede_generar=False,
+                             puede_validar_semanticamente=False),
+    Rol.GENERADOR_LLM: Permisos(rol=Rol.GENERADOR_LLM,
+                                puede_proponer=True, puede_ejecutar=False,
+                                puede_validar=False, puede_generar=True,
+                                puede_validar_semanticamente=False),
+    Rol.VALIDADOR_SEMANTICO: Permisos(rol=Rol.VALIDADOR_SEMANTICO,
+                                      puede_proponer=False, puede_ejecutar=False,
+                                      puede_validar=True, puede_generar=False,
+                                      puede_validar_semanticamente=True),
+    Rol.EJECUTOR: Permisos(rol=Rol.EJECUTOR,
+                           puede_proponer=False, puede_ejecutar=True,
+                           puede_validar=False, puede_generar=False,
+                           puede_validar_semanticamente=False),
+    Rol.AUDITOR: Permisos(rol=Rol.AUDITOR,
+                          puede_proponer=False, puede_ejecutar=False,
+                          puede_validar=True, puede_generar=False,
+                          puede_validar_semanticamente=False),
+    Rol.CRONISTA: Permisos(rol=Rol.CRONISTA,
+                           puede_proponer=False, puede_ejecutar=False,
+                           puede_validar=False, puede_generar=False,
+                           puede_validar_semanticamente=False),
 }
 ```
 
-**Regla para equipos pequeños:** si un usuario tiene múltiples roles, el sistema lo marca como `RIESGO_SEGREGACION` en el reporte. No lo bloquea. Lo visibiliza. Y documenta la compensación.
+**Regla para equipos pequeños:** si un usuario tiene múltiples roles, el sistema lo marca como `RIESGO_SEGREGACION` en el reporte.
+
+**Regla para multi-agente:** el `GeneradorLLM` no puede ser el mismo modelo que el `ValidadorSemantico`. Si el Generador usa GPT-4, el Validador usa Claude o Gemini.
 
 ### 7.3 Gestión de costes de ejecución
 
@@ -705,21 +991,9 @@ class CosteEjecucion(BaseModel):
     coste_unitario: float
     num_ejecuciones: int
     coste_total: float
-
-    @classmethod
-    def desde_llm(cls, test_id: str, num_calls: int,
-                  coste_por_call: float) -> "CosteEjecucion":
-        return cls(
-            test_id=test_id,
-            coste_unitario=coste_por_call,
-            num_ejecuciones=num_calls,
-            coste_total=num_calls * coste_por_call
-        )
 ```
 
-**Estado del arte 2026:** CAST completó un análisis de 100 agentes en 63 minutos por $7.97. Un pipeline de agentes para infotainment consume ~$4.64 por escenario. El coste de un LLM testing es real y debe presupuestarse.
-
-**Regla 1310:** si el coste de un test supera el coste estimado del bug que previene, el test no se ejecuta en cada commit. Se ejecuta en nightly o pre-release. El protocolo distingue entre **tests de commit** (baratos, rápidos) y **tests de release** (caros, exhaustivos).
+**Regla 1310:** si el coste de un test supera el coste estimado del bug que previene, el test no se ejecuta en cada commit. Se ejecuta en nightly o pre-release.
 
 ### 7.4 Métricas de escape de emulación
 
@@ -733,11 +1007,8 @@ class MetricaEscape(BaseModel):
 
     @property
     def justifica_hil(self) -> bool:
-        """Si la tasa de escape es alta, HIL se justifica."""
         return self.tasa_escape > 0.3
 ```
-
-**Si `tasa_escape > 0.3`**, el protocolo recomienda invertir en HIL. Si es menor, la emulación es suficiente.
 
 
 ## PARTE 8 — IMPLEMENTACIÓN LITE
@@ -787,8 +1058,15 @@ Eres un agente de testing 1310. Cada test que generas tiene:
 5. Un sello 1310
 
 No generas tests sin refutador. No generas refutadores genéricos
-("depende", "quizás", "a veces"). Si no puedes formular un refutador,
-el test no es un test. Es un script.
+("depende", "quizás", "a veces"). No generas tests tautológicos.
+Un test tautológico es aquel que verifica la implementación
+en lugar de desafiarla. Si no puedes formular un refutador que
+pueda ser falso, el test no es un test. Es un script.
+
+Si generas un test con un refutador tautológico, el ValidadorSemantico
+lo detectará y el test pasará a estado TAUTOLOGICO. No contará para
+cobertura. No bloqueará release. Pero quedará registrado como fallo
+del Propositor.
 ```
 
 
@@ -799,10 +1077,11 @@ el test no es un test. Es un script.
 El nivel Full usa todos los modelos definidos en PARTE 2. El Auditor 1310 orquesta:
 
 1. **Pre-registro** de cada `TestInmutable`.
-2. **Verificación de integridad** (hash SHA-256).
-3. **Ejecución** con registro de `TestEstado`.
-4. **Decisión de bloqueo** basada en historial, severidad y categoría.
-5. **Reporte** con impacto de negocio, costes y estándares cubiertos.
+2. **Validación semántica** del refutador.
+3. **Verificación de integridad** (hash SHA-256).
+4. **Ejecución** con registro de `TestEstado`.
+5. **Decisión de bloqueo** basada en historial, severidad y categoría.
+6. **Reporte** con impacto de negocio, costes y estándares cubiertos.
 
 ### 9.2 Gestión de anomalías para dominios regulados
 
@@ -826,6 +1105,8 @@ class ReporteNegocio(BaseModel):
     passed: int
     failed: int
     blocked: int
+    tautologicos: int
+    refutadores_invalidos: int
 
     bugs_prevenidos_estimados: int
     coste_bug_produccion_evitado: float
@@ -833,6 +1114,11 @@ class ReporteNegocio(BaseModel):
     cobertura_owasp: float
     cobertura_requisitos: float
     roi_estimado: float
+
+    # Costes de generación
+    coste_generacion_total: float
+    coste_generacion_medio_por_test: float
+    tests_generados_por_llm: int
 
     # Transparencia del cálculo
     formula_roi: str = "(beneficio - coste) / coste"
@@ -842,7 +1128,7 @@ class ReporteNegocio(BaseModel):
     coste_testing: float
 ```
 
-**Estado del arte 2026:** Los equipos que adoptan TDD reportan reducciones de defectos entre 40% y 90%. Las organizaciones que implementan automatización de pruebas pueden reducir entre 40% y 85% los costos operativos de QA. La automatización madura entrega un ROI del 150-200% con payback en 6-12 meses.
+**Estado del arte 2026:** Los equipos que adoptan TDD reportan reducciones de defectos entre 40% y 90%. Las organizaciones que implementan automatización de pruebas pueden reducir entre 40% y 85% los costos operativos de QA.
 
 
 ## PARTE 10 — CONSEJOS POR DOMINIO
@@ -861,7 +1147,7 @@ class ReporteNegocio(BaseModel):
 
 **Frameworks:** Pact, PactFlow (contract). Hypothesis (PBT financiero). Parasoft, Tricentis Tosca (compliance). JMeter, k6, Gatling (performance). TIBER-EU (TLPT).
 
-**Prácticas:** Contract testing obligatorio entre servicios. PBT financiero ("suma de débitos = suma de créditos"). TLPT trienal. Trazabilidad DORA. Ciclos regulatorios diferenciados.
+**Prácticas:** Contract testing obligatorio entre servicios. PBT financiero. TLPT trienal. Trazabilidad DORA. Ciclos regulatorios diferenciados.
 
 ### 10.3 IoT y Sistemas Embebidos
 
@@ -933,191 +1219,189 @@ class ReporteNegocio(BaseModel):
 17. **Escalabilidad:** SQLite para historial. Buffer circular.
 18. **Priorización:** tests críticos primero. Frameworks por capa, no por moda.
 19. **Adopción:** roadmap por fases.
+20. **Coste de generación:** `CosteGeneracion` + `PresupuestoGeneracion`.
+21. **Versionado de prompts:** `PromptGeneracion` + `HistorialPrompts`.
+22. **Validación semántica:** `ValidadorSemantico` + `EntropiaSemantica`.
+23. **Multi-agente:** `SistemaMultiAgente` con roles como agentes.
+24. **Detección de tautologías:** estado `TAUTOLOGICO` + tipos de tautología.
+25. **Diversidad de modelos:** Generador y Validador usan modelos distintos.
 
 ### Roadmap de adopción
 
 | Fase | Duración | Qué se implementa | Métrica de éxito |
 |---|---|---|---|
 | **Piloto** | 1-2 meses | Nivel Lite en 1 equipo. Refutadores en docstring. | 20 tests con refutador. |
-| **Expansión** | 3-6 meses | Nivel Standard en 2-3 equipos. Roles, historial, reporte negocio. | ROI > 1.0. Flakiness < 5%. |
-| **Escala** | 6-12 meses | Nivel Full en toda la organización. SBOM, SLSA, ML, ciclos regulatorios. | Auditoría regulatoria pasada. |
+| **Expansión** | 3-6 meses | Nivel Standard en 2-3 equipos. Roles, historial, reporte negocio, validación semántica. | ROI > 1.0. Flakiness < 5%. Tautológicos < 10%. |
+| **Escala** | 6-12 meses | Nivel Full en toda la organización. SBOM, SLSA, ML, ciclos regulatorios, multi-agente. | Auditoría regulatoria pasada. |
 | **Optimización** | 12+ meses | Red teaming continuo. Experience paper publicado. | Casos de éxito documentados. |
 
 
 ## CIERRE
 
-El Protocolo de Testing 1310 formaliza cada prueba como un objeto tipado, con refutador obligatorio, severidad, estándar de ciberseguridad, firma de integridad, roles segregados y sello 1310. El Auditor verifica. El sistema reporta. Y la suite crece por refutación, no por acumulación.
+El Protocolo de Testing 1310 formaliza cada prueba como un objeto tipado, con refutador obligatorio, severidad, estándar de ciberseguridad, firma de integridad, roles segregados, validación semántica y sello 1310. El Auditor verifica. El sistema reporta. Y la suite crece por refutación, no por acumulación.
 
 **El sello 1310 es obligatorio.** Acredita que el test ha superado el protocolo de falsabilidad. Sin sello, no hay test. Hay script.
 
+**La extensión para QA con IA:** el protocolo está diseñado para que un LLM pueda operarlo sin ambigüedad. El humano define el contrato (refutador, severidad, estándar). El LLM genera el test. El ValidadorSemantico verifica que el refutador sea falsable. El Auditor verifica integridad. El Ejecutor corre. El Cronista documenta. Y todo tiene coste, versión y trazabilidad.
+
 **1310.**
 
-*El que diseña el test también escribe el pipeline. Y el que lo ejecuta, también. Pero el que elige el nivel, decide qué protocolo necesita.*
+*El que diseña el test también escribe el pipeline. Y el que lo ejecuta, también. Pero el que elige el nivel, decide qué protocolo necesita. Y el que valida el refutador, decide si el test es un test o es una ilusión.*
 
 
 ---
 
 # ANEXO A — ALTERNATIVAS DESCARTADAS DURANTE EL DISEÑO
 
-Este anexo documenta las decisiones que se consideraron y se descartaron durante el diseño del protocolo. No son errores. Son caminos no tomados. Se documentan por transparencia y para evitar que futuros revisores propongan lo mismo sin saber por qué se descartó.
-
 ### A.1 Sello 1310 opcional en nivel Lite
 
-**Considerado:** permitir que el nivel Lite no incluya el sello 1310, para reducir fricción de entrada.
+**Considerado:** permitir que el nivel Lite no incluya el sello 1310.
 
-**Descartado:** el sello no es un adorno. Es la acreditación de que el test ha pasado por el protocolo de falsabilidad. Un test sin sello es un script. Si el nivel Lite no exige sello, deja de ser un nivel del protocolo 1310 y se convierte en "pytest con docstrings". El sello se mantiene obligatorio en los tres niveles.
+**Descartado:** el sello no es un adorno. Es la acreditación de que el test ha pasado por el protocolo de falsabilidad. Sin sello, no hay test.
 
-**Consecuencia:** el plugin Lite parsea el docstring y añade el sello automáticamente. El desarrollador no tiene que escribirlo manualmente. La fricción se resuelve con automatización, no con excepción.
+### A.2 Hash sobre el modelo completo
 
-### A.2 Hash sobre el modelo completo (incluyendo estado)
+**Considerado:** calcular SHA-256 sobre el objeto completo incluyendo estado.
 
-**Considerado:** calcular el SHA-256 sobre el objeto completo del test, incluyendo `estado` y `timestamp`.
+**Descartado:** el hash cambiaría en cada ejecución. Alternativa: separar `TestInmutable` de `TestEstado`.
 
-**Descartado:** el hash cambiaría en cada ejecución, invalidando el pre-registro. El pre-registro dejaría de tener sentido.
+### A.3 Historial de flakiness estático
 
-**Alternativa adoptada:** separar `TestInmutable` (identidad) de `TestEstado` (dinámica). El hash se calcula solo sobre la identidad.
+**Considerado:** declarar flakiness como campo del test.
 
-### A.3 Historial de flakiness como campo estático
+**Descartado:** el flakiness es dinámico. Alternativa: `HistorialEjecuciones` con ventana de 20.
 
-**Considerado:** declarar el flakiness como un campo del test, estimado a priori.
+### A.4 Tests de ML fuera del protocolo
 
-**Descartado:** el flakiness es dinámico. Un test puede ser estable durante 100 ejecuciones y fallar en la 101. Un campo estático no captura eso.
+**Considerado:** sistema aparte para ML.
 
-**Alternativa adoptada:** `HistorialEjecuciones` con ventana de 20 ejecuciones, almacenado en SQLite. La decisión de bloquear release se basa en el patrón, no en el valor declarado.
+**Descartado:** en banca, el 40% del riesgo es modelo. Alternativa: `TipoTest.ML_*`.
 
-### A.4 Tests de ML como tipo separado del protocolo
-
-**Considerado:** dejar los tests de ML fuera del protocolo 1310, en un sistema aparte.
-
-**Descartado:** en banca, el 40% del riesgo es modelo, no código. Un protocolo de testing que ignora ML es un protocolo del 2015.
-
-**Alternativa adoptada:** `TipoTest.ML_DRIFT`, `ML_FAIRNESS`, `ML_EXPLAINABILITY`, `ML_ROBUSTNESS`, `LLM_HALLUCINATION`, `LLM_BIAS`, `LLM_SAFETY`. Los tests de ML son ciudadanos de primera clase.
-
-### A.5 HIL como requisito obligatorio en IoT
+### A.5 HIL obligatorio en IoT
 
 **Considerado:** exigir HIL para todos los tests de firmware.
 
-**Descartado:** el hardware es caro. Un equipo con presupuesto limitado no puede tener 200 placas de test. Exigir HIL cuando no hay HIL deja el protocolo en PowerPoint.
-
-**Alternativa adoptada:** jerarquía con fallback (emulación → SIL → PIL → HIL) más `MetricaEscape` para cuantificar el placebo. Si la emulación no detecta el 30% de los bugs, se justifica HIL. Si no, no.
+**Descartado:** el hardware es caro. Alternativa: fallback + `MetricaEscape`.
 
 ### A.6 Automatización total de OWASP Top 10
 
-**Considerado:** prometer que el protocolo cubre las 10 categorías de OWASP Top 10:2025 de forma automatizada.
+**Considerado:** prometer cobertura automatizada de las 10 categorías.
 
-**Descartado:** A06 (Insecure Design) y A10 (Mishandling Exceptional Conditions) no son automatizables. Requieren criterio humano. Prometer automatización donde no la hay es mentir.
+**Descartado:** A06 y A10 no son automatizables. Alternativa: tabla honesta con "Automatizable: Sí/Parcial/NO".
 
-**Alternativa adoptada:** tabla honesta con columna "Automatizable: Sí/Parcial/NO". Las categorías no automatizables se marcan explícitamente.
+### A.7 Threat modeling opcional
 
-### A.7 Threat modeling como paso opcional
+**Considerado:** recomendación, no obligación.
 
-**Considerado:** dejar el threat modeling como recomendación.
+**Descartado:** sin modelo de amenazas, un test de seguridad es un checklist.
 
-**Descartado:** sin modelo de amenazas, un test de seguridad es un checklist. No verifica nada específico del sistema. El threat modeling es obligatorio en Standard y Full.
+### A.8 ROI sin fórmula explícita
 
-### A.8 Reporte de ROI sin fórmula explícita
+**Considerado:** ROI como número calculado internamente.
 
-**Considerado:** presentar el ROI como un número calculado internamente.
-
-**Descartado:** un número sin fórmula no es auditable. Un PM no puede defenderlo ante un CEO.
-
-**Alternativa adoptada:** `ReporteNegocio` incluye `formula_roi`, `formula_bugs`, `tasa_escape_historica`, `coste_medio_bug_produccion` y `coste_testing`. Todo transparente.
+**Descartado:** no es auditable. Alternativa: `formula_roi` explícita en el reporte.
 
 ### A.9 Versionado por sobrescritura
 
-**Considerado:** cuando un test cambia, sobrescribir el anterior.
+**Considerado:** sobrescribir el test anterior cuando cambia.
 
-**Descartado:** se pierde la trazabilidad. Un auditor regulatorio quiere ver la evolución.
+**Descartado:** se pierde trazabilidad. Alternativa: versionado semántico con `test_padre`.
 
-**Alternativa adoptada:** versionado semántico. `test_padre` referencia al test reemplazado. El padre se marca `OBSOLETO` pero no se elimina.
+### A.10 Un único nivel
 
-### A.10 Un único nivel para todos los equipos
+**Considerado:** un solo protocolo sin niveles.
 
-**Considerado:** un solo protocolo, sin niveles.
+**Descartado:** un banco necesita Full. Una startup necesita Lite. Alternativa: tres niveles.
 
-**Descartado:** un banco necesita SBOM y SLSA. Una startup necesita 3 líneas en conftest.py. Un único protocolo o es demasiado para uno o demasiado poco para el otro.
+### A.11 Sello 1310 como metáfora sin función
 
-**Alternativa adoptada:** tres niveles (Lite, Standard, Full) con árbol de decisión.
+**Considerado:** elemento narrativo decorativo.
 
-### A.11 Sello 1310 como metáfora sin función técnica
-
-**Considerado:** usar el 1310 como elemento narrativo decorativo, sin impacto en el modelo de datos.
-
-**Descartado:** si el sello es decorativo, no acredita nada. Y si no acredita nada, no hay razón para mantenerlo.
-
-**Alternativa adoptada:** `sello: Literal[1310] = 1310` en `TestInmutable`. Pydantic valida. Si falta, el test no se instancia. El sello acredita que el test ha pasado por el protocolo de falsabilidad.
+**Descartado:** si no acredita nada, no hay razón para mantenerlo. Alternativa: `Literal[1310]` validado por Pydantic.
 
 ### A.12 Ejecución de todos los tests en cada commit
 
-**Considerado:** ejecutar la suite completa en cada commit.
+**Considerado:** suite completa en cada commit.
 
-**Descartado:** los tests de LLM cuestan dinero. Los tests de HIL cuestan tiempo. Un test que cuesta 500€ por run no se ejecuta en cada commit.
+**Descartado:** los tests de LLM cuestan dinero. Alternativa: tests de commit vs tests de release.
 
-**Alternativa adoptada:** distinción entre **tests de commit** (baratos, rápidos) y **tests de release** (caros, exhaustivos). El `CosteEjecucion` determina en qué categoría cae cada test.
+### A.13 Red teaming anual
 
-### A.13 Red teaming como evento anual
+**Considerado:** una vez al año.
 
-**Considerado:** red teaming una vez al año, como auditoría.
-
-**Descartado:** el atacante no espera a la auditoría. El red teaming anual es un snapshot, no un continuo.
-
-**Alternativa adoptada:** `RedTeamingContinuo` con frecuencia configurable (diario, semanal, mensual). Cada hallazgo genera un test de regresión automáticamente.
+**Descartado:** el atacante no espera. Alternativa: `RedTeamingContinuo`.
 
 ### A.14 Ciclos regulatorios unificados
 
-**Considerado:** tratar todos los estándares regulatorios con el mismo ciclo de auditoría.
+**Considerado:** mismo ciclo para todos los estándares.
 
-**Descartado:** PCI DSS es trimestral. DORA es trienal. IEC 62304 es anual. ISO 26262 es por proyecto. Unificarlos es incorrecto.
+**Descartado:** PCI DSS es trimestral, DORA trienal, IEC 62304 anual. Alternativa: `CicloRegulatorio` diferenciado.
 
-**Alternativa adoptada:** `CicloRegulatorio` diferenciado por estándar.
+### A.15 Historial en memoria
 
-### A.15 Historial de ejecuciones en memoria
+**Considerado:** JSON en memoria durante la suite.
 
-**Considerado:** mantener el historial de ejecuciones en un JSON en memoria durante la ejecución de la suite.
-
-**Descartado:** 15.000 tests × 20 ejecuciones = 300.000 registros. En memoria, es inmanejable. En JSON monolítico, es inmantenible.
-
-**Alternativa adoptada:** SQLite con índice por `test_id`. La ventana de 20 se consulta con `ORDER BY timestamp DESC LIMIT 20`.
+**Descartado:** 300.000 registros en memoria es inmanejable. Alternativa: SQLite.
 
 ### A.16 Framework único por capa
 
-**Considerado:** recomendar un único framework por capa (ej: solo pytest para unit, solo Playwright para E2E).
+**Considerado:** recomendar un solo framework por capa.
 
-**Descartado:** el framework depende del lenguaje, del ecosistema y del equipo. Un equipo Java no usa pytest. Un equipo Python no usa JUnit.
+**Descartado:** depende del lenguaje y del equipo. Alternativa: tabla con alternativas.
 
-**Alternativa adoptada:** tabla de frameworks por capa con alternativas. El equipo elige según su stack.
+### A.17 Refutador opcional
 
-### A.17 Refutador opcional en todos los tests
+**Considerado:** permitir tests sin refutador.
 
-**Considerado:** permitir tests sin refutador para reducir fricción.
+**Descartado:** sin refutador, un test es una tautología. Alternativa: obligatorio en todos los niveles.
 
-**Descartado:** sin refutador, un test es una tautología. No aporta información.
+### A.18 Sello calculado dinámicamente
 
-**Alternativa adoptada:** refutador obligatorio en todos los tests. En Lite, se declara en el docstring. En Full, se declara en el modelo. Pydantic lo valida. Si es genérico ("depende", "quizás"), el test no se instancia.
+**Considerado:** sello como función del hash.
 
-### A.18 Sello 1310 calculado dinámicamente
-
-**Considerado:** calcular el sello como función del hash del test.
-
-**Descartado:** el sello no es un hash. Es una acreditación. Debe ser constante y verificable.
-
-**Alternativa adoptada:** `sello: Literal[1310] = 1310`. Constante. Validado por Pydantic.
+**Descartado:** el sello no es un hash. Es una acreditación constante.
 
 ### A.19 Auditor único sin roles
 
-**Considerado:** un único rol de "tester" que propone, ejecuta y valida.
+**Considerado:** un solo rol de "tester".
 
-**Descartado:** la segregación de funciones es un requisito en PCI DSS, SOX y DORA. Un único rol no la cumple.
-
-**Alternativa adoptada:** cuatro roles (Propositor, Ejecutor, Auditor, Cronista) con permisos explícitos. En equipos pequeños, se documenta el riesgo de segregación sin bloquear.
+**Descartado:** la segregación es requisito en PCI DSS, SOX y DORA. Alternativa: cuatro roles.
 
 ### A.20 Documentación extensa como onboarding
 
-**Considerado:** el manual completo como documento de onboarding.
+**Considerado:** el manual completo como onboarding.
 
-**Descartado:** un dev nuevo no lee 40 páginas. Necesita 5 minutos.
+**Descartado:** un dev nuevo no lee 40 páginas. Alternativa: quickstart de 5 minutos.
 
-**Alternativa adoptada:** quickstart de 5 minutos en la PARTE 8, con 5 pasos concretos. El manual completo queda como referencia.
+### A.21 Generación de tests sin coste monitorizado
+
+**Considerado:** generar tests sin `CosteGeneracion`.
+
+**Descartado:** un test suite con GPT-4 cuesta entre $5 y $50 por ejecución. El coste debe presupuestarse. Alternativa: `CosteGeneracion` + `PresupuestoGeneracion`.
+
+### A.22 Versionado de prompts ignorado
+
+**Considerado:** no versionar los prompts de generación.
+
+**Descartado:** si el prompt cambia, los tests cambian. Es un cambio de versión del protocolo. Alternativa: `PromptGeneracion` + `HistorialPrompts`.
+
+### A.23 Validación semántica solo con palabras prohibidas
+
+**Considerado:** el validador actual solo detecta palabras prohibidas.
+
+**Descartado:** un LLM puede escribir "si el resultado es incorrecto, falla". Eso es tautológico pero no contiene palabras prohibidas. Alternativa: `ValidadorSemantico` con entropía semántica.
+
+### A.24 Un solo agente LLM para todo
+
+**Considerado:** un agente que genera, valida y ejecuta.
+
+**Descartado:** un agente no puede validar sin sesgo. Alternativa: `SistemaMultiAgente` con roles separados y modelos diversos.
+
+### A.25 Tests tautológicos tratados como passed
+
+**Considerado:** un test tautológico pasa porque el assert es verdadero.
+
+**Descartado:** un test tautológico no verifica nada. Alternativa: estado `TAUTOLOGICO` que no cuenta para cobertura.
 
 ---
 
