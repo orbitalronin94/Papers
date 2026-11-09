@@ -273,11 +273,14 @@ La razón es simple: el modelo tiene poca capacidad de atención y parámetros. 
 4. **“State of the Art and Future Directions of Small Language Models: A Systematic Review” (2025).** Revisión de 70 trabajos centrada en SLMs hasta 7B. Resume entrenamiento multitarea, destilación, compresión y RAG. Sus rangos agregados no son predicciones para un modelo de 10M; sirven como mapa, no como promesa.  
    https://www.mdpi.com/2504-2289/9/7/189
 
-5. **“Synthesizing scientific literature with retrieval-augmented language models” (Nature, 2025).** OpenScholar combina almacén documental, recuperación, reranking y auto-refinamiento, y usa su pipeline para crear datos sintéticos. La lección aplicable es que calidad de recuperación, atribución y verificación importan tanto como el generador. Su modelo de 8B es mucho mayor que MINIRONIN.  
-   https://www.nature.com/articles/s41586-025-10072-4
+5. **Nozaki et al. (COLING Industry Track 2025), “Efficient Vocabulary Reduction for Small Language Models”.** Evalúa la reducción del vocabulario como palanca de compresión de embeddings. Observa que puede reducir memoria y mejorar velocidad, aunque el rendimiento de tareas puede caer y parte de esa pérdida se recupera con fine-tuning. En MINIRONIN las 23.000 filas ya están reservadas físicamente: activar 128–256 IDs no reduce el tamaño del checkpoint; solo puede reducir longitud de secuencia y cambiar el coste del softmax. No confundir activación de filas con compresión de pesos.  
+   https://aclanthology.org/2025.coling-industry.64/
 
-6. **Chan et al. (2025), “Retrieval-augmented reasoning with lean language models”.** Estudia recuperador denso, compresión/resumen y ajuste de modelos compactos para un dominio específico. Apoya generar ejemplos de entrenamiento a partir de evidencia, pero no justifica trazas largas ni dependencia de un docente propietario.  
-   https://arxiv.org/abs/2508.11386
+6. **Srivastava et al. (EMNLP 2025), “ThinkSLM: Towards Reasoning in Small Language Models”.** Su benchmark de 72 SLMs subraya el papel de métodos de entrenamiento y calidad de datos, además de escala. Sus modelos son de cientos de millones a varios miles de millones de parámetros, por lo que no es evidencia directa para un modelo de 10M; sirve para formular ablations, no para prometer resultados.  
+   https://aclanthology.org/2025.emnlp-main.1659/
+
+7. **Asai et al. (Nature, 4 febrero 2026), “Synthesizing scientific literature with retrieval-augmented language models”.** OpenScholar combina un almacén de 45 millones de artículos, recuperación especializada, reranking, generación iterativa, verificación de citas y datos sintéticos. La lección aplicable es separar recuperación, atribución y generación. No copiar su coste: usa un generador 8B, un bi-encoder de 110M y un cross-encoder de 340M. Además, usa marcadores de formato como cadenas normales, no como nuevos tokens especiales; para MINIRONIN es una razón adicional para probar primero los marcadores literales en el prompt.  
+   https://www.nature.com/articles/s41586-025-10072-4
 
 ## 10. Referencias internas del proyecto
 
@@ -289,6 +292,16 @@ La razón es simple: el modelo tiene poca capacidad de atención y parámetros. 
 - MINIRONIN/docs/RAG_VS_TRAINING.md: baseline anterior de comparación entrenamiento frente a RAG.
 
 ## Conclusión
+
+### Implicaciones específicas para el tamaño de MINIRONIN
+
+El estudio de edge SLMs de ACL cubre modelos de 100M–5B, y ThinkSLM evalúa escalas muy superiores a 10M. MINIRONIN está por debajo de ambos rangos; por eso no se importan sus porcentajes como predicciones. Sí se importan sus criterios metodológicos:
+
+- Calidad y selección de datos antes que volumen indiscriminado; controlar saturación y olvido.
+- Recuperación exacta BM25 como baseline obligatorio; vectores solo si mejoran recall y la latencia/memoria total lo justifican.
+- Estructura explícita y enlaces documentales simples antes que un grafo generado por un modelo grande.
+- Marcadores de contexto/cita como texto literal inicialmente; solo convertirlos en IDs si una ablación demuestra una mejora.
+- Medir coste total del sistema (generador + encoder + índice + prompt), no solo el tamaño del checkpoint.
 
 La arquitectura más sensata para MINIRONIN no es un modelo enano intentando tragarse una biblioteca infinita. Es un modelo pequeño con representación textual más eficiente, memoria literal verificable, ejemplos que le enseñan a usar esa memoria y política explícita de abstención.
 
