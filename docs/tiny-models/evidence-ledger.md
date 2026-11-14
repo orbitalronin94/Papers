@@ -60,7 +60,7 @@ Recorded chunk:
 - Explicitly excluded: validation/test/holdout, 20,000 unreviewed open-source candidates, Drosophila procedural synthetic rows, and exact/SimHash near-duplicate endpoints in the signed audit plan.
 - Elapsed time 17,105.51 s; checkpoint SHA-256 `c81edf6658ed208cf4848c831336d427df4464eb725d158fdf827b99910ba5a2`.
 
-The holdout's 0/120 is meaningful only relative to its exact scoring rubric. Recover the raw outputs and scorer before interpreting it as task failure or general capability.
+The scorer source is now identified: the 120 items are procedurally generated (20 per domain) and scored by normalized exact string equality. The reported 0/120 is therefore a zero exact-match score on this narrow synthetic diagnostic, not a general capability result. Paired raw JSON still pending independent recomputation.
 
 ## E. CPU / throughput records
 
@@ -223,7 +223,7 @@ The following records were checked through the GitHub Actions run, job-step, and
 - Run [42358300901](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42358300901), job 128361091415; workflow-head commit 1acc15ed5ee14e1a485b84d86562216e7f1be8c9; run and job concluded success.
 - Successful steps included enforcing the signed global corpus audit; verifying training authorization and holdout isolation; downloading the exact train-only corpus and verifying SHA-256; recovering the exact checkpoint and paired holdout; completing the 2,000-micro-step/50-optimizer-step chunk; and uploading the resumable checkpoint and paired holdout.
 - Artifact ID 13578607392, 6,001,746,291 bytes, API digest sha256:9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468.
-- The artifact is retained. Its internal files have not yet been inspected in this pass. The 0/120 score remains dependent on the raw paired JSON and scorer.
+- The artifact is retained; its internal files have not yet been inspected. Scorer semantics are verified from source code at the exact workflow commit; raw paired JSON is still required for independent recomputation.
 
 ### RONIN-IA — two 10× expansion executions
 
@@ -248,3 +248,15 @@ The following records were checked through the GitHub Actions run, job-step, and
 ### Interpretation rule
 
 An Actions artifact API digest identifies the uploaded ZIP archive. A checkpoint SHA identifies a file within that archive. They are different objects and must never be substituted for one another. The audit records both when available.
+
+
+### HERETIC-RONIN — scorer and audit-source verification (14 November 2026)
+
+- Workflow run [42358300901](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42358300901), job 128361091415, workflow-head commit `1acc15ed5ee14e1a485b84d86562216e7f1be8c9`; workflow file blob `8ab07599d8ef4f97d37df1d5ca271ce0ff505967`.
+- The run title says 500 optimizer steps, but this job executes the bounded 2,000-micro-step chunk 2,600–4,600 = 50 optimizer steps. It dispatches subsequent chunks until global micro-step 22,600.
+- Trainer blob `fa52ddd6ad04a639c1bac95feea5c48a75368cfb`; holdout/evaluator source blob `5749d09a16a6c6c57523776ff9aff60e2742863a`; corpus-audit source blob `b5d2085f56083b3a92e06e9486d9bc2a00c95d12`.
+- Holdout: procedural 120 rows, 20 each in mathematics, programming, logic, natural science, language, and interdisciplinary. Task families are arithmetic, Python list-sum arithmetic, transitive ordering, density, Spanish pluralization, and unit conversion.
+- Scoring: greedy byte-tokenizer generation, max 32 tokens, newline stop; normalized exact string equality (first line, answer-prefix removal, case-folding, whitespace collapse, punctuation trim). Reported 0/120 means zero normalized exact matches, not a human or semantic score.
+- Corpus audit gate checks `training_authorized == true` and `exact_holdout_question_matches == 0`; its SimHash procedure is explicitly heuristic and does not prove absence of semantic or historical contamination.
+- Artifact ID 13578607392, 6,001,746,291 bytes, archive SHA-256 `9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468`; archive payload still not inspected.
+- Remaining: recover paired before/after JSON and chunk report; independently rescore; inspect checkpoint metadata and full 500-step chain; recover prompt and corpus manifest hashes.
