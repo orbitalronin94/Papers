@@ -73,7 +73,7 @@ Hosted runners are not stable scientific instruments unless hardware allocation 
 `benchmark_manifest.json`, `throughput_runs.csv`, `benchmark.py`, `environment.txt`, and workflow YAML snapshots.
 
 ### References to add
-PyTorch CPU performance guidance, reproducible systems benchmarking, and relevant literature on efficient training under resource constraints. All external references must be verified before citation.
+Methodological anchors: [PyTorch torch.set_num_threads documentation](https://docs.pytorch.org/docs/stable/generated/torch.set_num_threads.html) for intra-op thread control; [Hoffmann et al. (2022)](https://arxiv.org/abs/2203.15556) for compute/token-budget scaling context. Chinchilla scaling results are not direct evidence for CPU thread performance or for these smaller model families.
 
 
 ### 6. What the workflow record can establish
