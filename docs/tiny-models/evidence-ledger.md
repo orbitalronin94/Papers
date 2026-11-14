@@ -14,9 +14,9 @@ This ledger preserves source identifiers and the narrowest claim supported by th
 | 137.5k | 0 | 42 | 96 | [Run 43166483341](https://github.com/orbitalronin94/RONINIA/actions/runs/43166483341) |
 | 205k | 14 | 29 | 83 | [Run 43309180308](https://github.com/orbitalronin94/RONINIA/actions/runs/43309180308) |
 | 250k | 2 | 45 | 96 | [Run 43378296219](https://github.com/orbitalronin94/RONINIA/actions/runs/43378296219) |
-| 330k | pending raw JSON | pending raw JSON | pending raw JSON | [Run 43490561981](https://github.com/orbitalronin94/RONINIA/actions/runs/43490561981) |
+| 330k | 1 | 21 | 99 | [Run 43490561981](https://github.com/orbitalronin94/RONINIA/actions/runs/43490561981) |
 
-Each evaluation is a 100-response holdout. A follow-up audit of all four workflow files and the inference script found a common prompt-set SHA-256, tokenizer SHA-256, inference-script blob SHA, deterministic seed, greedy decoding, and matching generation limits across the five checkpoints (details in Section I). This substantially strengthens protocol comparability. It does not validate the preliminary behavioral counts: recompute those from the raw JSON, audit the scoring definitions, and verify that the holdout was excluded from every training corpus. A preliminary adjacent-bigram repetition estimate for 205k/250k was 0.96/1.83 per response; its denominator and scorer still require audit.
+Each evaluation is a 100-response holdout. A follow-up audit of all four workflow files and the inference script found a common prompt-set SHA-256, tokenizer SHA-256, inference-script blob SHA, deterministic seed, greedy decoding, and matching generation limits across the five checkpoints (details in Section I). This substantially strengthens protocol comparability. The recomputed descriptive counts are now in Section K. They are not correctness scores; the output schema does not record the exact stop reason, and the holdout's exclusion from every training corpus still requires a leakage audit. A preliminary adjacent-bigram repetition estimate for 205k/250k was 0.96/1.83 per response; its denominator and scorer still require audit.
 
 The 250k checkpoint metadata recorded 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. Source training run: [43315959342](https://github.com/orbitalronin94/RONINIA/actions/runs/43315959342). That workflow reached 250k and uploaded the official holdout artifact, but its later lineage-verification stage failed with `AttributeError: 'NoneType' object has no attribute 'group'`.
 
@@ -171,6 +171,41 @@ The 250k-to-300k continuation was interrupted, but its partial checkpoint artifa
 - Workflow verified the exact 330k checkpoint, the same 8k tokenizer SHA, and the same 100-question holdout SHA used by the earlier checkpoint evaluations.
 - The holdout job completed successfully and uploaded artifact ID 14068589478 (25,444 bytes; archive SHA-256 `fb3106d6cb698321e363eb9c7ba88f155203062494270d4b99a4127498d220b8`).
 - The exact inference-script blob is still `b83ceb712431b3ea20902708fb9ec8f3c243425a`; its defaults match the earlier protocol: seed 20261110, greedy decoding, two threads, 32 tokens, 128 bytes, no KV cache, no RAG.
-- **Not yet extracted:** empty-output count, cap-hit count, EOS count, distinct responses, response-length distribution, and any task-level correctness scores. Do not add 330k to behavioral trend calculations until the raw JSON is retrieved and rescored.
+- The raw JSON has now been recovered and rescored: 1 empty response, 21 outputs reaching the 32-token limit, 99 exact-distinct answer strings, mean generated length 19.88 tokens, and mean latency 0.323478 s. EOS emission and task-level correctness remain unscored because the JSON schema records neither an explicit stop reason nor an automatic rubric score.
 
 The 330k holdout run is distinct from the registry-update workflow triggered by the same commit, which failed. That documentation/registry failure does not invalidate the independently successful holdout job or its uploaded artifact.
+
+
+## K. Raw JSON recomputation of the five RONINIA holdouts
+
+All five holdout ZIP artifacts were downloaded. Each local archive SHA-256 matched the digest returned by GitHub's Actions artifact API. The JSON inside each archive was then processed by the new repository script `scripts/score_roninia_holdouts.py`. The resulting table is committed as [roninia-checkpoint-metrics.csv](roninia-checkpoint-metrics.csv).
+
+| Checkpoint | Empty | Exactly 32 generated tokens | Exact-distinct answers | Mean generated tokens | Mean latency (s) | P90 latency (s) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 100k | 1 | 22 | 100 | 21.18 | 0.319804 | 0.484661 |
+| 137.5k | 0 | 42 | 96 | 22.69 | 0.374886 | 0.570726 |
+| 205k | 14 | 29 | 83 | 19.03 | 0.141405 | 0.237574 |
+| 250k | 2 | 45 | 96 | 23.13 | 0.274788 | 0.402664 |
+| 330k | 1 | 21 | 99 | 19.88 | 0.323478 | 0.510915 |
+
+The recomputed empty-output, token-limit, and exact-distinct counts match the previously extracted values. The table now has a raw-artifact basis rather than being only a transcription from logs.
+
+### Metric definitions and limits
+
+- **Empty:** `answer.strip()` is empty.
+- **Exactly 32 generated tokens:** the number of recorded `generated_token_ids` equals the configured `max_new_tokens=32`. This is a token-limit hit, not a general stop-reason label.
+- **Exact-distinct answers:** number of unique raw answer strings; no semantic similarity or paraphrase normalization is applied.
+- **Mean generated tokens:** arithmetic mean of `len(generated_token_ids)`.
+- **P90 latency:** nearest-rank 90th percentile over the 100 per-response `elapsed_seconds` values.
+- **EOS emissions:** unavailable. The inference loop stops when EOS is predicted but does not append EOS to the generated IDs and the output schema does not save a `stop_reason`. A short output may also have stopped because the next token would exceed the 128-byte limit. EOS cannot be reconstructed reliably from this JSON.
+- **Correctness:** not scored. Rubrics are present in the output records, but the workflow does not calculate an exact-match or rubric-based score.
+
+### Holdout composition
+
+The same 100-question file has the following domain distribution at every checkpoint: 35 `ci_cd`, 25 `personality_troll`, and 40 questions spread across 11 other domains (logic, mathematics, causality, probability, instruction following, contradiction, uncertainty, reasoning, knowledge, critical thinking, and calibration). This is a mixed project-specific holdout, not a pure general-reasoning benchmark. The high share of CI/CD and personality/troll prompts must be stated when interpreting aggregate response diversity or behavior.
+
+### Interpretation
+
+The series is genuinely non-monotonic on these descriptive metrics. The 205k checkpoint has the highest empty-output count and lowest exact-distinct count; 250k has the most 32-token-limit hits; 330k has fewer token-limit hits and 99 exact-distinct strings. None of these facts establishes better answer quality. Latency varies substantially across runs and should be treated as a runner/runtime measurement, not as a direct measure of model capability.
+
+The next analysis must add per-domain behavior, inspect raw generations, audit prompt leakage against the full training corpus and synthetic sources, and define a correctness scorer before any quality trend is claimed.
