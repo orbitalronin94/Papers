@@ -93,3 +93,48 @@ A later RONINIA sequence provides a stronger recovery case than the isolated pos
 The recovery workflow's recorded training configuration was context length 256, two threads, batch size 4, learning rate 2.5e-5, zero warmup, minimum-LR ratio 1.0, checkpoint interval 1,000, and 32 evaluation batches. The token cache, tokenizer, and corpus fingerprint were verified before continuation.
 
 This case distinguishes at least four states that a single run conclusion cannot represent: (i) an interrupted run that emitted recoverable checkpoints, (ii) a successful recovery/continuation, (iii) a verified final checkpoint artifact, and (iv) a successful holdout job whose raw metrics still require analysis. The registry-update workflow triggered around the 330k documentation changes failed separately; that failure does not invalidate the independently successful training or holdout jobs.
+
+
+### 9. Job-step audit: successful work inside failed workflows
+
+The RONINIA 205k→250k job (run [43315959342](https://github.com/orbitalronin94/RONINIA/actions/runs/43315959342), job 131523907339) exposes the stage boundary precisely:
+
+- Parent run/artifact verification, exact 205k checkpoint resolution, token-cache download and identity verification, and matching 256-token configuration all succeeded.
+- The 45,000-step training action succeeded.
+- The “Upload every recoverable checkpoint even if a later step fails” action succeeded.
+- “Verify cumulative 205000 checkpoint and write lineage” failed.
+- “Upload final checkpoint and complete recovery lineage” succeeded.
+
+The overall workflow conclusion was failure. The record therefore contains successful optimization and checkpoint uploads alongside a failed verification stage. The failure should be preserved, not converted into either “training failed” or “workflow succeeded.”
+
+By contrast, the later 330k recovery job (run [43433905009](https://github.com/orbitalronin94/RONINIA/actions/runs/43433905009), job 131914009794) completed every substantive step: recovering checkpoints from the interrupted run, selecting the latest valid state, downloading and verifying the existing token cache unchanged, continuing to exactly 330k, verifying the final checkpoint and lineage, and uploading the final chain. The official 330k holdout then verified the checkpoint SHA and produced its own artifact.
+
+### 10. Artifact inventory and retention risk
+
+The GitHub Actions artifact API reports these retained artifacts:
+
+| Run | Artifact | ID | Size (bytes) | API SHA-256 |
+|---|---|---:|---:|---|
+| HERETIC 512k chunk | heretic-500m-accum40-micro-4600 | 13578607392 | 6,001,746,291 | 9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468 |
+| RONIN-IA expansion A | ronin-expand-10x-from-10k-42364113096 | 13570749085 | 374,819,789 | f53659f166548e742f6feefbcf067c9af4be312969b264a35593ce66803897b4 |
+| RONIN-IA expansion B | ronin-expand-10x-from-10k-42364138735 | 13571800501 | 374,819,541 | 49e7b3564797095b084b06492a550fca73b493664522ac0ea3bd15e9b459526c |
+| RONINIA 250k checkpoint chain | ronin-10m-chain-250000-43315959342 | 14002902157 | 4,835,631,596 | 8742092f1f0fb08c0e3bfd2cd8ea64fdbb9df94404f37ffc4a78972807fa974e |
+| RONINIA 330k checkpoint chain | ronin-10m-chain-330000-43433905009 | 14069581635 | 4,190,025,399 | 8f899b247c8cbab0dfa5ffeeb7e05bc4a35b1d3a403a5ebccd478ba9afffdeba |
+
+Artifact digests are metadata returned by GitHub's artifact API; they are not interchangeable with the checkpoint SHA-256 inside an archive. The HERETIC artifact is approximately 6.0 GB, so raw holdout extraction and retention should be planned separately from full checkpoint downloads. Preserve both artifact-level and file-level hashes.
+
+### 11. A provenance state machine
+
+For future work, represent each run with separate fields rather than one success flag:
+
+1. training_started
+2. target_steps_reached
+3. checkpoint_written
+4. checkpoint_hash_verified
+5. lineage_verified
+6. artifact_uploaded
+7. holdout_completed
+8. holdout_scored
+9. workflow_conclusion
+
+This prevents a post-training parsing exception from erasing valid training evidence, and prevents a successfully uploaded artifact from being mistaken for a validated scientific result.
