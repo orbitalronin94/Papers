@@ -120,3 +120,6 @@ This is evidence that the declared audit gate ran and found no exact question-st
 ### 2.8 Workflow scope and the 500-step pilot
 
 The workflow run title is “HERETIC — 500M pilot (500 optimizer steps),” but run `42358300901` is one bounded chunk: micro-steps 2,600–4,600, 2,000 micro-steps, and 50 optimizer steps. Its job dispatches the next chunk until the global target micro-step 22,600 is reached. The retained 6,001,746,291-byte artifact `heretic-500m-accum40-micro-4600` (ID `13578607392`, archive SHA-256 `9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468`) is therefore a chunk artifact, not by itself the complete 500-step pilot record. The workflow job completed successfully; the artifact's internal files have not yet been extracted in this audit.
+
+
+**Post-hoc prompt identity:** the recovered generator was independently re-executed and canonicalized as JSONL (`domain` and `question` only, UTF-8, compact separators, trailing newline per row). This yields SHA-256 `5fe85ea2e921165743e4ef4b2000204ee62725930ed91d4343ee7d87aa0aa177`. This is a post-hoc canonical hash, not a hash recorded by the original workflow. The full question-plus-reference-answer JSONL hash is `493f3f8955cd1807687c452188cda1a9f87b923c286693cfe3a5976313c31430`.
