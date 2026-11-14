@@ -82,3 +82,22 @@ The present record motivates the proposition that nominal corpus scale is not su
 
 ### References to add
 Dataset documentation, data contamination and memorization studies, language-model scaling and data-quality literature, and primary repository artifacts. All citations and licenses must be checked before submission.
+
+
+### 2.2 What the HERETIC job actually verified
+
+The 512k-chunk job's recorded steps show that several corpus and authorization gates were not merely planned: they completed successfully. The workflow downloaded and enforced the signed global corpus audit, verified training authorization and holdout isolation, downloaded the exact train-only corpus and checked its SHA-256, recovered the exact checkpoint and paired holdout, completed the 2,000-micro-step/50-optimizer-step chunk, and uploaded a resumable checkpoint and paired holdout. The overall job conclusion was success.
+
+This supports a claim about process execution: the run passed the workflow's declared authorization, train-only corpus, and holdout-isolation checks. It does not prove that the audit itself covered every possible historical copy of every prompt, nor does it validate the target metric without its raw scorer and rubric. “Verified by the workflow” and “independently demonstrated to be uncontaminated” are different levels of evidence.
+
+### 2.3 Artifact scale and practical recovery
+
+The Actions artifact API lists the HERETIC artifact heretic-500m-accum40-micro-4600, ID 13578607392, at 6,001,746,291 bytes, with API digest SHA-256 9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468. This is a retained artifact, not proof that all internal files have been inspected. The next extraction should first inspect the archive manifest and retrieve only the holdout JSON, scoring code, and corpus/tokenizer manifests rather than repeatedly downloading multi-gigabyte checkpoint payloads.
+
+### 2.4 Distinguish the pilot records
+
+The 512k-token chunk record and the separate HERETIC 500-optimizer-step pilot are not the same experiment summary. The former reports 50 optimizer steps in the chunk and 512,000 tokens; the latter's run title and performance record describe a 500-step pilot with approximately 500M parameters. The 6.0 GB artifact belongs to the workflow whose title is “HERETIC — 500M pilot (500 optimizer steps)”, while the retrieved job step names indicate a bounded chunk/continuation structure. The manuscript should retain both labels until the internal manifest proves the relationship; do not multiply 512k by ten and assume the pilot processed exactly 5.12M tokens without checking the full run trace.
+
+### 2.5 Minimum evidence needed to interpret 0/120
+
+Before interpreting the unchanged 0/120 result, recover and publish the 120 prompt IDs and hash; paired before/after raw answers; exact checkpoint SHA before and after; scorer source and version; per-domain numerator/denominator; whether the rubric is exact-match, unit-test, program execution, or human judgement; empty/malformed/truncated output counts; and the mapping between the 50-step chunk and any larger pilot schedule. If the scorer is deterministic, rerun it locally on the retained outputs and compare byte-for-byte with the workflow report.
