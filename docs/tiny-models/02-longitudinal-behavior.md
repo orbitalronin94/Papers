@@ -7,7 +7,7 @@
 **Claim policy:** Descriptive longitudinal analysis; no anthropomorphic interpretation.
 
 ### Abstract (provisional)
-This study examines how observable generation properties vary across checkpoints in a small language model trained through sequential continuation runs. Rather than treating a final checkpoint as the sole experimental outcome, it treats the checkpoint series as a longitudinal record. Preliminary RONINIA holdouts at 100k, 137.5k, 205k, and 250k steps show non-monotonic changes in empty outputs, generations reaching the output cap, and response diversity. MINIRONIN provides a contrasting case in which termination failure persists across 810k and 910k-step evaluations. The paper proposes a reproducible checkpoint-level measurement protocol and identifies the controls needed to distinguish genuine behavioral change from evaluation and lineage artifacts.
+This study examines how observable generation properties vary across checkpoints in a small language model trained through sequential continuation runs. Rather than treating a final checkpoint as the sole experimental outcome, it treats the checkpoint series as a longitudinal record. Preliminary RONINIA holdouts at 100k, 137.5k, 205k, 250k, and 330k steps show non-monotonic changes in empty outputs, generations reaching the output cap, and response diversity. MINIRONIN provides a contrasting case in which termination failure persists across 810k and 910k-step evaluations. The paper proposes a reproducible checkpoint-level measurement protocol and identifies the controls needed to distinguish genuine behavioral change from evaluation and lineage artifacts.
 
 ### 1. Research questions
 - How do termination, truncation, repetition, and diversity evolve across checkpoints?
@@ -22,8 +22,9 @@ This study examines how observable generation properties vary across checkpoints
 | 137,500 | 0 | 42 | 96 |
 | 205,000 | 14 | 29 | 83 |
 | 250,000 | 2 | 45 | 96 |
+| 330,000 | pending raw JSON | pending raw JSON | pending raw JSON |
 
-These counts are preliminary extractions from 100-response holdouts. They must be recomputed from the raw JSON and tied to exact checkpoint hashes before use as final results. “Distinct response” currently means textual uniqueness; normalization rules must be specified.
+The first four rows are preliminary extractions from 100-response holdouts. The 330k holdout job completed and uploaded an artifact, but its counts have not yet been extracted; blanks are intentional, not zeroes. A workflow audit verified the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG across all five checkpoints. The four published counts must still be recomputed from raw JSON and tied to exact checkpoint hashes. “Distinct response” currently means textual uniqueness; normalization rules must be specified. The common prompt file's absence from each training corpus remains to be verified.
 
 The 205k and 250k evaluations also yielded preliminary adjacent-bigram repetition estimates of 0.96 and 1.83 per response respectively. The denominator and implementation require verification.
 
@@ -57,7 +58,7 @@ A higher unique-output rate is not necessarily better; it may reflect instabilit
 
 ### 7. Limitations and required evidence
 - Verify all raw JSON files and their SHA-256 hashes.
-- Recover the full 5k–250k checkpoint sequence, not just four selected points.
+- Recover the full 5k–330k checkpoint sequence, not just selected points; extract the 330k JSON and rescore all five holdouts.
 - Audit prompt-set overlap with training data and earlier holdouts.
 - Re-run a subset with a common inference binary and tokenizer.
 - Recover training logs, validation traces, and run configuration for every checkpoint.
