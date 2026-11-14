@@ -63,6 +63,7 @@ One extracted training chunk contains 512,000 tokens across 50 optimizer steps (
 - **[Recomputed RONINIA metrics](roninia-checkpoint-metrics.csv)** — five-checkpoint raw-JSON metrics, including archive and checkpoint hashes.
 - **[Per-domain RONINIA metrics](roninia-domain-metrics.csv)** — 65 checkpoint-by-domain rows for empty outputs, token-limit hits, exact uniqueness, length, and latency.
 - **[Workflow and artifact audit](workflow-audit.csv)** — run/job status, step-level outcomes, commit identity, and retained artifact digests.
+- **[Related literature](related-literature.md)** — selected evaluation, contamination, scaling, and CPU-threading references with notes on their limits.
 - **[Reproducible scorer](../../scripts/score_roninia_holdouts.py)** — dependency-free script for JSON/ZIP input, common-protocol checks, descriptive metrics, and explicit EOS limitations.
 - **Five manuscripts** — separate working papers linked above.
 
