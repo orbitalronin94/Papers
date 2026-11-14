@@ -13,6 +13,7 @@ Five connected manuscripts are being developed from the MINIRONIN, RONIN-IA, HER
 ## Evidence and status
 
 - [Evidence ledger](evidence-ledger.md) records the currently extracted runs and the remaining verification work.
+- [Experiment matrix](experiment-matrix.csv) provides a machine-readable snapshot of currently extracted runs.
 - Metrics labelled preliminary must be recomputed from raw artifacts before submission.
 - No paper should claim causal effects from heterogeneous observational runs.
 - Negative results are retained; failed jobs are not silently omitted.
