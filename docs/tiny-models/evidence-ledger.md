@@ -99,7 +99,7 @@ Remaining priorities:
 
 ## I. RONINIA official holdout provenance audit (new)
 
-The five official holdout workflows were inspected at their exact workflow-head commits, and the referenced `scripts/checkpoint_holdout.py` file was fetched at each commit. The script blob SHA is identical in all four cases: `b83ceb712431b3ea20902708fb9ec8f3c243425a`.
+The five official holdout workflows were inspected at their exact workflow-head commits, and the referenced `scripts/checkpoint_holdout.py` file was fetched at each commit. The script blob SHA is identical across all five evaluated checkpoints: `b83ceb712431b3ea20902708fb9ec8f3c243425a`.
 
 ### Shared evaluation protocol
 
