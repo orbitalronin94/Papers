@@ -28,6 +28,12 @@ The 810k and 910k evaluations each contain 100 prompts. Both report 100 generati
 #### 3.2 RONINIA
 Four retrieved 100-prompt evaluations at 100k, 137.5k, 205k, and 250k show non-monotonic changes in empty outputs, maximum-length generations, and response diversity. The 205k to 250k comparison, as currently extracted, reports empty outputs decreasing from 14 to 2, cap-reaching outputs increasing from 29 to 45, and distinct responses increasing from 83 to 96. Adjacent-bigram repetition was reported as increasing from 0.96 to 1.83 per response. The metric implementation, exact checkpoint identity, and raw JSON must be re-audited before publication.
 
+#### 3.3 RONIN-IA: parameter expansion without screening gain
+
+Two workflow records for the experiment `ronin-expand-10x-from-winning-10k-v1` report the same base checkpoint (10,000 steps; SHA-256 `7a7fe93350b72ebc8d645900c2ae8be455a60334e04ac95176e09bab72f981ed`), target parameter count 100,900,160, 500 training steps, and a 685,023,414-byte corpus with SHA-256 `0d92e66ee96931299b97da7bbbb47f3312b3333bcd081a355422ed0230960af7`. The 64-question MMLU-Pro validation screening used identical question IDs before and after training: 5/64 correct in both cases (7.8125%; 0.0 percentage-point change). The report explicitly labels this SCREENING_ONLY, records automatic promotion as false, global G0 as FAIL, and benchmark holdout contamination as PENDING. Functional preservation before training passed with maximum absolute logit delta 1.4305e-6.
+
+This is useful evidence that a 500-step continuation after a 10× parameter expansion did not improve this particular screening score. It is not evidence that the model's broader behavior was unchanged, nor a controlled test of parameter count alone. The two records should be treated as replicated workflow outputs only after verifying whether they are independent runs or repeated execution of the same experiment specification.
+
 ### 4. Proposed method
 For every checkpoint, preserve:
 - checkpoint SHA-256, parent checkpoint SHA-256, completed optimizer steps;
