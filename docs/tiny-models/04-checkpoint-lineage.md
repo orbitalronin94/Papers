@@ -26,6 +26,10 @@ The retrieved workflow log for run `43315959342` records:
 
 A later official 250k holdout workflow successfully uploaded an artifact. This supports the distinction between training/holdout artifact availability and the earlier job's final status. The exact artifact IDs, source checkpoint, and parent hashes must be cross-checked in the final provenance table.
 
+#### 2.1 A second failure mode: MINIRONIN Mamba metadata
+
+A MINIRONIN continuation log records completion of 2,000 cumulative steps and a checkpoint with verified SHA-256, followed by a `KeyError: 'index_sha256'` during a later metadata stage. This is a separate failure signature from RONINIA's regex-related AttributeError. It supports classifying failures by stage and exception rather than treating all non-green workflows as failed training runs.
+
 ### 3. Proposed success model
 Report at least four independent statuses:
 1. **Training status:** planned optimizer steps reached or not.
