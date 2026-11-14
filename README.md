@@ -520,4 +520,24 @@ Investigador autodidacta. Sin afiliación institucional. Sin financiación exter
 14 de septiembre de 2026 / September 14, 2026.
 
 ---
+
+
+---
+
+## 🧠 Nueva línea de investigación: modelos de lenguaje pequeños / New research track: tiny language models
+
+Este repositorio incorpora una segunda línea de trabajo empírico dedicada al entrenamiento y evaluación de modelos de lenguaje pequeños bajo restricciones de datos, cómputo y reproducibilidad. La documentación reúne cinco manuscritos de trabajo, un libro mayor de evidencias y artefactos de evaluación reproducibles.
+
+1. **[The Loss–Behavior Gap in Tiny Language Models](docs/tiny-models/01-loss-behavior-gap.md)** — separa pérdida de entrenamiento y comportamiento observable.
+2. **[Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints](docs/tiny-models/02-longitudinal-behavior.md)** — sigue cambios de terminación, diversidad, longitud y respuestas vacías entre checkpoints.
+3. **[CPU-Constrained Training of Small Language Models](docs/tiny-models/03-cpu-constrained-training.md)** — documenta rendimiento y costes de entrenamiento en CPU.
+4. **[Checkpoint Lineage and Failure-Tolerant Experimentation](docs/tiny-models/04-checkpoint-lineage.md)** — reconstruye linaje, recuperación y fallos parciales de workflows.
+5. **[Corpus Scale Is Not Learning](docs/tiny-models/05-heretic-corpus-and-learning.md)** — examina exposición a datos, composición del corpus y resultados negativos de holdout.
+
+**Índice y estado de la evidencia:** [Tiny-models research dossier](docs/tiny-models/README.md) · [Evidence ledger](docs/tiny-models/evidence-ledger.md) · [Experiment matrix](docs/tiny-models/experiment-matrix.csv) · [Workflow audit](docs/tiny-models/workflow-audit.csv) · [Related literature](docs/tiny-models/related-literature.md).
+
+**Nota de alcance:** son manuscritos en desarrollo, no artículos revisados por pares. Las cifras descriptivas no equivalen a exactitud, capacidad general ni ausencia de contaminación. Las limitaciones y verificaciones pendientes se mantienen explícitas en cada documento.
+
+*This repository now includes a second empirical research track on small language models trained and evaluated under data, compute, and reproducibility constraints. The five manuscripts remain works in progress, not peer-reviewed publications.*
+
 ```
