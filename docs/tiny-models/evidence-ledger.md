@@ -85,14 +85,16 @@ RONIN-IA and HERETIC-RONIN logs include Node.js DEP0005 warnings for deprecated 
 
 ## H. Highest-priority missing evidence
 
-1. Raw JSON and scorer code for all RONINIA 100-response holdouts.
-2. Prompt-set hashes and leakage audit for all fixed holdouts.
-3. Exact workflow YAML/commit for RONINIA 250k and its failed lineage stage.
-4. Raw HERETIC 120-prompt holdout, scoring rubric, and full corpus manifest.
-5. Original RONIN-IA thread benchmark manifests and runner metadata.
-6. Complete RONIN-IA and HERETIC training traces, not only terminal summaries.
-7. RONIN-IA expansion workflow independence: determine whether the two run records are separate replications or repeated execution of one experiment design.
-8. Full checkpoint series between RONINIA 5k and 330k, including failed or missing evaluations and the raw 330k holdout JSON.
+Completed in this extraction pass: all five RONINIA official holdout ZIPs and raw JSONs recovered; archive digests verified; a common-protocol scorer and aggregate/domain metrics committed; exact workflow commits and shared prompt/tokenizer hashes recorded; 330k recovery and holdout chain reconstructed.
+
+Remaining priorities:
+1. Prompt-set overlap and leakage audit against every RONINIA training corpus, token cache, and synthetic-data source.
+2. Exact workflow YAML and logs for the 250k training run's regex-related lineage failure.
+3. Raw HERETIC 120-prompt holdout, scoring rubric, and full corpus manifest.
+4. Original RONIN-IA thread benchmark manifests and runner metadata.
+5. Complete RONIN-IA and HERETIC training traces, not only terminal summaries.
+6. RONIN-IA expansion workflow independence: determine whether the two run records are separate replications or repeated execution of one experiment design.
+7. Full checkpoint series between RONINIA 5k and 330k, including failed, cancelled, or missing evaluations.
 
 
 ## I. RONINIA official holdout provenance audit (new)
@@ -178,7 +180,7 @@ The 330k holdout run is distinct from the registry-update workflow triggered by 
 
 ## K. Raw JSON recomputation of the five RONINIA holdouts
 
-All five holdout ZIP artifacts were downloaded. Each local archive SHA-256 matched the digest returned by GitHub's Actions artifact API. The JSON inside each archive was then processed by the new repository script `scripts/score_roninia_holdouts.py`. The resulting table is committed as [roninia-checkpoint-metrics.csv](roninia-checkpoint-metrics.csv).
+All five holdout ZIP artifacts were downloaded. Each local archive SHA-256 matched the digest returned by GitHub's Actions artifact API. The JSON inside each archive was then processed by the new repository script `scripts/score_roninia_holdouts.py`. The resulting table is committed as [roninia-checkpoint-metrics.csv](roninia-checkpoint-metrics.csv); per-domain detail is in [roninia-domain-metrics.csv](roninia-domain-metrics.csv). The scorer is [scripts/score_roninia_holdouts.py](../../scripts/score_roninia_holdouts.py), blob SHA-256 `d0401f48d0e2e6a8a3fa5f8eadae69a171a69873`.
 
 | Checkpoint | Empty | Exactly 32 generated tokens | Exact-distinct answers | Mean generated tokens | Mean latency (s) | P90 latency (s) |
 |---:|---:|---:|---:|---:|---:|---:|
