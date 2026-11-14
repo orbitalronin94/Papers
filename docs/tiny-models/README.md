@@ -62,6 +62,7 @@ One extracted training chunk contains 512,000 tokens across 50 optimizer steps (
 - **[Experiment matrix](experiment-matrix.csv)** — tabular snapshot with run/job identity, checkpoint and corpus metadata, plus holdout artifact and protocol provenance.
 - **[Recomputed RONINIA metrics](roninia-checkpoint-metrics.csv)** — five-checkpoint raw-JSON metrics, including archive and checkpoint hashes.
 - **[Per-domain RONINIA metrics](roninia-domain-metrics.csv)** — 65 checkpoint-by-domain rows for empty outputs, token-limit hits, exact uniqueness, length, and latency.
+- **[Workflow and artifact audit](workflow-audit.csv)** — run/job status, step-level outcomes, commit identity, and retained artifact digests.
 - **[Reproducible scorer](../../scripts/score_roninia_holdouts.py)** — dependency-free script for JSON/ZIP input, common-protocol checks, descriptive metrics, and explicit EOS limitations.
 - **Five manuscripts** — separate working papers linked above.
 
@@ -167,10 +168,7 @@ This recovery sequence is particularly relevant to Paper 4: the cancelled 300k a
 
 Across the five holdouts, mean generated length ranges from 19.03 to 23.13 tokens, while mean per-response latency ranges from 0.141405 to 0.374886 seconds. The latency variation should be treated as runner/runtime variation unless runner conditions are controlled. The holdout contains 35 CI/CD prompts and 25 personality/troll prompts; the remaining 40 prompts span 11 other domains. It is therefore a project-specific mixed test set, not a general reasoning benchmark.
 
-The output files include answer text, token IDs, and elapsed time, but no explicit termination reason. The generation loop does not append EOS to the token list and may also stop at the 128-byte limit. EOS emission cannot be reconstructed reliably. Rubrics are included, but no automatic correctness scores are produced. The recomputed counts measure output shape and diversity only.
-
-
-The shared holdout contains 35 CI/CD prompts and 25 personality/troll prompts; the remaining 40 prompts span 11 other domains. It is a project-specific mixed evaluation, not a general reasoning benchmark. The output records include rubrics but no correctness score, and they do not preserve an explicit termination reason. Accordingly, the current longitudinal metrics describe output shape and exact-text diversity, not correctness or EOS behavior.
+The output files include answer text, token IDs, and elapsed time, but no explicit termination reason. The generation loop does not append EOS to the token list and may also stop at the 128-byte limit. EOS emission cannot be reconstructed reliably. Rubrics are included, but no automatic correctness scores are produced. The recomputed counts measure output shape and diversity only. The shared holdout contains 35 CI/CD prompts and 25 personality/troll prompts; the remaining 40 prompts span 11 other domains. It is a project-specific mixed evaluation, not a general reasoning benchmark.
 
 
 ## New extraction: workflow-level evidence
