@@ -22,6 +22,14 @@ A previous extraction identified:
 
 These values require direct verification against original run logs, workflow configuration, dataset manifests, and raw holdout outputs. The phrase “0/120” is not interpretable until the scoring criterion is defined. It must not be paraphrased as “the model learned nothing.”
 
+#### 2.1 HERETIC-RONIN: an audited 512,000-token chunk
+
+A retrieved chunk record reports micro-steps 2,600–4,600, 2,000 micro-steps, 50 optimizer steps, gradient accumulation 40, micro-batch size 2 sequences, context length 128, 10,240 tokens per optimizer step, and 512,000 tokens in the chunk. Mean loss per token was 2.26884 (first 100 micro-steps: 2.34918; last 100: 2.19189). The recorded holdout remained 0/120 before and after the chunk, with 20 items each in mathematics, programming, logic, natural science, language, and interdisciplinary categories. The reported difference was 0.0 percentage points.
+
+The same record gives a corpus audit: 256,305 documents before deduplication, 68 duplicate records excluded, and 256,237 audited documents after deduplication. Total source bytes were 680,665,972. Sources were CoVoST2 (CC0, translation-only), Mathlib4 (Apache-2.0), ScienceVerse (per-document CC-BY/CC0), Spanish public-domain literature, one NASA NTRS item, and nine owner-authorized Papers documents. The manifest explicitly excluded validation/test/holdout material, 20,000 unreviewed open-source candidates, Drosophila procedural synthetic rows, and exact/SimHash near-duplicate endpoints from the signed audit plan. The chunk took 17,105.51 seconds according to the record, and the checkpoint SHA-256 was `c81edf6658ed208cf4848c831336d427df4464eb725d158fdf827b99910ba5a2`.
+
+This is a stronger and more precise case than a bare “large corpus” claim. However, the 0/120 metric remains uninterpretable beyond the recorded scoring rubric until the raw prompt/response JSON and scorer are recovered. The first/last loss windows are not an independent validation metric.
+
 ### 3. Corpus audit framework
 For every corpus artifact, record:
 - source URL and retrieval date;
