@@ -74,3 +74,24 @@ Hosted runners are not stable scientific instruments unless hardware allocation 
 
 ### References to add
 PyTorch CPU performance guidance, reproducible systems benchmarking, and relevant literature on efficient training under resource constraints. All external references must be verified before citation.
+
+
+### 6. What the workflow record can establish
+
+The two RONIN-IA expansion jobs each completed the same high-level pipeline: CPU dependencies installed; function-preserving expansion checked on a small model; the exact 10k parent checkpoint downloaded; six source partitions separately admitted and verified; source hashes asserted; the partitions assembled; the model expanded, trained for 500 steps, screened on MMLU-Pro, and the checkpoint/report uploaded. The two runs have different workflow head commits and artifact digests, but the same experiment label, parent checkpoint SHA, nominal parameter target, step count, and corpus SHA.
+
+This is stronger than a bare timing record because it documents the data and execution path. It is not enough to establish independent replication. A proper replication claim requires checking random seeds, initialization of newly introduced parameters, runner identity, library versions, and whether the two artifacts differ only in nondeterministic training state or in source/configuration. Until then, call them two executions of the same experiment specification.
+
+### 7. CPU comparison: a cautious interpretation
+
+The existing performance record reports 167.0 tokens/s at two inter-op threads and 126.7 tokens/s at four, for nominally the same 100.9M-parameter model and 500 updates. The two-thread run took 383.24 seconds; the four-thread run took 505.14 seconds. In this pair, four threads were approximately 32% slower in wall time (or about 24% lower throughput).
+
+This is a within-record contrast, not a general CPU-scaling law. The runner model, physical-core allocation, intra-op thread count, BLAS configuration, CPU contention, warm-up, and exact artifact identity must be matched before attributing the difference to inter-op threads. The next benchmark should randomize run order and repeat each setting at least three times on the same runner class, reporting median and dispersion rather than one timing.
+
+### 8. Practical reporting template
+
+For each CPU run, report runner image and CPU model if exposed; Python/PyTorch/NumPy versions; OMP_NUM_THREADS, MKL_NUM_THREADS, intra-op and inter-op counts; batch and sequence dimensions; context length; gradient accumulation; precision; optimizer steps; processed tokens; wall time excluding and including setup; checkpoint time; evaluation time; and artifact size. Keep corpus download and tokenization times separate from steady-state training throughput.
+
+### 9. Limitations
+
+The current measurements come from hosted CI runners and a small number of runs. They do not establish a hardware-independent optimum, and throughput per second is not comparable across architectures unless the counted token unit and workload are identical. Parameter count alone is not a sufficient normalization for CPU cost.
