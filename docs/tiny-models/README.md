@@ -39,7 +39,7 @@ Four reported 100-response evaluations currently provide a preliminary series:
 | 205k | 14 | 29 | 83 |
 | 250k | 2 | 45 | 96 |
 
-These counts must be recomputed from the raw JSON. Before comparing checkpoints, verify identical prompt-set hashes, decoding parameters, output cap, tokenizer, inference code, and exact checkpoint hashes. A response being distinct does not imply that it is correct, useful, or non-repetitive. A generation reaching the cap is not automatically an EOS failure unless the evaluator records termination explicitly.
+These counts must be recomputed from the raw JSON. A provenance audit of all four exact workflow revisions has now verified the same 100-question prompt SHA-256, 8k tokenizer SHA-256, inference-script blob SHA, deterministic seed (20261110), greedy decoding, two CPU threads, 32-token/128-byte generation limits, and disabled KV cache/RAG. The 205k and 250k workflows omit the limit flags but use the same script revision whose defaults match the earlier workflows. This establishes protocol consistency, not correctness of the preliminary counts or freedom from training-data leakage. A response being distinct does not imply that it is correct, useful, or non-repetitive. A generation reaching the cap is not automatically an EOS failure unless the evaluator records termination explicitly.
 
 The 250k training record reports 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. The run reached its target and produced artifacts, while a later lineage-verification stage failed. This is a key example for Paper 4: a post-training workflow error must not erase a recoverable checkpoint, nor should it be hidden.
 
@@ -58,7 +58,7 @@ One extracted training chunk contains 512,000 tokens across 50 optimizer steps (
 ## Evidence files
 
 - **[Evidence ledger](evidence-ledger.md)** — source run links, extracted facts, hashes, caveats, and pending verification tasks.
-- **[Experiment matrix](experiment-matrix.csv)** — tabular snapshot intended for analysis and later conversion to a fully normalized dataset.
+- **[Experiment matrix](experiment-matrix.csv)** — tabular snapshot with run/job identity, checkpoint and corpus metadata, plus the newly recovered holdout artifact and protocol provenance.
 - **Five manuscripts** — separate working papers linked above.
 
 ## Reading the evidence: status vocabulary
@@ -139,3 +139,12 @@ The next research pass prioritizes evidence recovery over rhetorical expansion:
 Every empirical sentence in a manuscript should point to a reproducible source: a run, job log, artifact, code revision, corpus manifest, or immutable checkpoint hash. Where the source is unavailable, write that the result is reported or pending verification. Do not infer missing values, silently repair inconsistent records, or turn a failed workflow into either a model failure or a success without inspecting the stage that failed.
 
 The guiding principle is simple: **the experiment is the complete chain from data to scored output, not merely the training loop.**
+
+
+## Latest evidence extraction: RONINIA protocol audit
+
+A deeper inspection of the four holdout workflow files and the inference script at each exact workflow commit has established that the 100k, 137.5k, 205k, and 250k evaluations used the same immutable 100-question file and the same tokenizer. The inference script is byte-identical across all four workflow revisions. Its common protocol is deterministic greedy decoding, seed `20261110`, two CPU threads, a maximum of 32 generated tokens and 128 output bytes, with KV cache and RAG disabled.
+
+The uploaded artifacts are also now individually catalogued by GitHub artifact ID, archive SHA-256, and byte size, alongside the workflow run, job, commit, and workflow filename. These identifiers are in the [evidence ledger](evidence-ledger.md) and [experiment matrix](experiment-matrix.csv).
+
+This materially improves the checkpoint-series design: differences in the preliminary outputs are less likely to be explained by an intentional change in the inference protocol. It does not yet prove that the holdout was absent from the training corpus, and it does not turn the extracted empty/cap/distinct counts into validated scores. The next decisive step is to retrieve and rescore the raw JSON, then run a corpus-overlap audit.
