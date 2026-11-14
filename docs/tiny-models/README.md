@@ -191,3 +191,8 @@ The two RONIN-IA expansion executions both completed all job steps, including so
 - RONIN-IA: compare the two expansion artifacts at the report/config/seed level; retrieve exact runner identity and benchmark manifests for the two-thread/four-thread CPU comparison.
 - MINIRONIN: recover the two termination holdout JSONs and exact inference scripts; reconstruct the Mamba checkpoint metadata failure from structured artifacts.
 - Cross-project: build a failure-stage catalog and avoid pooling metrics across incompatible tokenizers, prompt sets, model families, and decoding limits.
+
+
+## HERETIC scoring audit update (14 November 2026)
+
+The exact evaluator source for HERETIC-RONIN run [42358300901](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42358300901) is now recovered at the workflow's immutable commit. The 120-item holdout is a procedurally generated diagnostic (20 items in each of six domains) scored by normalized exact string equality. The reported 0/120 therefore means zero exact matches under that normalization—not zero general reasoning ability. The workflow's corpus gate also checked for exact prompt-string matches and found none; the audit's SimHash procedure is heuristic and cannot prove absence of semantic or historical contamination. The run is one 50-optimizer-step chunk in a chained 500-step pilot. Raw paired JSON and internal artifact contents remain pending, so independent rescoring is the next step.
