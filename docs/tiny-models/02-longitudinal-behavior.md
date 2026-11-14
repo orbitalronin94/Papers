@@ -24,9 +24,11 @@ This study examines how observable generation properties vary across checkpoints
 | 250,000 | 2 | 45 | 96 | 23.13 | 0.274788 |
 | 330,000 | 1 | 21 | 99 | 19.88 | 0.323478 |
 
-The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified.
+The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified. Per-domain counts and metrics are published in `roninia-domain-metrics.csv`.
 
 The 205k and 250k evaluations also yielded preliminary adjacent-bigram repetition estimates of 0.96 and 1.83 per response respectively. The denominator and implementation require verification.
+
+The 205k checkpoint's 14 empty outputs are distributed across calibration (1), CI/CD (5), contradiction (2), knowledge (1), logic (1), personality/troll (3), and reasoning (1). At 330k, the single empty response is in personality/troll. This localization is descriptive only: most domains contain just 2–6 prompts, so per-domain rates are unstable. CI/CD and personality/troll have larger denominators (35 and 25) and account for most token-limit hits across checkpoints.
 
 ### 3. MINIRONIN comparator
 The 810k and 910k holdouts both report 100/100 outputs at the 128-token cap and 0/100 EOS emissions. The recorded mean latency changes from about 0.288 s to 0.424 s, while distinct outputs change from 98 to 91. The comparison is not controlled for all possible inference/runtime variables and must be presented as a case observation, not a causal effect of 100k additional steps.
@@ -65,7 +67,7 @@ A higher unique-output rate is not necessarily better; it may reflect instabilit
 - Document failed and missing evaluations.
 
 ### 8. Planned artifacts
-The initial raw-JSON metric table is available in `roninia-checkpoint-metrics.csv`, with a reproducible scorer in `scripts/score_roninia_holdouts.py`. Remaining artifacts: `checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
+The raw-JSON metric table is available in `roninia-checkpoint-metrics.csv`; the 65-row per-domain table is `roninia-domain-metrics.csv`; the reproducible scorer is `scripts/score_roninia_holdouts.py`. Remaining artifacts: `checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
 
 ### References to add
 Longitudinal evaluation, reliability of NLP benchmarks, bootstrap methods, and measurement theory. Cite exact repository runs and artifacts after re-audit.
