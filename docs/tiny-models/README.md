@@ -9,10 +9,10 @@ Five connected working manuscripts reconstruct a series of small-language-model 
 | Manuscript | Main question | Principal evidence | Current maturity |
 |---|---|---|---|
 | [01 — The Loss–Behavior Gap](01-loss-behavior-gap.md) | Does optimization loss predict useful generation behavior? | MINIRONIN termination results; RONINIA checkpoint holdouts | Exploratory; raw holdout audit required |
-| [02 — Longitudinal Behavioral Change](02-longitudinal-behavior.md) | How do observable behaviors change across checkpoints? | RONINIA 100k–250k; MINIRONIN 810k–910k | Descriptive series; comparability checks pending |
+| [02 — Longitudinal Behavioral Change](02-longitudinal-behavior.md) | How do observable behaviors change across checkpoints? | RONINIA 100k–330k; MINIRONIN 810k–910k | Descriptive series; comparability checks pending |
 | [03 — CPU-Constrained Training](03-cpu-constrained-training.md) | What governs throughput on low-cost CPU runners? | RONIN-IA thread comparison; MINIRONIN and HERETIC performance records | Preliminary benchmark; controlled reruns needed |
-| [04 — Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md) | How should partial success and artifact provenance be reported? | RONINIA and MINIRONIN post-training failures | Case-study evidence; workflow commit audit pending |
-| [05 — Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Evidence incomplete; scoring and exposure audit required |
+| [04 — Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md) | How should partial success and artifact provenance be reported? | RONINIA and MINIRONIN post-training failures | Case-study evidence; five workflow paths audited |
+| [05 — Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Corpus gates verified; raw 120-item scoring and exposure audit required |
 
 The five papers are related, but each has a distinct contribution. Paper 1 concerns measurement validity; paper 2 treats checkpoints as a longitudinal series; paper 3 concerns compute economics; paper 4 concerns experimental provenance; paper 5 concerns data exposure and the interpretation of negative results.
 
