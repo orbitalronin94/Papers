@@ -38,8 +38,9 @@ Four reported 100-response evaluations currently provide a preliminary series:
 | 137.5k | 0 | 42 | 96 |
 | 205k | 14 | 29 | 83 |
 | 250k | 2 | 45 | 96 |
+| 330k | pending raw JSON | pending raw JSON | pending raw JSON |
 
-These counts must be recomputed from the raw JSON. A provenance audit of all four exact workflow revisions has now verified the same 100-question prompt SHA-256, 8k tokenizer SHA-256, inference-script blob SHA, deterministic seed (20261110), greedy decoding, two CPU threads, 32-token/128-byte generation limits, and disabled KV cache/RAG. The 205k and 250k workflows omit the limit flags but use the same script revision whose defaults match the earlier workflows. This establishes protocol consistency, not correctness of the preliminary counts or freedom from training-data leakage. A response being distinct does not imply that it is correct, useful, or non-repetitive. A generation reaching the cap is not automatically an EOS failure unless the evaluator records termination explicitly.
+These counts must be recomputed from the raw JSON. A provenance audit of all five exact workflow revisions has now verified the same 100-question prompt SHA-256, 8k tokenizer SHA-256, inference-script blob SHA, deterministic seed (20261110), greedy decoding, two CPU threads, 32-token/128-byte generation limits, and disabled KV cache/RAG. The 205k and 250k workflows omit the limit flags but use the same script revision whose defaults match the earlier workflows. This establishes protocol consistency, not correctness of the preliminary counts or freedom from training-data leakage. A response being distinct does not imply that it is correct, useful, or non-repetitive. A generation reaching the cap is not automatically an EOS failure unless the evaluator records termination explicitly.
 
 The 250k training record reports 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. The run reached its target and produced artifacts, while a later lineage-verification stage failed. This is a key example for Paper 4: a post-training workflow error must not erase a recoverable checkpoint, nor should it be hidden.
 
@@ -143,8 +144,17 @@ The guiding principle is simple: **the experiment is the complete chain from dat
 
 ## Latest evidence extraction: RONINIA protocol audit
 
-A deeper inspection of the four holdout workflow files and the inference script at each exact workflow commit has established that the 100k, 137.5k, 205k, and 250k evaluations used the same immutable 100-question file and the same tokenizer. The inference script is byte-identical across all four workflow revisions. Its common protocol is deterministic greedy decoding, seed `20261110`, two CPU threads, a maximum of 32 generated tokens and 128 output bytes, with KV cache and RAG disabled.
+A deeper inspection of the five holdout workflow files and the inference script at each exact workflow commit has established that the 100k, 137.5k, 205k, and 250k evaluations used the same immutable 100-question file and the same tokenizer. The inference script is byte-identical across all four workflow revisions. Its common protocol is deterministic greedy decoding, seed `20261110`, two CPU threads, a maximum of 32 generated tokens and 128 output bytes, with KV cache and RAG disabled.
 
-The uploaded artifacts are also now individually catalogued by GitHub artifact ID, archive SHA-256, and byte size, alongside the workflow run, job, commit, and workflow filename. These identifiers are in the [evidence ledger](evidence-ledger.md) and [experiment matrix](experiment-matrix.csv).
+The uploaded artifacts are also now individually catalogued by GitHub artifact ID, archive SHA-256, and byte size, alongside the workflow run, job, commit, and workflow filename. The 330k holdout is now included: its Actions job succeeded and its artifact is retained, although its raw response metrics have not yet been extracted. These identifiers are in the [evidence ledger](evidence-ledger.md) and [experiment matrix](experiment-matrix.csv).
 
 This materially improves the checkpoint-series design: differences in the preliminary outputs are less likely to be explained by an intentional change in the inference protocol. It does not yet prove that the holdout was absent from the training corpus, and it does not turn the extracted empty/cap/distinct counts into validated scores. The next decisive step is to retrieve and rescore the raw JSON, then run a corpus-overlap audit.
+
+
+### New checkpoint: 330k after interrupted-run recovery
+
+The RONINIA history now extends beyond 250k. A 250k-to-300k continuation was cancelled after uploading a partial checkpoint chain. A separate recovery workflow selected the latest valid checkpoint from that artifact, checked that optimizer state was present, reused the existing token cache without retokenizing, verified the corpus fingerprint and tokenizer, and continued to exactly 330k. The recovery job and final checkpoint-chain upload succeeded.
+
+An official 100-question holdout was then run against the 330k checkpoint. Its job completed successfully and uploaded an immutable artifact. The workflow verifies the same holdout and tokenizer hashes as the earlier checkpoint evaluations; the inference script and generation defaults also match. The actual 330k output metrics are still pending extraction, so the checkpoint appears in the series as an evaluated point with metrics deliberately left blank.
+
+This recovery sequence is particularly relevant to Paper 4: the cancelled 300k attempt, recoverable intermediate artifacts, successful 330k continuation, and successful 330k holdout must be represented as separate events rather than compressed into a single “training succeeded” label.
