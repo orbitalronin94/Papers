@@ -171,3 +171,24 @@ The output files include answer text, token IDs, and elapsed time, but no explic
 
 
 The shared holdout contains 35 CI/CD prompts and 25 personality/troll prompts; the remaining 40 prompts span 11 other domains. It is a project-specific mixed evaluation, not a general reasoning benchmark. The output records include rubrics but no correctness score, and they do not preserve an explicit termination reason. Accordingly, the current longitudinal metrics describe output shape and exact-text diversity, not correctness or EOS behavior.
+
+
+## New extraction: workflow-level evidence
+
+The current pass extends the papers beyond output metrics into the execution record. Job-step summaries were recovered for the HERETIC 512k-token chunk, both RONIN-IA expansion runs, the RONINIA 205k→250k continuation, and the RONINIA recovery to 330k.
+
+Three details now matter for interpretation:
+
+1. **HERETIC's corpus gates were executed.** The job completed the signed global corpus audit, training authorization and holdout-isolation checks, exact train-only corpus SHA verification, checkpoint/paired-holdout recovery, the 50-optimizer-step chunk, and resumable checkpoint/holdout upload. This supports the integrity of the recorded procedure, but it does not by itself validate the 0/120 scoring rubric or prove the holdout is absent from every historical source.
+2. **RONINIA's 250k training completed despite a failed verification step.** The exact 45,000-step training step succeeded, recoverable checkpoints were uploaded, and the final checkpoint/lineage upload succeeded. The step named “Verify cumulative 205000 checkpoint and write lineage” failed; the overall run conclusion was failure. The paper now distinguishes this partial workflow failure from a failed training run.
+3. **The 330k recovery was a clean, separate continuation.** The recovery job downloaded checkpoints from the interrupted run, selected a valid state, reused and verified the existing token cache unchanged, continued to exactly 330,000, verified the final checkpoint and lineage, and uploaded the chain successfully.
+
+The two RONIN-IA expansion executions both completed all job steps, including source partition checks, six-source assembly, function-preserving expansion, 500 training steps, MMLU-Pro screening, and artifact upload. They are separate workflow executions with different head commits and artifact digests, but share the same experiment name, base checkpoint, corpus digest, and nominal configuration. Until seed and output-level independence are established, report them as repeated executions of one experiment specification—not as independent replications.
+
+## Updated research priorities
+
+- RONINIA: run a corpus/token-cache leakage audit against the shared 100-prompt holdout; extract the exact 250k parent and training trace; add correctness scoring with a blind, documented rubric.
+- HERETIC: recover the raw paired 120-prompt JSON and scorer from the retained artifact (6.0 GB compressed); establish the meaning of 0/120 and distinguish the 512k-token chunk from the separate 500-update pilot record.
+- RONIN-IA: compare the two expansion artifacts at the report/config/seed level; retrieve exact runner identity and benchmark manifests for the two-thread/four-thread CPU comparison.
+- MINIRONIN: recover the two termination holdout JSONs and exact inference scripts; reconstruct the Mamba checkpoint metadata failure from structured artifacts.
+- Cross-project: build a failure-stage catalog and avoid pooling metrics across incompatible tokenizers, prompt sets, model families, and decoding limits.
