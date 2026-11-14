@@ -80,3 +80,16 @@ Planned: `data/checkpoints.csv`, `data/holdout_metrics.csv`, `data/run_manifest.
 
 ### References to add
 Primary sources must be cited by immutable GitHub run URLs, artifact IDs, and SHA-256 values. Methodological references on language-model evaluation, measurement validity, bootstrap uncertainty, and data contamination remain to be selected and verified.
+
+
+### 3.4 RONINIA: optimization success, verification failure, and recovery
+
+The 205k→250k continuation provides a direct example of why training status and workflow status must be separated. In [run 43315959342](https://github.com/orbitalronin94/RONINIA/actions/runs/43315959342), the exact 45,000-additional-step training action completed successfully. The job uploaded recoverable checkpoints even if later steps failed, then the “Verify cumulative 205000 checkpoint and write lineage” step failed. The subsequent final checkpoint/lineage upload succeeded, but the run's overall conclusion was failure. The 250k holdout later used the recorded checkpoint SHA-256, so the model state was evaluable despite the verification-stage defect.
+
+A later recovery sequence reached 330k by recovering the latest valid checkpoint from an interrupted continuation, verifying the existing token cache without retokenization, continuing to exactly 330,000 steps, and successfully writing and uploading lineage. This makes the 250k and 330k observations usable only when their distinct ancestry and artifact states are preserved.
+
+### 3.5 What the expansion screening adds—and does not add
+
+The RONIN-IA 10× expansion case provides a different kind of negative result: the 64-question MMLU-Pro screening score remained 5/64 before and after 500 steps. The workflow's own status was SCREENING_ONLY and G0 FAIL, with automatic promotion disabled. This does not show that expansion is ineffective in general. It shows that this particular short continuation did not improve this small screening score, under the recorded experiment design.
+
+The broader lesson is methodological: loss, output-shape metrics, screening accuracy, and workflow completion are separate observables. They should be reported side by side, not substituted for one another.
