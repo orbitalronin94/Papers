@@ -260,3 +260,8 @@ An Actions artifact API digest identifies the uploaded ZIP archive. A checkpoint
 - Corpus audit gate checks `training_authorized == true` and `exact_holdout_question_matches == 0`; its SimHash procedure is explicitly heuristic and does not prove absence of semantic or historical contamination.
 - Artifact ID 13578607392, 6,001,746,291 bytes, archive SHA-256 `9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468`; archive payload still not inspected.
 - Remaining: recover paired before/after JSON and chunk report; independently rescore; inspect checkpoint metadata and full 500-step chain; recover prompt and corpus manifest hashes.
+
+
+The original chunk job log also prints the full `progress.json` summary: 500,102,144 parameters; 512,000 processed tokens; mean loss/token 2.2688384374; first/last 100-micro-step means 2.3491757298 and 2.1918858504; 0/120 before and after; 0/20 in each of the six domains; 17,105.5139746 seconds; checkpoint SHA-256 `c81edf6658ed208cf4848c831336d427df4464eb725d158fdf827b99910ba5a2`. The same log prints the global audit gate values: 256,305 documents audited, 68 near-duplicate pairs found, zero exact holdout-question matches, and `training_authorized=true`. These are log-verified values; the paired JSON and audit JSON remain unextracted from the 6GB artifact.
+
+Post-hoc canonical prompt-set SHA-256 (JSONL of `domain` and `question`, compact UTF-8 serialization): `5fe85ea2e921165743e4ef4b2000204ee62725930ed91d4343ee7d87aa0aa177`. This hash was computed from the recovered generator and was not recorded by the original workflow.
