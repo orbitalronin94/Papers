@@ -172,6 +172,7 @@ The 250k-to-300k continuation was interrupted, but its partial checkpoint artifa
 - Holdout run: [43490561981](https://github.com/orbitalronin94/RONINIA/actions/runs/43490561981), job 132110319633; workflow commit `11b1d25b7755d5efd745d4eda00b7d9f36129cda`.
 - Workflow verified the exact 330k checkpoint, the same 8k tokenizer SHA, and the same 100-question holdout SHA used by the earlier checkpoint evaluations.
 - The holdout job completed successfully and uploaded artifact ID 14068589478 (25,444 bytes; archive SHA-256 `fb3106d6cb698321e363eb9c7ba88f155203062494270d4b99a4127498d220b8`).
+- Exact checkpoint SHA-256 from the retained holdout JSON: `2fba7ec4b909150be08a1777e6a13c9046b1a2f5a711dd61469e61e54de578c4`.
 - The exact inference-script blob is still `b83ceb712431b3ea20902708fb9ec8f3c243425a`; its defaults match the earlier protocol: seed 20261110, greedy decoding, two threads, 32 tokens, 128 bytes, no KV cache, no RAG.
 - The raw JSON has now been recovered and rescored: 1 empty response, 21 outputs reaching the 32-token limit, 99 exact-distinct answer strings, mean generated length 19.88 tokens, and mean latency 0.323478 s. EOS emission and task-level correctness remain unscored because the JSON schema records neither an explicit stop reason nor an automatic rubric score.
 
