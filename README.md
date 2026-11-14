@@ -517,7 +517,7 @@ Investigador autodidacta. Sin afiliación institucional. Sin financiación exter
 
 ## 🕐 Última Actualización / Last Updated
 
-14 de septiembre de 2026 / September 14, 2026.
+14 de noviembre de 2026 / November 14, 2026.
 
 ---
 
