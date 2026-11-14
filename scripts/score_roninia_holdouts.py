@@ -12,7 +12,7 @@ import json
 import math
 import statistics
 import zipfile
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -60,6 +60,7 @@ def summarize(path: Path) -> dict[str, Any]:
     domains: Counter[str] = Counter()
     empty_by_domain: Counter[str] = Counter()
     token_limit_by_domain: Counter[str] = Counter()
+    per_domain: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         answer = row.get("answer")
         token_ids = row.get("generated_token_ids")
@@ -71,10 +72,23 @@ def summarize(path: Path) -> dict[str, Any]:
         byte_lengths.append(len(answer.encode("utf-8")))
         latencies.append(float(row["elapsed_seconds"]))
         domains[domain] += 1
+        per_domain[domain].append(row)
         if not answer.strip():
             empty_by_domain[domain] += 1
         if len(token_ids) == token_limit:
             token_limit_by_domain[domain] += 1
+
+    domain_metrics = []
+    for domain, group in sorted(per_domain.items()):
+        domain_metrics.append({
+            "domain": domain,
+            "n": len(group),
+            "empty_outputs": sum(not item["answer"].strip() for item in group),
+            "token_limit_hits": sum(len(item["generated_token_ids"]) == token_limit for item in group),
+            "distinct_exact_answers": len({item["answer"] for item in group}),
+            "mean_generated_tokens": round(statistics.mean(len(item["generated_token_ids"]) for item in group), 6),
+            "mean_latency_seconds": round(statistics.mean(float(item["elapsed_seconds"]) for item in group), 6),
+        })
 
     return {
         "label": payload.get("label"),
@@ -101,6 +115,7 @@ def summarize(path: Path) -> dict[str, Any]:
         "domain_counts": dict(sorted(domains.items())),
         "empty_by_domain": dict(sorted(empty_by_domain.items())),
         "token_limit_hits_by_domain": dict(sorted(token_limit_by_domain.items())),
+        "domain_metrics": domain_metrics,
         "eos_emissions": None,
         "eos_note": "Not recorded in the current JSON schema; do not infer from output length alone.",
     }
