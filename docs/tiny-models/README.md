@@ -1,28 +1,141 @@
 # Tiny-model research programme
 
-Five connected manuscripts are being developed from the MINIRONIN, RONIN-IA, HERETIC-RONIN, and RONINIA experiment histories. These are working drafts, not peer-reviewed publications.
+Five connected working manuscripts reconstruct a series of small-language-model experiments conducted in **MINIRONIN, RONIN-IA, HERETIC-RONIN, and RONINIA**. The programme studies not only model outputs, but also the engineering and measurement chain that makes those outputs interpretable: corpus construction, tokenization, training traces, checkpoint ancestry, inference settings, holdout scoring, and workflow recovery.
+
+> **Publication status:** exploratory research drafts, not peer-reviewed papers. All numerical results in this directory are provisional unless explicitly marked otherwise and must be traced to their raw artifacts before submission.
+
+## At a glance
+
+| Manuscript | Main question | Principal evidence | Current maturity |
+|---|---|---|---|
+| [01 — The Loss–Behavior Gap](01-loss-behavior-gap.md) | Does optimization loss predict useful generation behavior? | MINIRONIN termination results; RONINIA checkpoint holdouts | Exploratory; raw holdout audit required |
+| [02 — Longitudinal Behavioral Change](02-longitudinal-behavior.md) | How do observable behaviors change across checkpoints? | RONINIA 100k–250k; MINIRONIN 810k–910k | Descriptive series; comparability checks pending |
+| [03 — CPU-Constrained Training](03-cpu-constrained-training.md) | What governs throughput on low-cost CPU runners? | RONIN-IA thread comparison; MINIRONIN and HERETIC performance records | Preliminary benchmark; controlled reruns needed |
+| [04 — Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md) | How should partial success and artifact provenance be reported? | RONINIA and MINIRONIN post-training failures | Case-study evidence; workflow commit audit pending |
+| [05 — Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Evidence incomplete; scoring and exposure audit required |
+
+The five papers are related, but each has a distinct contribution. Paper 1 concerns measurement validity; paper 2 treats checkpoints as a longitudinal series; paper 3 concerns compute economics; paper 4 concerns experimental provenance; paper 5 concerns data exposure and the interpretation of negative results.
 
 ## Manuscripts
 
-1. [The Loss–Behavior Gap in Tiny Language Models](01-loss-behavior-gap.md) — training objectives versus externally measured generation behavior.
-2. [Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints](02-longitudinal-behavior.md) — checkpoint-level termination, repetition, truncation, and diversity.
-3. [CPU-Constrained Training of Small Language Models](03-cpu-constrained-training.md) — throughput, parallelism, and workflow costs.
-4. [Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md) — provenance, artifact integrity, and partial recovery.
-5. [Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) — HERETIC corpus composition, token budgets, and holdout outcomes.
+1. **[The Loss–Behavior Gap in Tiny Language Models](01-loss-behavior-gap.md)** — argues for reporting optimization metrics separately from externally measured generation outcomes. It examines cases where loss and visible behavior may diverge, without treating either as a proxy for general intelligence.
+2. **[Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints](02-longitudinal-behavior.md)** — tracks termination, empty outputs, cap hits, repetition, and response diversity across checkpoints. Its central methodological point is that a final checkpoint alone can conceal reversals and trade-offs.
+3. **[CPU-Constrained Training of Small Language Models](03-cpu-constrained-training.md)** — documents measured throughput and the practical costs of data preparation, training, checkpointing, and evaluation on hosted CPU infrastructure.
+4. **[Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md)** — separates successful optimization, valid checkpoint creation, artifact upload, provenance verification, and overall workflow status.
+5. **[Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md)** — reconstructs HERETIC-RONIN corpus composition and token exposure, and asks what a negative holdout can and cannot establish.
 
-## Evidence and status
+## Current evidence snapshot
 
-- [Evidence ledger](evidence-ledger.md) records the currently extracted runs and the remaining verification work.
-- [Experiment matrix](experiment-matrix.csv) provides a machine-readable snapshot of currently extracted runs.
-- Metrics labelled preliminary must be recomputed from raw artifacts before submission.
-- No paper should claim causal effects from heterogeneous observational runs.
-- Negative results are retained; failed jobs are not silently omitted.
-- Every reported score must define its task, denominator, scorer, prompt-set identity, and checkpoint lineage.
+The following is a navigation-level summary of the extraction ledger, **not a final statistical analysis**. See the [evidence ledger](evidence-ledger.md) for run IDs, checkpoint hashes, provenance notes, and unresolved checks; see the [experiment matrix](experiment-matrix.csv) for machine-readable rows.
 
-## Working conventions
+### RONINIA: checkpoint holdouts
 
-- Separate verified facts, derived metrics, hypotheses, and unknowns.
-- Prefer immutable run IDs, artifact IDs, checkpoint hashes, and corpus hashes to mutable branch links.
-- Keep raw generations and per-prompt scores whenever licensing and storage permit.
-- Distinguish training loss, validation loss, and task-specific holdout performance.
-- Do not equate diversity, EOS emission, or low loss with general intelligence.
+Four reported 100-response evaluations currently provide a preliminary series:
+
+| Cumulative checkpoint | Empty outputs | Reached generation cap | Distinct responses |
+|---:|---:|---:|---:|
+| 100k | 1 | 22 | 100 |
+| 137.5k | 0 | 42 | 96 |
+| 205k | 14 | 29 | 83 |
+| 250k | 2 | 45 | 96 |
+
+These counts must be recomputed from the raw JSON. Before comparing checkpoints, verify identical prompt-set hashes, decoding parameters, output cap, tokenizer, inference code, and exact checkpoint hashes. A response being distinct does not imply that it is correct, useful, or non-repetitive. A generation reaching the cap is not automatically an EOS failure unless the evaluator records termination explicitly.
+
+The 250k training record reports 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. The run reached its target and produced artifacts, while a later lineage-verification stage failed. This is a key example for Paper 4: a post-training workflow error must not erase a recoverable checkpoint, nor should it be hidden.
+
+### MINIRONIN: persistent termination limitation
+
+The 810k and 910k holdout records each contain 100 responses, all reaching the reported 128-token cap, with zero EOS emissions. The recorded distinct-response counts were 98 and 91 respectively; mean latency was 0.288 s and 0.424 s. These are descriptive observations only until the raw outputs, exact inference settings, and scoring implementation are checked. They are useful because they show why step count and output diversity cannot substitute for an explicit termination metric.
+
+### RONIN-IA: expansion screening and CPU measurements
+
+A 10× expansion experiment was screened on 64 identical MMLU-Pro question IDs and recorded 5/64 both before and after training (7.8125%; zero percentage-point change). The record labels this screening-only and G0 FAIL; it is not evidence of a validated benchmark gain. Two performance records report 100.9M parameters and 500 updates: 383.24 s at 167.0 tokens/s with two inter-op threads, versus 505.14 s at 126.7 tokens/s with four. Runner identity and all other settings must be confirmed before interpreting the difference as a thread effect.
+
+### HERETIC-RONIN: corpus and token-budget reconstruction
+
+One extracted training chunk contains 512,000 tokens across 50 optimizer steps (10,240 tokens per optimizer step), with mean loss/token 2.268838; the first and last 100 recorded values average 2.349176 and 2.191886. The associated holdout is reported as 0/120, with 20 examples in each of six domains. The corpus snapshot records 256,237 documents after deduplication and 680,665,972 bytes. These figures do not, by themselves, establish the amount of unique token exposure or explain the holdout outcome. The exact rubric, raw outputs, tokenizer, training ancestry, and corpus-license manifest remain part of the audit.
+
+## Evidence files
+
+- **[Evidence ledger](evidence-ledger.md)** — source run links, extracted facts, hashes, caveats, and pending verification tasks.
+- **[Experiment matrix](experiment-matrix.csv)** — tabular snapshot intended for analysis and later conversion to a fully normalized dataset.
+- **Five manuscripts** — separate working papers linked above.
+
+## Reading the evidence: status vocabulary
+
+Use these labels consistently in the manuscripts and future additions:
+
+- **Verified from source:** directly supported by an accessible run log, artifact manifest, source file, or immutable hash.
+- **Extracted / provisional:** transcribed from a run or curated record but not yet independently recomputed from raw artifacts.
+- **Derived:** calculated from source data using a documented formula and denominator.
+- **Hypothesis:** a proposed explanation that has not been isolated experimentally.
+- **Unknown / pending:** information not yet recovered or not comparable across runs.
+- **Failed stage:** a workflow stage returned an error. This label describes pipeline execution, not automatically the training result or model quality.
+
+Do not upgrade a claim's status merely because the same number appears in more than one draft. The ledger is the single working index for evidence provenance; the raw run and artifact remain the authority.
+
+## Reproducibility and audit protocol
+
+Before any result is promoted into a paper's main findings, record or recover:
+
+1. **Identity:** repository, workflow run ID, job ID, workflow file path, workflow commit SHA, and execution date.
+2. **Model:** architecture/configuration, parameter count, tokenizer identity and vocabulary, context length, optimizer, schedule, batch size, gradient accumulation, precision, and random seeds.
+3. **Data:** corpus manifest and hash, source-level license/permission, deduplication procedure, filtering, split policy, token count, and actual token exposure.
+4. **Lineage:** parent checkpoint, cumulative and incremental steps, parent and child hashes, and the code revision used to load and save them.
+5. **Evaluation:** exact checkpoint hash, prompt-set version/hash, prompt IDs, decoding settings, generation cap, inference implementation, scorer version, denominator, and raw per-prompt outputs.
+6. **Execution:** runner/CPU details, thread settings, elapsed time, tokens/s definition, data-loading and tokenization time, checkpoint time, and workflow exit status.
+7. **Failure handling:** preserve logs and artifacts from failed or partially completed runs; state which stage failed and whether a usable checkpoint or evaluation artifact survived.
+
+### Minimum behavioral metrics
+
+Where raw generations are available, report at least:
+
+- empty-output rate;
+- EOS emission rate and explicit termination status;
+- generation-cap hit rate;
+- output length distribution (not just its mean);
+- exact-match and normalized-match scores where a task has a defensible answer key;
+- distinct-output rate, with the definition of “distinct” stated;
+- repetition metrics with a documented tokenizer, window, denominator, and aggregation;
+- latency distribution and the inference configuration.
+
+Never collapse these into a single unqualified “quality” score. Correctness, fluency, termination, diversity, and latency are separate dimensions.
+
+## Cross-paper dependencies
+
+- **Paper 1** depends on the validity of the loss records and the behavioral scoring protocol developed across Papers 2 and 5.
+- **Paper 2** depends on checkpoint lineage from Paper 4 and strict evaluation comparability.
+- **Paper 3** depends on normalized throughput definitions and runner/configuration metadata.
+- **Paper 4** supplies the provenance standard required by every other paper.
+- **Paper 5** depends on corpus manifests, tokenizer accounting, data-split integrity, and a defensible interpretation of the 0/120 result.
+
+Paper 4 is therefore the methodological backbone; Papers 1, 2, 3, and 5 are complementary empirical studies.
+
+## Known limitations
+
+- The experiments are heterogeneous: model families, tokenizers, corpus mixtures, parameter counts, training regimes, and evaluation procedures differ.
+- Most current comparisons are observational, not randomized controlled experiments.
+- Several holdout summaries have not yet been recalculated from raw JSON.
+- Some workflow logs show successful checkpoint creation followed by metadata or lineage errors; final job status alone is an insufficient summary.
+- A reported corpus byte count is not a token count, and a token count is not a measure of unique or useful information.
+- A small fixed holdout can be noisy and can be contaminated by training data unless prompt provenance and corpus overlap are audited.
+- Benchmark screening scores must not be described as general capability measurements, especially when the evaluation is small or explicitly marked screening-only.
+- No result in this programme currently justifies claims of general intelligence, reasoning ability, or broad superiority.
+
+## Work plan
+
+The next research pass prioritizes evidence recovery over rhetorical expansion:
+
+1. Recover the raw JSON for each RONINIA and MINIRONIN holdout and recompute all metrics with one versioned scorer.
+2. Verify prompt-set identity, decoding configuration, tokenizer, inference code, and checkpoint SHA across each checkpoint comparison.
+3. Recover workflow YAML and commit SHAs for the principal training and holdout runs.
+4. Reconstruct HERETIC's corpus manifest, license records, tokenizer output, unique-token exposure, and exact 0/120 scoring rubric.
+5. Normalize CPU benchmark metadata and distinguish model compute from end-to-end pipeline time.
+6. Add all failed, cancelled, and partially successful runs to the ledger so the evidence is not selected only for favorable outcomes.
+7. Revise the five manuscripts only when the underlying ledger changes; keep all unresolved claims visibly provisional.
+
+## Citation and claim discipline
+
+Every empirical sentence in a manuscript should point to a reproducible source: a run, job log, artifact, code revision, corpus manifest, or immutable checkpoint hash. Where the source is unavailable, write that the result is reported or pending verification. Do not infer missing values, silently repair inconsistent records, or turn a failed workflow into either a model failure or a success without inspecting the stage that failed.
+
+The guiding principle is simple: **the experiment is the complete chain from data to scored output, not merely the training loop.**
