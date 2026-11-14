@@ -78,7 +78,7 @@ The present record motivates the proposition that nominal corpus scale is not su
 6. Compare with MINIRONIN/RONINIA only after harmonizing metric definitions.
 
 ### 8. Planned artifacts
-`heretic_runs.csv`, `corpus_manifest.csv`, `holdout_120_raw.json`, `score_holdout.py`, `data_card.md`, and a reproducibility README.
+`heretic_runs.csv`, `corpus_manifest.csv`, `holdout_120_raw.json`, `data_card.md`, and a reproducibility README. A dependency-free scorer is now available at [`scripts/score_heretic_holdout.py`](../../scripts/score_heretic_holdout.py); it can recompute scores once the paired JSON is extracted.
 
 ### References to add
 Methodological anchors: [Li et al. (2024)](https://aclanthology.org/2024.findings-emnlp.30/) and [Deng et al. (2024)](https://aclanthology.org/2024.naacl-long.482/) for contamination audits; [Hoffmann et al. (2022)](https://arxiv.org/abs/2203.15556) for compute/token-budget scaling context. These references motivate audits; the HERETIC corpus composition, authorization, token exposure, and 0/120 outcome must be established from primary project artifacts.
