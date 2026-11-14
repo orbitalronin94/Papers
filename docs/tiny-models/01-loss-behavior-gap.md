@@ -79,7 +79,7 @@ The evidence supports a narrow claim: optimization traces and generation diagnos
 Planned: `data/checkpoints.csv`, `data/holdout_metrics.csv`, `data/run_manifest.csv`, `src/score_holdout.py`, `src/paired_checkpoint_analysis.py`, and a README with exact artifact IDs and hashes.
 
 ### References to add
-Primary sources must be cited by immutable GitHub run URLs, artifact IDs, and SHA-256 values. Methodological references on language-model evaluation, measurement validity, bootstrap uncertainty, and data contamination remain to be selected and verified.
+Primary sources are the immutable GitHub run URLs, artifact IDs, and SHA-256 values cited in this manuscript. Methodological anchors: [HELM](https://arxiv.org/abs/2211.09110) for multi-metric evaluation; [Li et al. (2024)](https://aclanthology.org/2024.findings-emnlp.30/) and [Deng et al. (2024)](https://aclanthology.org/2024.naacl-long.482/) for contamination analysis. See [related-literature.md](related-literature.md) for scope notes.
 
 
 ### 3.4 RONINIA: optimization success, verification failure, and recovery
