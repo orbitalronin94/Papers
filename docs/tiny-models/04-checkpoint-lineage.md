@@ -77,7 +77,7 @@ The current case is one reconstructed workflow chain. It does not quantify how f
 `workflow_failure_catalog.csv`, `checkpoint_lineage.jsonl`, `verify_checkpoint.py`, `schema/checkpoint_manifest.schema.json`, and workflow examples.
 
 ### References to add
-ML experiment tracking, data provenance, workflow reliability, software supply-chain integrity, and GitHub Actions documentation. Cite exact workflow run and commit URLs.
+Primary evidence is the immutable workflow, job, commit, and artifact record. Supplementary context: [HELM](https://arxiv.org/abs/2211.09110) demonstrates the value of releasing raw prompts and completions alongside standardized evaluation. The [workflow-audit.csv](workflow-audit.csv) file provides the run-level index.
 
 
 ### 2.2 Recovery after a cancelled continuation: 250k → partial artifact → 330k
