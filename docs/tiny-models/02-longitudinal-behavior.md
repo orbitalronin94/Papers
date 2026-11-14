@@ -24,7 +24,7 @@ This study examines how observable generation properties vary across checkpoints
 | 250,000 | 2 | 45 | 96 | 23.13 | 0.274788 |
 | 330,000 | 1 | 21 | 99 | 19.88 | 0.323478 |
 
-The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified. Per-domain counts and metrics are published in `roninia-domain-metrics.csv`.
+The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. Workflow-step and artifact metadata are also catalogued in `workflow-audit.csv`. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified. Per-domain counts and metrics are published in `roninia-domain-metrics.csv`.
 
 The 205k and 250k evaluations also yielded preliminary adjacent-bigram repetition estimates of 0.96 and 1.83 per response respectively. The denominator and implementation require verification.
 
@@ -60,7 +60,7 @@ A higher unique-output rate is not necessarily better; it may reflect instabilit
 
 ### 7. Limitations and required evidence
 - Raw JSON and archive hashes are now verified for the five RONINIA checkpoints; retain this scorer and artifact inventory.
-- Recover the full 5k–330k checkpoint sequence, not just selected points; extract the 330k JSON and rescore all five holdouts.
+- Recover the full 5k–330k checkpoint sequence, not just selected points; the five available holdout JSONs are already rescored, but intervening checkpoints and missing evaluations remain to be catalogued.
 - Audit prompt-set overlap with training data and earlier holdouts; the shared 100-question set includes 35 CI/CD and 25 personality/troll prompts, so it is a project-specific mixed holdout rather than a general reasoning benchmark.
 - Re-run a subset with a common inference binary and tokenizer.
 - Recover training logs, validation traces, and run configuration for every checkpoint.
@@ -78,3 +78,12 @@ Longitudinal evaluation, reliability of NLP benchmarks, bootstrap methods, and m
 The current output schema stores generated token IDs and decoded answers but not a termination enum. The inference loop stops when EOS is predicted without appending EOS to the generated list; it can also stop when the next token would exceed 128 UTF-8 bytes. Therefore, this paper reports exact 32-token-limit hits, not EOS emissions. A byte-limit stop cannot be distinguished reliably from EOS from the stored JSON alone.
 
 The common holdout is not domain-balanced: 35/100 prompts are labelled `ci_cd`, 25/100 `personality_troll`, and 40/100 span 11 other domains. Aggregate distinctness is sensitive to this mixture. Future reporting should include per-domain metrics and avoid interpreting the aggregate as general reasoning ability. No correctness score has yet been computed from the included rubrics.
+
+
+### 10. What the five-point series can support
+
+The strongest defensible result is not a monotonic improvement or decline. It is that several output-shape indicators move independently over the observed checkpoints. Empty outputs peak at 205k (14/100), exact 32-token-limit hits peak at 250k (45/100), and exact-distinct answers reach a minimum at 205k (83/100) before rising to 99/100 at 330k. Because the sample is the same fixed set of 100 prompts, these are paired observations in principle; the aggregate table alone does not show which prompts changed state. A prompt-level transition table is required before claiming that individual questions improved or regressed.
+
+The 330k checkpoint is not a simple continuation from an uninterrupted 250k training job. Its ancestry includes a cancelled continuation, a partial artifact, and a recovery job that selected the latest valid checkpoint and reused the existing token cache. Longitudinal plots should mark this recovery boundary. A checkpoint count is not a sufficient description of training history.
+
+The small per-domain groups are exploratory. Most domains have only two to six items, and even the larger CI/CD and personality/troll groups are too small for fine-grained claims. The domain table should be used to identify where manual inspection is warranted, not to rank domain capability.
