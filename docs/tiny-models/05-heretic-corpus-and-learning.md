@@ -1,13 +1,13 @@
 # Corpus Scale Is Not Learning
 ## A case study of data composition, token budgets, and behavioral evaluation in HERETIC-RONIN
 
-**Status:** Research draft v0.1 — evidence incomplete  
+**Status:** Research draft v0.2 — scorer semantics verified from source; paired raw outputs pending  
 **Primary system:** HERETIC-RONIN  
 **Comparators:** MINIRONIN and RONINIA where compatible  
 **Claim policy:** The title is a research hypothesis, not a pre-established conclusion.
 
 ### Abstract (provisional)
-The amount of text presented to a language model is an incomplete description of its training experience. Corpus composition, deduplication, tokenization, sequence packing, optimization schedule, and evaluation design all influence what can be inferred from a run. This paper reconstructs HERETIC-RONIN experiments, including a reported pilot of approximately 500M parameters and a 512,000-token training chunk with a 0/120 holdout result. The 512k-chunk workflow's job record confirms that signed corpus-audit, training-authorization, holdout-isolation, train-only corpus-hash, checkpoint-recovery, training, and resumable-upload steps all completed. However, the raw 120-item paired outputs and scoring implementation have not yet been inspected, so the reported 0/120 cannot yet be interpreted as a measure of learning. The paper links corpus manifests to token exposure, checkpoint lineage, and fixed behavioral evaluations.
+The amount of text presented to a language model is an incomplete description of its training experience. Corpus composition, deduplication, tokenization, sequence packing, optimization schedule, and evaluation design all influence what can be inferred from a run. This paper reconstructs HERETIC-RONIN experiments, including a reported pilot of approximately 500M parameters and a 512,000-token training chunk with a 0/120 holdout result. The 512k-chunk workflow's job record confirms that signed corpus-audit, training-authorization, holdout-isolation, train-only corpus-hash, checkpoint-recovery, training, and resumable-upload steps all completed. The exact scorer source has now been recovered: 0/120 means zero normalized exact matches on a procedurally generated, six-domain diagnostic set. The paired raw JSON and internal archive manifest remain uninspected, so the score is interpretable as a narrow task metric but not yet independently recomputed. The paper links corpus manifests to token exposure, checkpoint lineage, and fixed behavioral evaluations.
 
 ### 1. Research questions
 1. Does increasing nominal corpus size increase unique, useful token exposure?
@@ -20,7 +20,7 @@ A previous extraction identified:
 - a HERETIC pilot described as approximately 500M parameters, 50 updates, about 13,096 seconds, and 39.1 tokens/s in a performance record;
 - a 512,000-token training chunk followed by a 120-prompt holdout reported as 0/120 on the target success measure.
 
-These values require direct verification against original run logs, workflow configuration, dataset manifests, and raw holdout outputs. The phrase “0/120” is not interpretable until the scoring criterion is defined. It must not be paraphrased as “the model learned nothing.”
+These values require direct verification against original run logs, workflow configuration, dataset manifests, and raw holdout outputs. The scorer criterion is now defined by source code: normalized exact string equality after response-prefix and punctuation/whitespace normalization. It must not be paraphrased as “the model learned nothing.”
 
 #### 2.1 HERETIC-RONIN: an audited 512,000-token chunk
 
@@ -28,7 +28,7 @@ A retrieved chunk record reports micro-steps 2,600–4,600, 2,000 micro-steps, 5
 
 The same record gives a corpus audit: 256,305 documents before deduplication, 68 duplicate records excluded, and 256,237 audited documents after deduplication. Total source bytes were 680,665,972. Sources were CoVoST2 (CC0, translation-only), Mathlib4 (Apache-2.0), ScienceVerse (per-document CC-BY/CC0), Spanish public-domain literature, one NASA NTRS item, and nine owner-authorized Papers documents. The manifest explicitly excluded validation/test/holdout material, 20,000 unreviewed open-source candidates, Drosophila procedural synthetic rows, and exact/SimHash near-duplicate endpoints from the signed audit plan. The chunk took 17,105.51 seconds according to the record, and the checkpoint SHA-256 was `c81edf6658ed208cf4848c831336d427df4464eb725d158fdf827b99910ba5a2`.
 
-This is a stronger and more precise case than a bare “large corpus” claim. However, the 0/120 metric remains uninterpretable beyond the recorded scoring rubric until the raw prompt/response JSON and scorer are recovered. The first/last loss windows are not an independent validation metric.
+This is a stronger and more precise case than a bare “large corpus” claim. The scorer implementation is now recovered from the exact workflow revision. The 0/120 metric therefore has a precise, narrow meaning: none of the 120 generated answers matched its reference answer after the script's normalization. The paired JSON remains necessary to independently recompute the reported count and inspect malformed, empty, or truncated outputs. The first/last loss windows are not an independent validation metric.
 
 ### 3. Corpus audit framework
 For every corpus artifact, record:
@@ -72,7 +72,7 @@ The present record motivates the proposition that nominal corpus scale is not su
 ### 7. Required evidence
 1. Locate all HERETIC training runs and exact workflow commits.
 2. Recover the 512k chunk manifest and tokenizer metadata.
-3. Recover raw 120-prompt holdout JSON and scoring code.
+3. Recover the raw paired 120-prompt JSON and independently recompute the score; the scorer source has been identified.
 4. Verify parameter count, architecture, optimizer steps, and processed tokens.
 5. Reconstruct corpus composition and synthetic/non-synthetic proportions.
 6. Compare with MINIRONIN/RONINIA only after harmonizing metric definitions.
@@ -100,4 +100,23 @@ The 512k-token chunk record and the separate HERETIC 500-optimizer-step pilot ar
 
 ### 2.5 Minimum evidence needed to interpret 0/120
 
-Before interpreting the unchanged 0/120 result, recover and publish the 120 prompt IDs and hash; paired before/after raw answers; exact checkpoint SHA before and after; scorer source and version; per-domain numerator/denominator; whether the rubric is exact-match, unit-test, program execution, or human judgement; empty/malformed/truncated output counts; and the mapping between the 50-step chunk and any larger pilot schedule. If the scorer is deterministic, rerun it locally on the retained outputs and compare byte-for-byte with the workflow report.
+The scorer source and criterion are now known, but full independent verification still requires the paired before/after raw answers, exact checkpoint SHA before and after, prompt-set hash, per-domain numerators/denominators, and empty/malformed/truncated-output counts. Rerun the recovered deterministic scorer on the retained JSON and compare the result byte-for-byte with the workflow report. The larger 500-step pilot's complete chain remains a separate provenance question.
+
+
+### 2.6 Scoring semantics recovered from the exact workflow revision
+
+The Actions run [42358300901](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42358300901) used workflow `.github/workflows/train-pilot-500-optimizer-steps.yml` at commit `1acc15ed5ee14e1a485b84d86562216e7f1be8c9` (workflow blob `8ab07599d8ef4f97d37df1d5ca271ce0ff505967`). The chunk trainer was `scripts/heretic_train_accum40.py` (blob `fa52ddd6ad04a639c1bac95feea5c48a75368cfb`), which imports its holdout and evaluation functions from `scripts/heretic_train_real_corpus_250k.py` (blob `5749d09a16a6c6c57523776ff9aff60e2742863a`).
+
+The 120-item set is generated procedurally in code, not sampled from an external benchmark: 20 items in each of six domains. The families are arithmetic, Python list-sum arithmetic, ordering/transitive logic, density calculation, Spanish plural formation, and unit conversion. Each row has a single reference answer. The evaluator counts an item correct only when the normalized prediction equals the normalized reference exactly. Normalization takes the first output line, strips recognized answer prefixes, case-folds, collapses whitespace, and trims surrounding punctuation. Generation is greedy argmax with the byte tokenizer, a `Q: ...\\nA:` prompt, a maximum of 32 generated tokens, and early stopping on newline token ID 10.
+
+Accordingly, `0/120` is a **zero normalized exact-match score on this particular synthetic diagnostic**. It is not a human rating, unit-test result, semantic similarity score, or general reasoning benchmark. The result is more interpretable than before, but the raw paired JSON is still needed to independently recompute the count and inspect output pathologies. The exact-match evaluator's simplicity also means that semantically correct but differently formatted answers may be scored incorrect.
+
+### 2.7 What the corpus gate does—and does not—establish
+
+The workflow's authorization step reads `GLOBAL-CORPUS-AUDIT.json` and fails closed unless `training_authorized` is true and `exact_holdout_question_matches` is zero. The audit implementation at the same repository revision is `scripts/audit_heretic_training_corpus.py` (blob `b5d2085f56083b3a92e06e9486d9bc2a00c95d12`). It reconstructs the same procedural 120 questions and checks for exact question-string occurrence in the audited train documents; the audit also uses 64-bit word-trigram SimHash with banded candidate retrieval and a Hamming-distance threshold of three for near-duplicate review.
+
+This is evidence that the declared audit gate ran and found no exact question-string matches in the audited train artifact. The audit script itself explicitly describes the procedure as a high-recall heuristic, not semantic proof of no contamination. It does not rule out paraphrased leakage, prior exposure outside the audited artifact, or contamination through other historical corpora. The right claim is “zero exact prompt matches under the declared audit,” not “proven uncontaminated.”
+
+### 2.8 Workflow scope and the 500-step pilot
+
+The workflow run title is “HERETIC — 500M pilot (500 optimizer steps),” but run `42358300901` is one bounded chunk: micro-steps 2,600–4,600, 2,000 micro-steps, and 50 optimizer steps. Its job dispatches the next chunk until the global target micro-step 22,600 is reached. The retained 6,001,746,291-byte artifact `heretic-500m-accum40-micro-4600` (ID `13578607392`, archive SHA-256 `9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468`) is therefore a chunk artifact, not by itself the complete 500-step pilot record. The workflow job completed successfully; the artifact's internal files have not yet been extracted in this audit.
