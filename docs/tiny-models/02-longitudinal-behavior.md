@@ -70,7 +70,7 @@ A higher unique-output rate is not necessarily better; it may reflect instabilit
 The raw-JSON metric table is available in `roninia-checkpoint-metrics.csv`; the 65-row per-domain table is `roninia-domain-metrics.csv`; the reproducible scorer is `scripts/score_roninia_holdouts.py`. Remaining artifacts: `checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
 
 ### References to add
-Longitudinal evaluation, reliability of NLP benchmarks, bootstrap methods, and measurement theory. Cite exact repository runs and artifacts after re-audit.
+Methodological anchors: [HELM](https://arxiv.org/abs/2211.09110) for scenario/metric coverage; [HELMET](https://arxiv.org/abs/2410.02694) for benchmark coverage and metric reliability; [Li et al. (2024)](https://aclanthology.org/2024.findings-emnlp.30/) for contamination auditing. The project holdouts are much smaller and narrower than these benchmark suites. Cite exact repository runs and artifacts as primary evidence.
 
 
 ### 9. Stop-reason and holdout-composition caveats
