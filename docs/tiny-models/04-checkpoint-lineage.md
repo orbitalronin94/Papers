@@ -5,7 +5,7 @@
 **Claim policy:** Reconstructed from workflow logs; no inference about model quality from pipeline status.
 
 ### Abstract (provisional)
-Long-running machine-learning experiments can produce valid checkpoints even when a workflow later fails during metadata verification or artifact finalization. This paper studies checkpoint lineage and failure handling in small-model experiments conducted through GitHub Actions. In a RONINIA continuation sequence, workflow logs show training reaching 250,000 cumulative steps, saving and hashing the checkpoint, and successfully uploading a holdout artifact, while a later lineage-verification step failed with an AttributeError caused by a failed regular-expression match. The case motivates a layered definition of experiment success and a failure-tolerant provenance protocol.
+Long-running machine-learning experiments can produce valid checkpoints even when a workflow later fails during metadata verification or artifact finalization. This paper studies checkpoint lineage and failure handling in small-model experiments conducted through GitHub Actions. In RONINIA, one continuation reached 250,000 steps and saved its checkpoint before a later lineage-verification stage failed with a regex-related AttributeError. A subsequent 250k-to-300k attempt was cancelled after uploading partial checkpoints; a recovery workflow selected the latest valid checkpoint, reused the existing token cache, and completed a verified continuation to 330,000 steps. A separate official 330k holdout job then completed and uploaded its evaluation artifact. These events demonstrate why interrupted runs, recovered checkpoints, training completion, lineage verification, and evaluation completion must be recorded separately. The case motivates a layered definition of experiment success and a failure-tolerant provenance protocol.
 
 ### 1. Research questions
 - How should an experiment distinguish compute completion from workflow completion?
@@ -78,3 +78,18 @@ The current case is one reconstructed workflow chain. It does not quantify how f
 
 ### References to add
 ML experiment tracking, data provenance, workflow reliability, software supply-chain integrity, and GitHub Actions documentation. Cite exact workflow run and commit URLs.
+
+
+### 2.2 Recovery after a cancelled continuation: 250k → partial artifact → 330k
+
+A later RONINIA sequence provides a stronger recovery case than the isolated post-training metadata errors:
+
+1. **Interrupted attempt:** [run 43379873611](https://github.com/orbitalronin94/RONINIA/actions/runs/43379873611), job 131734887979, attempted 50,000 additional steps from the verified 250k parent toward 300k. The training step was cancelled. The workflow nevertheless uploaded a partial checkpoint artifact (artifact ID 14038606072; archive SHA-256 `ca4d66e2a0b4ceb406685c559dedd67a45e1c5ff36a7ae2ad30dcec6f67a20c9`). The cancelled run must not be described as having reached 300k.
+2. **Recovery:** [run 43433905009](https://github.com/orbitalronin94/RONINIA/actions/runs/43433905009), job 131914009794, recovered that artifact and selected the latest valid checkpoint. Its workflow explicitly required optimizer state, checked the tokenizer and parameter count, and compared the parent checkpoint's corpus fingerprint with the existing token-cache manifest.
+3. **Data pipeline reuse:** the recovery job downloaded the pre-existing full-corpus token cache unchanged. It verified the cache checksums and manifest and did not retokenize the corpus.
+4. **Continuation:** training reached exactly 330,000 cumulative steps. The workflow then wrote structured lineage metadata and uploaded the final checkpoint chain (artifact ID 14069581635; archive SHA-256 `8f899b247c8cbab0dfa5ffeeb7e05bc4a35b1d3a403a5ebccd478ba9afffdeba`). The recovered parent step and final checkpoint SHA should be extracted from the lineage JSON before publication.
+5. **Evaluation:** [run 43490561981](https://github.com/orbitalronin94/RONINIA/actions/runs/43490561981), job 132110319633, verified the 330k checkpoint and the official prompt/tokenizer hashes, generated 100 responses, and uploaded holdout artifact ID 14068589478 (archive SHA-256 `fb3106d6cb698321e363eb9c7ba88f155203062494270d4b99a4127498d220b8`). Raw behavioral metrics remain to be extracted.
+
+The recovery workflow's recorded training configuration was context length 256, two threads, batch size 4, learning rate 2.5e-5, zero warmup, minimum-LR ratio 1.0, checkpoint interval 1,000, and 32 evaluation batches. The token cache, tokenizer, and corpus fingerprint were verified before continuation.
+
+This case distinguishes at least four states that a single run conclusion cannot represent: (i) an interrupted run that emitted recoverable checkpoints, (ii) a successful recovery/continuation, (iii) a verified final checkpoint artifact, and (iv) a successful holdout job whose raw metrics still require analysis. The registry-update workflow triggered around the 330k documentation changes failed separately; that failure does not invalidate the independently successful training or holdout jobs.
