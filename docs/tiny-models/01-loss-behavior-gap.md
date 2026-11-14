@@ -1,0 +1,76 @@
+# The Loss–Behavior Gap in Tiny Language Models
+## A multi-run observational study of training objectives and externally measured generation behavior
+
+**Status:** Research draft v0.1 — exploratory, not peer reviewed  
+**Language:** English working manuscript; Spanish notes may be added  
+**Evidence base:** MINIRONIN, RONIN-IA, HERETIC-RONIN, RONINIA  
+**Claim policy:** No claim of reasoning, intelligence, or general capability is made.
+
+### Abstract (provisional)
+Training loss is a convenient optimization signal, but it is not itself a direct measurement of useful generation behavior. This paper investigates the gap between optimization traces and fixed-prompt behavioral evaluations in several resource-constrained language-model experiments. The available record includes byte-level and subword-tokenized systems, distinct model families, CPU-constrained training runs, and checkpoint-level holdouts. Preliminary observations include persistent termination failures in MINIRONIN despite extended training, and non-monotonic changes in empty outputs, truncation, lexical diversity, and repetition across RONINIA checkpoints. These observations motivate a measurement framework that reports optimization, decoding, and behavioral outcomes separately. The current evidence is observational and heterogeneous; causal attribution to architecture, data, tokenizer, or training duration is not yet justified.
+
+### 1. Research question
+When, and to what extent, do training and validation loss trajectories predict externally observable generation behavior in small language models trained under constrained compute?
+
+Subquestions:
+1. Can lower training or validation loss coexist with persistent EOS failure, truncation, repetition, or empty generations?
+2. Are checkpoint-level behavioral changes monotonic?
+3. Which evaluation metrics are stable across tokenizer and decoding changes?
+4. How much apparent progress is explained by prompt memorization, output-length changes, or decoding configuration?
+
+### 2. Scope and terminology
+“Tiny” is used descriptively for the experimental systems in this corpus, not as a universal parameter threshold. “Behavior” refers only to measurable properties of generated outputs under a specified prompt set and decoding configuration. “Holdout” means a prompt set not used for the relevant training run, subject to verification of contamination and lineage.
+
+### 3. Preliminary evidence
+#### 3.1 MINIRONIN
+The 810k and 910k evaluations each contain 100 prompts. Both report 100 generations reaching the 128-token cap and zero emitted EOS tokens. Mean latency rises from approximately 0.288 s to 0.424 s; distinct textual responses fall from 98 to 91. These figures are descriptive and depend on the recorded inference setup. They do not establish that additional training caused degradation.
+
+#### 3.2 RONINIA
+Four retrieved 100-prompt evaluations at 100k, 137.5k, 205k, and 250k show non-monotonic changes in empty outputs, maximum-length generations, and response diversity. The 205k to 250k comparison, as currently extracted, reports empty outputs decreasing from 14 to 2, cap-reaching outputs increasing from 29 to 45, and distinct responses increasing from 83 to 96. Adjacent-bigram repetition was reported as increasing from 0.96 to 1.83 per response. The metric implementation, exact checkpoint identity, and raw JSON must be re-audited before publication.
+
+### 4. Proposed method
+For every checkpoint, preserve:
+- checkpoint SHA-256, parent checkpoint SHA-256, completed optimizer steps;
+- parameter count, architecture/config hash, tokenizer hash and vocabulary;
+- corpus manifest, document IDs, token count, deduplication and synthetic-data flags;
+- training and validation loss with aggregation window;
+- exact prompt-set hash, decoding parameters, stop conditions, inference implementation;
+- per-prompt raw output, token count, latency, EOS status and error state.
+
+Report at least:
+- empty-output rate;
+- EOS emission rate;
+- maximum-length/truncation rate;
+- unique-output rate and normalized distinct-n;
+- repeated unigram/bigram rates with explicit denominator;
+- latency distribution, not only mean;
+- task-specific correctness only where independently adjudicated.
+
+Use paired checkpoint comparisons on identical prompts and decoding settings. Report confidence intervals or bootstrap intervals, and retain per-item results. Avoid collapsing heterogeneous models into one aggregate score.
+
+### 5. Threats to validity
+- Holdout contamination and prompt reuse across training datasets.
+- Different tokenizer vocabularies and token-to-character ratios.
+- Different generation caps, stop-token definitions, and inference code.
+- Temperature, sampling, KV-cache, and batching differences.
+- Checkpoint lineage errors or artifact substitution.
+- Small prompt sets and unstable metrics.
+- Loss values not comparable across tokenizers, objectives, or data mixtures.
+- The risk of selecting only interesting checkpoints after seeing results.
+
+### 6. Current conclusion
+The evidence supports a narrow claim: optimization traces and generation diagnostics measure different aspects of a model, and the latter can change non-monotonically across checkpoints. It does not yet support a causal account of why these changes occur or a universal relationship between loss and behavioral quality.
+
+### 7. Required work before submission
+1. Recompute all metrics from raw holdout JSONs using one audited script.
+2. Verify prompt-set hashes and prove holdout separation from training corpora.
+3. Recover matching training/validation traces for every evaluated checkpoint.
+4. Normalize decoding conditions or stratify results where normalization is impossible.
+5. Add RONIN-IA and HERETIC runs only after exact configurations are recovered.
+6. Publish analysis code, raw metric tables, and a data dictionary.
+
+### 8. Reproducibility package
+Planned: `data/checkpoints.csv`, `data/holdout_metrics.csv`, `data/run_manifest.csv`, `src/score_holdout.py`, `src/paired_checkpoint_analysis.py`, and a README with exact artifact IDs and hashes.
+
+### References to add
+Primary sources must be cited by immutable GitHub run URLs, artifact IDs, and SHA-256 values. Methodological references on language-model evaluation, measurement validity, bootstrap uncertainty, and data contamination remain to be selected and verified.
