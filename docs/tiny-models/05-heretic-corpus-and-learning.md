@@ -81,7 +81,7 @@ The present record motivates the proposition that nominal corpus scale is not su
 `heretic_runs.csv`, `corpus_manifest.csv`, `holdout_120_raw.json`, `score_holdout.py`, `data_card.md`, and a reproducibility README.
 
 ### References to add
-Dataset documentation, data contamination and memorization studies, language-model scaling and data-quality literature, and primary repository artifacts. All citations and licenses must be checked before submission.
+Methodological anchors: [Li et al. (2024)](https://aclanthology.org/2024.findings-emnlp.30/) and [Deng et al. (2024)](https://aclanthology.org/2024.naacl-long.482/) for contamination audits; [Hoffmann et al. (2022)](https://arxiv.org/abs/2203.15556) for compute/token-budget scaling context. These references motivate audits; the HERETIC corpus composition, authorization, token exposure, and 0/120 outcome must be established from primary project artifacts.
 
 
 ### 2.2 What the HERETIC job actually verified
