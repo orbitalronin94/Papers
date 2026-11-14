@@ -16,15 +16,15 @@ This study examines how observable generation properties vary across checkpoints
 - Can apparent improvement in one metric coincide with deterioration in another?
 
 ### 2. RONINIA preliminary series
-| Checkpoint | Empty outputs | Cap-reaching outputs | Distinct responses |
-|---:|---:|---:|---:|
-| 100,000 | 1 | 22 | 100 |
-| 137,500 | 0 | 42 | 96 |
-| 205,000 | 14 | 29 | 83 |
-| 250,000 | 2 | 45 | 96 |
-| 330,000 | pending raw JSON | pending raw JSON | pending raw JSON |
+| Checkpoint | Empty outputs | 32-token limit hits | Exact-distinct responses | Mean tokens | Mean latency (s) |
+|---:|---:|---:|---:|---:|---:|
+| 100,000 | 1 | 22 | 100 | 21.18 | 0.319804 |
+| 137,500 | 0 | 42 | 96 | 22.69 | 0.374886 |
+| 205,000 | 14 | 29 | 83 | 19.03 | 0.141405 |
+| 250,000 | 2 | 45 | 96 | 23.13 | 0.274788 |
+| 330,000 | 1 | 21 | 99 | 19.88 | 0.323478 |
 
-The first four rows are preliminary extractions from 100-response holdouts. The 330k holdout job completed and uploaded an artifact, but its counts have not yet been extracted; blanks are intentional, not zeroes. A workflow audit verified the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG across all five checkpoints. The four published counts must still be recomputed from raw JSON and tied to exact checkpoint hashes. “Distinct response” currently means textual uniqueness; normalization rules must be specified. The common prompt file's absence from each training corpus remains to be verified.
+The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified.
 
 The 205k and 250k evaluations also yielded preliminary adjacent-bigram repetition estimates of 0.96 and 1.83 per response respectively. The denominator and implementation require verification.
 
@@ -42,7 +42,7 @@ For each checkpoint:
 5. Compute all metrics from raw outputs.
 6. Repeat selected checkpoints to estimate runtime/inference nondeterminism.
 
-Primary outcomes: EOS rate, empty-output rate, cap-hit rate, normalized unique-output rate, repeated n-gram rate. Secondary outcomes: response length, latency percentiles, exact-match or rubric-based task scores where suitable.
+Primary outcomes: empty-output rate, explicit stop-reason rate (when logged), token/byte-limit hit rates, exact and normalized unique-output rates, repeated n-gram rate. EOS rate is unavailable in the current RONINIA output schema. Secondary outcomes: response length, latency percentiles, exact-match or rubric-based task scores where suitable.
 
 ### 5. Analysis plan
 - Plot each metric against cumulative optimizer steps.
@@ -57,15 +57,22 @@ Primary outcomes: EOS rate, empty-output rate, cap-hit rate, normalized unique-o
 A higher unique-output rate is not necessarily better; it may reflect instability or incoherence. A lower cap-hit rate may indicate better stopping or merely shorter generations. EOS emission is a formatting/termination property, not a direct measure of semantic competence. These metrics must not be combined into an unvalidated “intelligence” score.
 
 ### 7. Limitations and required evidence
-- Verify all raw JSON files and their SHA-256 hashes.
+- Raw JSON and archive hashes are now verified for the five RONINIA checkpoints; retain this scorer and artifact inventory.
 - Recover the full 5k–330k checkpoint sequence, not just selected points; extract the 330k JSON and rescore all five holdouts.
-- Audit prompt-set overlap with training data and earlier holdouts.
+- Audit prompt-set overlap with training data and earlier holdouts; the shared 100-question set includes 35 CI/CD and 25 personality/troll prompts, so it is a project-specific mixed holdout rather than a general reasoning benchmark.
 - Re-run a subset with a common inference binary and tokenizer.
 - Recover training logs, validation traces, and run configuration for every checkpoint.
 - Document failed and missing evaluations.
 
 ### 8. Planned artifacts
-`checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
+The initial raw-JSON metric table is available in `roninia-checkpoint-metrics.csv`, with a reproducible scorer in `scripts/score_roninia_holdouts.py`. Remaining artifacts: `checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
 
 ### References to add
 Longitudinal evaluation, reliability of NLP benchmarks, bootstrap methods, and measurement theory. Cite exact repository runs and artifacts after re-audit.
+
+
+### 9. Stop-reason and holdout-composition caveats
+
+The current output schema stores generated token IDs and decoded answers but not a termination enum. The inference loop stops when EOS is predicted without appending EOS to the generated list; it can also stop when the next token would exceed 128 UTF-8 bytes. Therefore, this paper reports exact 32-token-limit hits, not EOS emissions. A byte-limit stop cannot be distinguished reliably from EOS from the stored JSON alone.
+
+The common holdout is not domain-balanced: 35/100 prompts are labelled `ci_cd`, 25/100 `personality_troll`, and 40/100 span 11 other domains. Aggregate distinctness is sensitive to this mixture. Future reporting should include per-domain metrics and avoid interpreting the aggregate as general reasoning ability. No correctness score has yet been computed from the included rubrics.
