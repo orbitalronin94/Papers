@@ -12,7 +12,7 @@ Five connected working manuscripts reconstruct a series of small-language-model 
 | [02 — Longitudinal Behavioral Change](02-longitudinal-behavior.md) | How do observable behaviors change across checkpoints? | RONINIA 100k–330k; MINIRONIN 810k–910k | Descriptive series; comparability checks pending |
 | [03 — CPU-Constrained Training](03-cpu-constrained-training.md) | What governs throughput on low-cost CPU runners? | RONIN-IA thread comparison; MINIRONIN and HERETIC performance records | Preliminary benchmark; controlled reruns needed |
 | [04 — Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md) | How should partial success and artifact provenance be reported? | RONINIA and MINIRONIN post-training failures | Case-study evidence; five workflow paths audited |
-| [05 — Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Corpus gates verified; raw 120-item scoring and exposure audit required |
+| [05 — Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Corpus gates verified; exact-match scorer source recovered; paired JSON and exposure audit pending |
 
 The five papers are related, but each has a distinct contribution. Paper 1 concerns measurement validity; paper 2 treats checkpoints as a longitudinal series; paper 3 concerns compute economics; paper 4 concerns experimental provenance; paper 5 concerns data exposure and the interpretation of negative results.
 
@@ -54,7 +54,7 @@ A 10× expansion experiment was screened on 64 identical MMLU-Pro question IDs a
 
 ### HERETIC-RONIN: corpus and token-budget reconstruction
 
-One extracted training chunk contains 512,000 tokens across 50 optimizer steps (10,240 tokens per optimizer step), with mean loss/token 2.268838; the first and last 100 recorded values average 2.349176 and 2.191886. The associated holdout is reported as 0/120, with 20 examples in each of six domains. The corpus snapshot records 256,237 documents after deduplication and 680,665,972 bytes. These figures do not, by themselves, establish the amount of unique token exposure or explain the holdout outcome. The exact rubric, raw outputs, tokenizer, training ancestry, and corpus-license manifest remain part of the audit.
+One extracted training chunk contains 512,000 tokens across 50 optimizer steps (10,240 tokens per optimizer step), with mean loss/token 2.268838; the first and last 100 recorded values average 2.349176 and 2.191886. The associated holdout is reported as 0/120, with 20 examples in each of six domains. The corpus snapshot records 256,237 documents after deduplication and 680,665,972 bytes. These figures do not, by themselves, establish the amount of unique token exposure or explain the holdout outcome. The scorer is now known to use normalized exact string equality over six procedural task families; the job log reports 0/20 in every domain before and after the chunk. The paired raw outputs, tokenizer identity, full training ancestry, and corpus-license manifest remain part of the audit.
 
 ## Evidence files
 
@@ -136,7 +136,7 @@ The next research pass prioritizes evidence recovery over rhetorical expansion:
 1. Recover the raw JSON for each RONINIA and MINIRONIN holdout and recompute all metrics with one versioned scorer.
 2. Verify prompt-set identity, decoding configuration, tokenizer, inference code, and checkpoint SHA across each checkpoint comparison.
 3. Recover workflow YAML and commit SHAs for the principal training and holdout runs.
-4. Reconstruct HERETIC's corpus manifest, license records, tokenizer output, unique-token exposure, and exact 0/120 scoring rubric.
+4. Recover HERETIC's paired raw JSON and chunk report for independent rescoring; reconstruct corpus/tokenizer manifests, license records, unique-token exposure, and the full 500-step chain.
 5. Normalize CPU benchmark metadata and distinguish model compute from end-to-end pipeline time.
 6. Add all failed, cancelled, and partially successful runs to the ledger so the evidence is not selected only for favorable outcomes.
 7. Revise the five manuscripts only when the underlying ledger changes; keep all unresolved claims visibly provisional.
@@ -179,7 +179,7 @@ The current pass extends the papers beyond output metrics into the execution rec
 
 Three details now matter for interpretation:
 
-1. **HERETIC's corpus gates were executed.** The job completed the signed global corpus audit, training authorization and holdout-isolation checks, exact train-only corpus SHA verification, checkpoint/paired-holdout recovery, the 50-optimizer-step chunk, and resumable checkpoint/holdout upload. This supports the integrity of the recorded procedure, but it does not by itself validate the 0/120 scoring rubric or prove the holdout is absent from every historical source.
+1. **HERETIC's corpus gates were executed.** The job completed the signed global corpus audit, training authorization and holdout-isolation checks, exact train-only corpus SHA verification, checkpoint/paired-holdout recovery, the 50-optimizer-step chunk, and resumable checkpoint/holdout upload. The evaluator source now shows that 0/120 is normalized exact-match scoring on a procedural diagnostic. The audit gate found zero exact question-string matches and 68 near-duplicate pairs; this does not prove absence of semantic or historical contamination.
 2. **RONINIA's 250k training completed despite a failed verification step.** The exact 45,000-step training step succeeded, recoverable checkpoints were uploaded, and the final checkpoint/lineage upload succeeded. The step named “Verify cumulative 205000 checkpoint and write lineage” failed; the overall run conclusion was failure. The paper now distinguishes this partial workflow failure from a failed training run.
 3. **The 330k recovery was a clean, separate continuation.** The recovery job downloaded checkpoints from the interrupted run, selected a valid state, reused and verified the existing token cache unchanged, continued to exactly 330,000, verified the final checkpoint and lineage, and uploaded the chain successfully.
 
@@ -188,7 +188,7 @@ The two RONIN-IA expansion executions both completed all job steps, including so
 ## Updated research priorities
 
 - RONINIA: run a corpus/token-cache leakage audit against the shared 100-prompt holdout; extract the exact 250k parent and training trace; add correctness scoring with a blind, documented rubric.
-- HERETIC: recover the raw paired 120-prompt JSON and scorer from the retained artifact (6.0 GB compressed); establish the meaning of 0/120 and distinguish the 512k-token chunk from the separate 500-update pilot record.
+- HERETIC: recover the raw paired 120-prompt JSON and chunk report from the retained 6.0 GB artifact; independently rerun the recovered scorer and reconstruct the full 500-step pilot chain.
 - RONIN-IA: compare the two expansion artifacts at the report/config/seed level; retrieve exact runner identity and benchmark manifests for the two-thread/four-thread CPU comparison.
 - MINIRONIN: recover the two termination holdout JSONs and exact inference scripts; reconstruct the Mamba checkpoint metadata failure from structured artifacts.
 - Cross-project: build a failure-stage catalog and avoid pooling metrics across incompatible tokenizers, prompt sets, model families, and decoding limits.
