@@ -15,7 +15,7 @@ This ledger preserves source identifiers and the narrowest claim supported by th
 | 205k | 14 | 29 | 83 | [Run 43309180308](https://github.com/orbitalronin94/RONINIA/actions/runs/43309180308) |
 | 250k | 2 | 45 | 96 | [Run 43378296219](https://github.com/orbitalronin94/RONINIA/actions/runs/43378296219) |
 
-Each evaluation is reported as a 100-response holdout. Recompute from raw JSON before publication. Confirm identical prompt-set hashes, generation cap, tokenizer, decoding parameters, checkpoint hashes, and inference implementation. A preliminary adjacent-bigram repetition estimate for 205k/250k was 0.96/1.83 per response; its denominator and scorer still require audit.
+Each evaluation is a 100-response holdout. A follow-up audit of all four workflow files and the inference script found a common prompt-set SHA-256, tokenizer SHA-256, inference-script blob SHA, deterministic seed, greedy decoding, and matching generation limits across the four checkpoints (details in Section I). This substantially strengthens protocol comparability. It does not validate the preliminary behavioral counts: recompute those from the raw JSON, audit the scoring definitions, and verify that the holdout was excluded from every training corpus. A preliminary adjacent-bigram repetition estimate for 205k/250k was 0.96/1.83 per response; its denominator and scorer still require audit.
 
 The 250k checkpoint metadata recorded 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. Source training run: [43315959342](https://github.com/orbitalronin94/RONINIA/actions/runs/43315959342). That workflow reached 250k and uploaded the official holdout artifact, but its later lineage-verification stage failed with `AttributeError: 'NoneType' object has no attribute 'group'`.
 
@@ -92,3 +92,50 @@ RONIN-IA and HERETIC-RONIN logs include Node.js DEP0005 warnings for deprecated 
 6. Complete RONIN-IA and HERETIC training traces, not only terminal summaries.
 7. RONIN-IA expansion workflow independence: determine whether the two run records are separate replications or repeated execution of one experiment design.
 8. Full checkpoint series between RONINIA 5k and 250k, including failed or missing evaluations.
+
+
+## I. RONINIA official holdout provenance audit (new)
+
+The four official holdout workflows were inspected at their exact workflow-head commits, and the referenced `scripts/checkpoint_holdout.py` file was fetched at each commit. The script blob SHA is identical in all four cases: `b83ceb712431b3ea20902708fb9ec8f3c243425a`.
+
+### Shared evaluation protocol
+
+| Field | Verified value |
+|---|---|
+| Prompt set | 100 questions; SHA-256 `3cd8c1eb3142ebf9c6cc17d2e19353be3472d61ac7b7cfb6de0cbb233cf4a535` |
+| Tokenizer | 8k tokenizer; SHA-256 `605834d0d1deea545518be54ae0936060845107b906172f6628d0ff9520e57a4` |
+| Inference script blob | `b83ceb712431b3ea20902708fb9ec8f3c243425a` |
+| Random seed | `20261110` (Python, NumPy, and PyTorch) |
+| Determinism | `torch.use_deterministic_algorithms(True)` |
+| Decoding | Greedy argmax |
+| CPU threads | 2 |
+| Generation limit | 32 new tokens and 128 UTF-8 bytes |
+| KV cache | Disabled |
+| RAG | Disabled |
+| Prompt wrapper | Same Spanish instruction prefix and `Respuesta:` suffix |
+
+The 100k and 137.5k workflow files pass these generation limits explicitly. The 205k and 250k files omit those command-line flags, but their exact checked-out inference script has the same defaults (2 threads, 32 tokens, 128 bytes). The four workflows therefore converge on the same generation settings. This is stronger than assuming comparability from the run labels alone.
+
+### Per-run immutable workflow and artifact records
+
+| Checkpoint | Run / job | Workflow head commit | Workflow file | Artifact ID | Artifact size | Artifact archive SHA-256 |
+|---:|---|---|---|---:|---:|---|
+| 100k | [43112010343](https://github.com/orbitalronin94/RONINIA/actions/runs/43112010343) / 130830212601 | `01db5d205b0e24b492d76873c3cba7c28f571b9e` | `checkpoint-holdout-ronin-10m-100000.yml` | 13897325999 | 26,054 B | `799d5d7189e725c44afead7975a56ad1f2d9b2ae429f41924f9501b50e989868` |
+| 137.5k | [43166483341](https://github.com/orbitalronin94/RONINIA/actions/runs/43166483341) / 131009439575 | `bc0a4fd6c7cc0aa0892559b31ac7cde9dfc03e3d` | `checkpoint-holdout-ronin-10m-137500.yml` | 13920058028 | 25,368 B | `f10b8d4f112f2598cd0851e2526ae71e785d145c95423fc39e372f9d94aeef5f` |
+| 205k | [43309180308](https://github.com/orbitalronin94/RONINIA/actions/runs/43309180308) / 131500398462 | `62da7623310ec019a1c20e25685b5c4746ec84e9` | `official-holdout-205000.yml` | 13984838040 | 24,897 B | `df6db70c4971315e1a035dae28b61320c41f57a942f570fd94b9875561ad0127` |
+| 250k | [43378296219](https://github.com/orbitalronin94/RONINIA/actions/runs/43378296219) / 131729865487 | `e6955017eebb58541f1429fa691c80bcd31e7392` | `official-holdout-250000.yml` | 14015746116 | 25,826 B | `47135395843ab0a0736aa9aabd6a58689ebea8bafbcfbdd5c8fa71c464bf9d3c` |
+
+All four jobs are recorded by the Actions API as completed with conclusion `success`; each uploaded one non-expired holdout artifact. The artifact digests above are GitHub's archive-level SHA-256 values, not hashes of the JSON file inside each archive. Artifact IDs, archive digests, sizes, and run/job IDs make the uploaded packages individually identifiable.
+
+### Checkpoint identity recovered from the workflow definitions
+
+- 137.5k checkpoint SHA-256: `d2c30940ade76e82bc5e7569c96af6ac4337173d141f627410eb40847e245727`.
+- 205k checkpoint SHA-256: `425b9a0939a1b387420061450a99728718eb2640dea3c05fd1692d9ea8a24fa9`.
+- 250k checkpoint SHA-256: `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`.
+- 100k workflow verifies the exact checkpoint and writes its SHA into the output JSON; the value still needs to be extracted from the retained artifact.
+
+### What this audit does and does not establish
+
+It establishes a common prompt-file hash, tokenizer hash, inference-script blob, and generation protocol across the four holdouts. It does **not** establish that the holdout was never included in any training corpus, that the current preliminary empty/cap/distinct counts are correct, or that the model answers are accurate. The JSON artifacts must still be retrieved and scored with an audited script. The workflows include rubrics in the output records but do not calculate a correctness score.
+
+The source benchmark is stored in MINIRONIN at `benchmarks/inference-holdout-v1.jsonl` and each RONINIA workflow downloads that exact file by URL and verifies its SHA-256. The next leakage audit must compare the 100 question IDs and normalized text against every corpus manifest and any synthetic-data generation source used in the relevant RONINIA training lineage.
