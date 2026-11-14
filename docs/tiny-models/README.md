@@ -61,6 +61,7 @@ One extracted training chunk contains 512,000 tokens across 50 optimizer steps (
 - **[Evidence ledger](evidence-ledger.md)** — source run links, extracted facts, hashes, caveats, and pending verification tasks.
 - **[Experiment matrix](experiment-matrix.csv)** — tabular snapshot with run/job identity, checkpoint and corpus metadata, plus holdout artifact and protocol provenance.
 - **[Recomputed RONINIA metrics](roninia-checkpoint-metrics.csv)** — five-checkpoint raw-JSON metrics, including archive and checkpoint hashes.
+- **[Per-domain RONINIA metrics](roninia-domain-metrics.csv)** — 65 checkpoint-by-domain rows for empty outputs, token-limit hits, exact uniqueness, length, and latency.
 - **[Reproducible scorer](../../scripts/score_roninia_holdouts.py)** — dependency-free script for JSON/ZIP input, common-protocol checks, descriptive metrics, and explicit EOS limitations.
 - **Five manuscripts** — separate working papers linked above.
 
