@@ -38,6 +38,14 @@ Use paired, randomized benchmark runs on the same runner class. Record:
 
 Run at least three repetitions per configuration when feasible. Report median, spread, and raw run data. Keep data preparation and training throughput separate.
 
+#### 3.1 Additional Mamba continuation record
+
+A MINIRONIN workflow log records a Mamba continuation from 1,000 to 2,000 cumulative steps, with 1,000 additional optimizer steps completed in 1,166.33 seconds. The log reports 49.1M parameters in the curated performance record, a checkpoint at step 2,000 (SHA-256 `4015cf070de7ca58cc3302fa80754308c86ecfc736b78a52eda267dbb441b364`), and a final mean loss over the last 50 steps of 1.9871. The run then failed during a later metadata operation with `KeyError: 'index_sha256'`. This reinforces the need to separate training duration and checkpoint recovery from workflow success.
+
+#### 3.2 Environment and warning capture
+
+The RONIN-IA expansion workflows record `OMP_NUM_THREADS=2` and `MKL_NUM_THREADS=2`. Separate Node.js runtime logs emit DEP0005 warnings for deprecated `Buffer()` usage. These warnings are infrastructure/toolchain observations; they are not evidence of a model-training defect and should not be conflated with Python training failures.
+
 ### 4. Engineering factors to investigate
 - Thread oversubscription and CPU affinity.
 - Data-loader stalls and corpus preloading.
