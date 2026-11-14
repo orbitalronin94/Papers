@@ -16,7 +16,7 @@ This ledger preserves source identifiers and the narrowest claim supported by th
 | 250k | 2 | 45 | 96 | [Run 43378296219](https://github.com/orbitalronin94/RONINIA/actions/runs/43378296219) |
 | 330k | 1 | 21 | 99 | [Run 43490561981](https://github.com/orbitalronin94/RONINIA/actions/runs/43490561981) |
 
-Each evaluation is a 100-response holdout. A follow-up audit of all four workflow files and the inference script found a common prompt-set SHA-256, tokenizer SHA-256, inference-script blob SHA, deterministic seed, greedy decoding, and matching generation limits across the five checkpoints (details in Section I). This substantially strengthens protocol comparability. The recomputed descriptive counts are now in Section K. They are not correctness scores; the output schema does not record the exact stop reason, and the holdout's exclusion from every training corpus still requires a leakage audit. A preliminary adjacent-bigram repetition estimate for 205k/250k was 0.96/1.83 per response; its denominator and scorer still require audit.
+Each evaluation is a 100-response holdout. A follow-up audit of all five workflow files and the inference script found a common prompt-set SHA-256, tokenizer SHA-256, inference-script blob SHA, deterministic seed, greedy decoding, and matching generation limits across the five checkpoints (details in Section I). This substantially strengthens protocol comparability. The recomputed descriptive counts are now in Section K. They are not correctness scores; the output schema does not record the exact stop reason, and the holdout's exclusion from every training corpus still requires a leakage audit. A preliminary adjacent-bigram repetition estimate for 205k/250k was 0.96/1.83 per response; its denominator and scorer still require audit.
 
 The 250k checkpoint metadata recorded 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. Source training run: [43315959342](https://github.com/orbitalronin94/RONINIA/actions/runs/43315959342). That workflow reached 250k and uploaded the official holdout artifact, but its later lineage-verification stage failed with `AttributeError: 'NoneType' object has no attribute 'group'`.
 
@@ -212,3 +212,39 @@ The same 100-question file has the following domain distribution at every checkp
 The series is genuinely non-monotonic on these descriptive metrics. The 205k checkpoint has the highest empty-output count and lowest exact-distinct count; 250k has the most 32-token-limit hits; 330k has fewer token-limit hits and 99 exact-distinct strings. None of these facts establishes better answer quality. Latency varies substantially across runs and should be treated as a runner/runtime measurement, not as a direct measure of model capability.
 
 The next analysis must add per-domain behavior, inspect raw generations, audit prompt leakage against the full training corpus and synthetic sources, and define a correctness scorer before any quality trend is claimed.
+
+
+## L. Workflow-step and retained-artifact audit
+
+The following records were checked through the GitHub Actions run, job-step, and artifact endpoints. A machine-readable table is committed as workflow-audit.csv.
+
+### HERETIC-RONIN — 512k-token chunk
+
+- Run [42358300901](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42358300901), job 128361091415; workflow-head commit 1acc15ed5ee14e1a485b84d86562216e7f1be8c9; run and job concluded success.
+- Successful steps included enforcing the signed global corpus audit; verifying training authorization and holdout isolation; downloading the exact train-only corpus and verifying SHA-256; recovering the exact checkpoint and paired holdout; completing the 2,000-micro-step/50-optimizer-step chunk; and uploading the resumable checkpoint and paired holdout.
+- Artifact ID 13578607392, 6,001,746,291 bytes, API digest sha256:9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468.
+- The artifact is retained. Its internal files have not yet been inspected in this pass. The 0/120 score remains dependent on the raw paired JSON and scorer.
+
+### RONIN-IA — two 10× expansion executions
+
+- Run [42364113096](https://github.com/orbitalronin94/RONIN-IA/actions/runs/42364113096), job 128378466048, head commit 61b5e4f7f8933b1fae00c5dbc3ffb77bfb031302; artifact 13570749085, 374,819,789 bytes, API digest f53659f166548e742f6feefbcf067c9af4be312969b264a35593ce66803897b4.
+- Run [42364138735](https://github.com/orbitalronin94/RONIN-IA/actions/runs/42364138735), job 128380526347, head commit 484cbdbb9d342384c1ad11bb0c930065fa031695; artifact 13571800501, 374,819,541 bytes, API digest 49e7b3564797095b084b06492a550fca73b493664522ac0ea3bd15e9b459526c.
+- Both jobs completed every listed step: source partitions were downloaded/admitted and hash-checked, six sources assembled, function-preserving expansion tested, 500 training steps and MMLU-Pro screening completed, and checkpoint/report artifacts uploaded.
+- Both executions share the same experiment label, base checkpoint SHA, target parameter count, step count, and corpus SHA. Their distinct run IDs, commits, and artifact digests establish separate workflow executions, but not independent replications. Seed, initialization, and artifact-level comparison remain open.
+
+### RONINIA — 205k to 250k
+
+- Run [43315959342](https://github.com/orbitalronin94/RONINIA/actions/runs/43315959342), job 131523907339, head commit ebbd4ee03854964a8ad402e9b003c0f2f5d0022c; run/job conclusion failure.
+- Parent verification, checkpoint resolution, token-cache identity checks, and compatible 256-token config all succeeded. The exact 45,000-step training action succeeded. Recoverable checkpoints were uploaded. The cumulative-checkpoint verification step failed; final checkpoint/lineage upload then succeeded.
+- Final chain artifact ID 14002902157, 4,835,631,596 bytes, API digest sha256:8742092f1f0fb08c0e3bfd2cd8ea64fdbb9df94404f37ffc4a78972807fa974e.
+- This is a concrete case of successful training and artifact recovery inside a failed workflow.
+
+### RONINIA — recovery to 330k
+
+- Run [43433905009](https://github.com/orbitalronin94/RONINIA/actions/runs/43433905009), job 131914009794, head commit 4b25c6adabf86418b6b2da00b5c9adde76226a1f; run/job conclusion success.
+- The job recovered checkpoints from the interrupted run, selected the latest valid state, downloaded and verified the existing full-corpus token cache unchanged, continued to exactly 330,000, verified checkpoint and lineage, and uploaded the final chain.
+- Final chain artifact ID 14069581635, 4,190,025,399 bytes, API digest sha256:8f899b247c8cbab0dfa5ffeeb7e05bc4a35b1d3a403a5ebccd478ba9afffdeba.
+
+### Interpretation rule
+
+An Actions artifact API digest identifies the uploaded ZIP archive. A checkpoint SHA identifies a file within that archive. They are different objects and must never be substituted for one another. The audit records both when available.
