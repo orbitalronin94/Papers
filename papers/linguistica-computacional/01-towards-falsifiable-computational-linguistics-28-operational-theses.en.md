@@ -686,6 +686,139 @@ Zipf, G. K. (1949). *Human behavior and the principle of least effort*. Addison-
 
 ## Appendices
 
-The Spanish source continues with Appendix A (engine architecture), Appendix B (thesis/flag map), Appendix C (formal glossary), Appendix D (complete engine code), and Appendix E (the empirical refutation protocol for all 28 theses, including its proposed runner). These materials are not reproduced in this main-text edition because the code and experiment definitions must remain synchronized with the source. Their translation and parity audit remain outstanding.
+Appendices A–C and the explanatory portions E.32–E.34 are translated below. Appendix D (the complete engine code) and executable experiment listings in Appendix E remain canonical in the Spanish source. Their identifiers and embedded Spanish corpus are preserved to prevent code drift.
 
-**Translation status:** Complete English translation of the main text (Abstract through References). Appendices A–E remain in the Spanish source and are not represented as translated.
+**Translation status:** Complete English translation of the main text and the explanatory appendices listed above. Executable code listings and their comments remain in the Spanish source.
+
+## Appendix A — Engine architecture
+
+MOTOR CASCABEL v0.1.0 combines the unchanged v0.0.2 core with the twenty-eight new instruments.
+
+**Core v0.0.2 (unchanged):**
+- Corpus: 19 embedded posts + 41 bootstrap chapters.
+- Pattern pools: 14 closures, 8 adenoviruses, 12 viruses, and 15 rhetorical patterns.
+- Combinatorics: 14 × 92 × 9 = 11,592 combinations.
+- Scheduler: exhaustive, sampling, and directed modes.
+- Validators: stylometric, anti-repetition, and anti-tic.
+
+**Instruments v0.1.0 (28 theses):**
+
+| Block | Theme | Number |
+|---|---|---:|
+| A | Persistence | 2 |
+| B | Measurement | 5 |
+| C | Inversion | 4 |
+| D | Interpolation | 3 |
+| E | Boundary | 1 |
+| F | Cross-validation | 3 |
+| G | Metamorphosis | 3 |
+| H | Self-reference | 3 |
+| I | Compression | 2 |
+| J | Operational ethics | 2 |
+
+## Appendix B — Thesis and CLI-flag map
+
+| # | Flag | Thesis summary | Block |
+|---|---|---|---|
+| 1 | `--publicar` | N-gram half-life decreases as the corpus grows | A |
+| 2 | `--canon-expandir` | The canon is defined by rejected material | A |
+| 3 | `--auditar` | H(layer | axis) is a generator invariant | B |
+| 4 | `--ablation` | Validators are non-additive | B |
+| 5 | `--matriz` | Co-occurrence matrix has low rank | B |
+| 6 | `--deriva` | Drift is a regime change | B |
+| 7 | `--firma` | Eight-dimensional signature stable under paraphrase | B |
+| 8 | `--espejo` | Antithesis is an involutive operator | C |
+| 9 | `--contraejemplo` | Violation has a grammar | C |
+| 10 | `--ciego` | Bias is blind/validated divergence | C |
+| 11 | `--forense` | Authorship through functional n-grams | C |
+| 12 | `--interpolar` | Interpolation is non-commutative | D |
+| 13 | `--reconstruir` | Unique reconstruction under style constraints | D |
+| 14 | `--temporal` | Dating through lexical markers | D |
+| 15 | `--frontera` | Boundary of declared space | E |
+| 16 | `--consenso` | Agreement indicates structural cause | F |
+| 17 | `--disenso` | Dissent is a moving boundary | F |
+| 18 | `--cuarentena` | Rejections form stable failure modes | F |
+| 19 | `--mutar` | Mutation is linear in stylometric distance | G |
+| 20 | `--cruzar` | Crossover follows the harmonic mean | G |
+| 21 | `--degradar` | Layer hierarchy | G |
+| 22 | `--autopsia` | Plan/text distance measures generator health | H |
+| 23 | `--espejo-negro` | Rejected near-neighbour is informative | H |
+| 24 | `--parasito` | Permissiveness is hosting capacity | H |
+| 25 | `--comprimir` | K(x) is proportional to K(plan(x)) | I |
+| 26 | `--expandir` | Expansion converges to the signature | I |
+| 27 | `--censurar` | Structural censorship differs from lexical censorship | J |
+| 28 | `--confesar` | Reflexive self-consistency | J |
+
+## Appendix C — Formal glossary
+
+| Term | Definition |
+|---|---|
+| **Stylometric signature** | Vector f(x) in eight-dimensional real space. |
+| **Plan** | Tuple containing axis, cast, layer, virus, adenovirus, rhetorical pattern, closure, temperature, and paragraph count. |
+| **N-gram** | Sequence of n consecutive tokens. |
+| **Tic** | Syntactic formula repeated within a single text. |
+| **N-gram half-life** | Number of cycles between its first and last appearance in the corpus. |
+| **Negative corpus** | Rejected texts, with the reason for rejection. |
+| **Effective dimension** | Number of singular values needed to capture 90% of the energy. |
+| **Change point** | Index where the mean changes regime, detected by CUSUM. |
+| **Involution** | Operator E such that E² = identity. |
+| **Language complement** | Texts the generator would never accept. |
+| **Confession** | Text stating its own plan constraints without violating them. |
+
+## Appendix E — Refutation protocol: reproducibility and limitations
+
+### E.32 Reproducibility
+
+Run the 28 experiments:
+
+```bash
+python refutacion_cascabel.py
+```
+
+Run selected experiments:
+
+```bash
+python refutacion_cascabel.py --solo 1 4 6 21
+```
+
+Write the output as JSON:
+
+```bash
+python refutacion_cascabel.py --json > resultados.json
+```
+
+- **Environment:** Python 3.11 or later.
+- **Dependencies:** no external dependencies.
+- **Requirement:** cascabel.py v0.1.0 in the same directory.
+- **Estimated runtime:** 5–15 minutes, depending on the machine.
+- **Seeds:** fixed within each experiment.
+
+### E.33 Limitations
+
+- **Coverage:** 27 of 28 theses have an implemented experiment. Thesis 2 (negative canon) requires persistence across executions and is not implemented in this script. Thesis 11 (forensic attribution) requires an external multi-author corpus and is not run by default.
+- **Corpus:** all experiments use the embedded corpus (19 posts). Neither bootstrap nor an external corpus is used.
+- **Statistical validation:** each experiment runs with a single seed. A stronger protocol would repeat every experiment with 30 seeds and report confidence intervals.
+- **Single language:** Spanish, short-essay register.
+- **Unpublished results:** the script's verdicts are not preregistered. They will be published as produced in the next revision.
+
+### E.34 Publication commitment
+
+The author commits to publishing in the next preprint revision:
+
+- The literal script output, without editing.
+- The actual verdicts for all 28 theses, including those contradicting the predictions in §E.2.
+- Theses left as INDETERMINATE by the protocol, together with the reason.
+- Any third-party refutation obtained by running the protocol on different corpora.
+
+*Appendix E — v1.2 — September 2026.*  
+*David Ferrández Canalis.*  
+*28 theses. 28 experiments. 0 executed.*  
+*The commitment is to publish what comes out, not what is expected.*
+
+---
+
+## Canonical executable listings
+
+Appendix D (the complete MOTOR CASCABEL engine) and the executable experiment code in Appendix E remain in the Spanish source, unchanged. Their identifiers, embedded Spanish corpus, CLI contract, metadata, and runtime output are part of the reproducible artefact. This English edition now includes the main text and the explanatory material in Appendices A–C and E.32–E.34; it does not claim that source-code comments or executable listings have been translated.
+
+[Spanish source manuscript and complete engine/experiment code](01-veintiocho-tesis-linguistica-computacional.es.md).
