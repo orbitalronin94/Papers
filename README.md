@@ -108,7 +108,8 @@
 **EN.** An operational manual for typed, falsifiable, integrity-preserving, auditable tests, using Pydantic models, severity criteria, semantic validation, and multi-agent assistance. It should be read as a protocol/specification; publication of the document alone does not establish implementation or certification.
 
 - [Manuscrito en castellano / Spanish manuscript](papers/testing/01-protocolo-testing-1310.es.md)
-- Estado lingüístico / Language status: original en castellano; traducción integral pendiente / Spanish original; full translation pending.
+- [English edition](papers/testing/01-testing-protocol-1310.en.md)
+- Estado lingüístico / Language status: explicación operativa y secciones narrativas traducidas; código y modelos Pydantic se conservan en la fuente para no alterar la API / Operational prose and narrative sections translated; code and Pydantic models remain in the source to preserve the API.
 
 ## 5. Modelos de lenguaje diminutos / Tiny language models
 
