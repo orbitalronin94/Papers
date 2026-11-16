@@ -69,7 +69,8 @@
 **EN.** Studies parameter degeneracy in compartmental epidemic models with under-reporting during early outbreak phases. It combines asymptotic analysis, Fisher information, Jacobian analysis, and Bayesian comparison, and introduces the EPIDEMIC-ID protocol. Numerical results and validation scope are limited to the stated scenarios and assumptions.
 
 - [Manuscrito en castellano / Spanish manuscript](papers/identificabilidad/01-epidemiologia-subreporte.es.md)
-- Estado lingüístico / Language status: original en castellano; traducción integral pendiente / Spanish original; full translation pending.
+- [English edition](papers/identificabilidad/01-structural-non-identifiability-epidemic-under-reporting.en.md)
+- Estado lingüístico / Language status: texto principal traducido íntegramente; el apéndice de código se conserva sin cambios en la fuente española / Main text fully translated; executable code appendix is retained verbatim in the Spanish source.
 
 ### 3.2 No-identificabilidad estructural y práctica en modelos PBPK
 
