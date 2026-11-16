@@ -1,544 +1,239 @@
-# Corpus RONIN — Artículos sobre No-Identificabilidad y Tratado del Método
-# RONIN Corpus — Papers on Non-Identifiability and Treatise on Method
+# RONIN Papers — Compendio de investigación / Research Compendium
 
-> **Research repository / Repositorio de investigación.** Technical papers and working manuscripts on structural and practical non-identifiability, mathematical modelling, epistemology, falsifiable computational linguistics, and empirical research on small language models. / Artículos y manuscritos de trabajo sobre no-identificabilidad estructural y práctica, modelización matemática, epistemología, lingüística computacional falsable e investigación empírica de modelos de lenguaje pequeños.
+**Autor / Author:** David Ferrández Canalis — Agencia RONIN  
+**Periodo / Period:** 2026  
+**Licencia declarada en los manuscritos / License stated in manuscripts:** CC BY-NC-SA 4.0 + Cláusula Comercial Ronin (salvo indicación específica en cada documento)  
+**Estado editorial / Editorial status:** colección de preprints, perspectivas y borradores de investigación; no equivale a revisión por pares. Cada manuscrito conserva su propio estado, alcance y limitaciones.
 
+> **ES — Qué contiene este repositorio.** Este compendio reúne trabajos sobre epistemología y metodología falsable, lingüística computacional, identificabilidad de modelos matemáticos, pruebas de software y experimentación con modelos de lenguaje diminutos. La organización temática no implica que todos los documentos tengan el mismo grado de madurez ni que sus resultados estén igualmente validados.
+>
+> **EN — What this repository contains.** This compendium brings together work on epistemology and falsifiable methodology, computational linguistics, identifiability in mathematical models, software testing, and experiments with tiny language models. Thematic grouping does not imply that every manuscript has the same maturity or evidential status.
 
-**Autor / Author:** David Ferrandez Canalis — Agencia RONIN
-**Fecha / Date:** Septiembre 2026 / September 2026
-**Licencia / License:** CC BY-NC-SA 4.0 + Cláusula Comercial Ronin
-**Estado / Status:** Autopublicado. Sin revisión por pares. / Self-published. Not peer-reviewed.
+## Navegación / Navigation
 
----
+- [Epistemología y método / Epistemology and method](papers/epistemologia/)
+- [Lingüística computacional / Computational linguistics](papers/linguistica-computacional/)
+- [Identificabilidad matemática y aplicada / Mathematical and applied identifiability](papers/identificabilidad/)
+- [Testing y calidad de software / Software testing and quality](papers/testing/)
+- [Modelos de lenguaje diminutos / Tiny language models](papers/modelos-diminutos/)
+- [Transpilación COBOL / COBOL transpilation](papers/transpilacion-cobol/)
+- [Datos, registros y materiales reproducibles / Data, ledgers and reproducibility materials](research/)
 
-## ⚠️ Nota genealógica / Genealogical note
+## 1. Epistemología y método / Epistemology and method
 
-**ES:** Este repositorio es el resultado de una **contracción**. No es el corpus original del autor. Es lo que sobrevivió después de un proceso de revisión interna que redujo un programa de investigación de 19 documentos, 288 reducciones, 74 teoremas y un lenguaje de programación a **cuatro documentos con un estándar epistémico superior**. El corpus original —llamado **PUSFRE** (Principio Universal de Sistemas Finitos con Recursos Escasos)— **vive en otro repositorio del mismo autor**. Ese corpus era más ambicioso y menos riguroso. Este repositorio es su versión madura.
+### 1.1 Epistemología Generativa: un protocolo para producir proposiciones falsables a escala
 
-**EN:** This repository is the result of a **contraction**. It is not the author's original corpus. It is what survived after an internal review process that reduced a research program of 19 documents, 288 reductions, 74 theorems, and a programming language to **four documents with a higher epistemic standard**. The original corpus — called **PUSFRE** (Universal Principle of Finite Systems with Scarce Resources) — **lives in another repository by the same author**. That corpus was more ambitious and less rigorous. This repository is its mature version.
+**ES.** Propone un protocolo para convertir exploración intelectual en proposiciones falsables: estructura de tesis, niveles de categorización epistémica, pre-registro y ciclo entre generación exploratoria y formalización. El texto usa el programa PUSFRE/RONIN como caso autoetnográfico y declara que la replicación externa sigue siendo necesaria.
 
-### La genealogía en una tabla / The genealogy in one table
+**EN.** Proposes an operational protocol for turning exploratory inquiry into falsifiable propositions. It combines a structured claim format, epistemic categories, pre-registration, and an iterative process between exploratory generation and formalization. The PUSFRE/RONIN programme is used as an autoethnographic case; external replication remains necessary.
 
-| Fase | Fecha | Estado | Documentos |
-|------|-------|--------|------------|
-| **Ambición** | Jun–Ago 2026 | Corpus PUSFRE completo | 19 docs, 288 reducciones, 74 teoremas, RONIN 1.0 |
-| **Crisis** | Ago 2026 | Autorrevisión interna | Degradación explícita de afirmaciones inflacionarias |
-| **Contracción** | Sep 2026 | Este repositorio | 4 documentos delimitados + anexo ejecutable |
+- [Manuscrito en castellano / Spanish manuscript](papers/epistemologia/01-epistemologia-generativa.es.md)
+- [English translation](papers/epistemologia/01-epistemologia-generativa.en.md)
+- Estado lingüístico / Language status: versiones completas paralelas / Full parallel versions available.
 
-**La lección:** La ambición total y la precisión local no son opuestas. Son fases. El corpus original fue necesario para producir los cuatro papers. Pero no era el producto. El producto es lo que está aquí.
+### 1.2 Epistemología de la Degeneración: cuándo un parámetro no es una medición
 
-*The lesson: total ambition and local precision are not opposites. They are phases. The original corpus was necessary to produce the four papers. But it was not the product. The product is what is here.*
+**ES.** Perspectiva conceptual sobre la diferencia entre estimar un parámetro y disponer de información que lo identifique. Defiende el diagnóstico previo al ajuste y presenta el «parámetro fantasma» como herramienta conceptual, no como teorema universal ni método nuevo.
 
----
+**EN.** A conceptual perspective on the difference between estimating a parameter and having data that identify it. It argues for diagnosis before fitting and introduces the “ghost parameter” as a conceptual device, not a universal theorem or a new mathematical method.
 
-## 📄 Documentos / Documents
+- [Manuscrito bilingüe completo / Full bilingual manuscript](papers/epistemologia/02-epistemologia-degeneracion.bilingual.md)
+- Estado lingüístico / Language status: castellano e inglés en el mismo manuscrito / Spanish and English in one manuscript.
 
-Este repositorio contiene **cuatro documentos** y un **anexo ejecutable**:
+### 1.3 Tratado del Periplo y del Método
 
-1. Dos artículos técnicos que formalizan el mismo problema matemático en dominios distintos.
-2. Una perspectiva epistemológica que los unifica.
-3. Un tratado de síntesis que narra el periplo del programa de investigación y **formaliza el método que emerge de él**.
-4. Un **anexo ejecutable embebido** en el tratado que convierte las tres deudas pendientes del método en código reproducible.
+**ES.** Relato de la contracción del programa PUSFRE: de una ambición universal a afirmaciones locales y auditables. Extrae un método de investigación, explicita sus deudas y fortalezas e incluye un anexo ejecutable. No reproduce ni valida por sí mismo el corpus PUSFRE original.
 
-*This repository contains four documents and an executable annex: two technical papers, an epistemological perspective, a synthesis treatise, and an embedded executable annex that converts the three pending debts into reproducible code.*
+**EN.** A narrative account of the contraction of the PUSFRE programme, from universal ambition to local, auditable claims. It extracts a research method, states its unresolved obligations and strengths, and includes an executable annex. It does not reproduce or independently validate the original PUSFRE corpus.
 
----
+- [Manuscrito en castellano / Spanish manuscript](papers/epistemologia/03-tratado-del-periplo-y-del-metodo.es.md)
+- [English narrative edition](papers/epistemologia/03-treatise-on-the-periplus-and-the-method.en.md)
+- Estado lingüístico / Language status: edición narrativa completa en inglés; listados ejecutables reproducidos literalmente para preservar reproducibilidad; comentarios y mensajes de runtime siguen en castellano / Complete English narrative edition; executable listings reproduced verbatim for reproducibility; code comments and runtime messages remain in Spanish.
 
-### 1. No-Identificabilidad Estructural y Práctica en Modelos PBPK
+## 2. Lingüística computacional / Computational linguistics
 
-**Archivo / File:** [`No-Identificabilidad Estructural y Práctica en Modelos PBPK_ Diagnóstico mediante Matriz de Información de Fisher, Umbrales Calibrados .md`](No-Identificabilidad%20Estructural%20y%20Práctica%20en%20Modelos%20PBPK_%20Diagnóstico%20mediante%20Matriz%20de%20Información%20de%20Fisher%2C%20Umbrales%20Calibrados%20.md)
+### 2.1 Hacia una lingüística computacional falsable: veintiocho tesis operables en un generador de texto en español
 
-**Resumen / Abstract:** Los modelos PBPK son herramientas estándar en el desarrollo de fármacos. Una fracción significativa de sus parámetros son estructural o prácticamente no identificables. Este trabajo formaliza el diagnóstico mediante la matriz de información de Fisher (FIM), calibra umbrales operativos (número de condición < 1e3, 1e3–1e6, ≥ 1e6), y propone un protocolo de 5 pasos. La validación se realiza sobre cuatro casos sintéticos, análisis de Sobol, bootstrap, diseño D-optimal, y datos reales de PK-DB, HCTZ, Bosentan, y Theophylline.
+**ES.** Presenta MOTOR CASCABEL v0.1.0 como sistema experimental para convertir 28 tesis sobre lenguaje y generación textual en operaciones computables y refutables. Su contribución es el protocolo de medición y refutación; las afirmaciones deben leerse dentro de los límites del corpus, implementación y validación descritos en el manuscrito.
 
-*The PBPK paper is written in dual language: Spanish first, English second. Both versions contain the complete code, the tables, and the appendices.*
+**EN.** Presents MOTOR CASCABEL v0.1.0 as an experimental system that turns 28 claims about language and text generation into computable, refutable operations. Its contribution is the measurement and falsification protocol; claims must be interpreted within the manuscript’s stated corpus, implementation, and validation limits.
 
-**Palabras clave:** PBPK · no-identificabilidad · FIM · protocolo de diagnóstico · TMDD · mPBPK · Sobol · D-optimal
-**Tipo:** Original Research
-**Categoría epistémica dominante:** A (degeneración demostrada), B (calibración y validación)
+- [Manuscrito en castellano / Spanish manuscript](papers/linguistica-computacional/01-veintiocho-tesis-linguistica-computacional.es.md)
+- [English main-text edition](papers/linguistica-computacional/01-towards-falsifiable-computational-linguistics-28-operational-theses.en.md)
+- Estado lingüístico / Language status: texto principal completo en ambos idiomas; apéndices A–E (arquitectura, glosario, código y protocolo de refutación) pendientes de traducción / Complete main text in both languages; Appendices A–E (architecture, glossary, code, and refutation protocol) remain to be translated.
 
----
+## 3. Identificabilidad matemática y aplicada / Mathematical and applied identifiability
 
-### 2. No-Identificabilidad de los Parámetros de la Ecuación de Hill en el Régimen Sub-Saturado
+### 3.1 No-identificabilidad estructural en modelos epidemiológicos con subreporte
 
-**Archivo / File:** [`No-Identificabilidad de los Parámetros de la Ecuación de Hill en el Régimen Sub-Saturado_ Análisis Estructural, Protocolo de Diagnóstico e Implicaciones Regulatorias.md`](No-Identificabilidad%20de%20los%20Parámetros%20de%20la%20Ecuación%20de%20Hill%20en%20el%20Régimen%20Sub-Saturado_%20Análisis%20Estructural%2C%20Protocolo%20de%20Diagnóstico%20e%20Implicaciones%20Regulatorias.md)
+**ES.** Estudia la degeneración entre parámetros epidemiológicos en fases tempranas de brotes con subreporte. Combina análisis asintótico, matriz de información de Fisher, Jacobiano y comparación bayesiana, e introduce el protocolo EPIDEMIC-ID. Los resultados cuantitativos y el alcance de la validación deben interpretarse según los escenarios y supuestos declarados.
 
-**Resumen / Abstract:** En el régimen sub-saturado (Ω ≪ K), los parámetros K y n_H de la ecuación de Hill son **estructuralmente no identificables**. Los datos solo identifican la constante combinada A = K^(−n_H). Se deriva la expansión asintótica, se calcula la FIM analíticamente, y se calibran umbrales mediante Monte Carlo. Validación en qHTS (NCATS) y Holling II/III.
+**EN.** Studies parameter degeneracy in compartmental epidemic models with under-reporting during early outbreak phases. It combines asymptotic analysis, Fisher information, Jacobian analysis, and Bayesian comparison, and introduces the EPIDEMIC-ID protocol. Numerical results and validation scope are limited to the stated scenarios and assumptions.
 
-*The Hill paper is written in dual language: Spanish first, English second. Both versions contain the complete code, the tables, and the appendices.*
+- [Manuscrito en castellano / Spanish manuscript](papers/identificabilidad/01-epidemiologia-subreporte.es.md)
+- [English edition](papers/identificabilidad/01-structural-non-identifiability-epidemic-under-reporting.en.md)
+- Estado lingüístico / Language status: texto principal traducido íntegramente; el apéndice de código se conserva sin cambios en la fuente española / Main text fully translated; executable code appendix is retained verbatim in the Spanish source.
 
-**Palabras clave:** ecuación de Hill · no-identificabilidad estructural · FIM · régimen sub-saturado · regresión no lineal · dosis-respuesta · qHTS · Holling
-**Tipo:** Original Research
-**Categoría epistémica dominante:** A (degeneración demostrada), B (calibración), C (implicaciones regulatorias)
+### 3.2 No-identificabilidad estructural y práctica en modelos PBPK
 
----
+**ES.** Desarrolla un protocolo de diagnóstico basado en FIM y umbrales calibrados para modelos fisiológicos farmacocinéticos. Distingue identificabilidad estructural y práctica y estudia sensibilidad, bootstrap, diseño D-óptimo y datos de aplicación. La parte inglesa existente no debe confundirse con una traducción integral si faltan secciones.
 
-### 3. Epistemología de la Degeneración: Cuándo un Parámetro No Es una Medición
+**EN.** Develops a FIM-based diagnostic protocol with calibrated thresholds for physiologically based pharmacokinetic models. It distinguishes structural from practical identifiability and examines sensitivity, bootstrap, D-optimal design, and applied data. Existing English sections are partial and should not be mistaken for a complete translation.
 
-**Archivo / File:** [`Epistemología de la Degeneración_ Cuándo un Parámetro No Es una Medición.md`](Epistemología%20de%20la%20Degeneración_%20Cuándo%20un%20Parámetro%20No%20Es%20una%20Medición.md)
+- [Manuscrito fuente y apéndices canónicos / Source manuscript and canonical appendices](papers/identificabilidad/02-pbpk-identificabilidad.mixed.md)
+- [English narrative edition](papers/identificabilidad/02-structural-practical-non-identifiability-pbpk.en.md)
+- Estado lingüístico / Language status: texto científico principal completo en inglés; implementaciones y apéndices técnicos conservados en la fuente canónica / Main scientific text fully available in English; implementations and technical appendices retained in the canonical source.
 
-**Resumen / Abstract:** Este trabajo extrae la tesis epistemológica que subyace a los dos papers técnicos: **el diagnóstico de identificabilidad debe preceder al ajuste, y no seguirlo**. Introduce el concepto de *parámetro fantasma*, formaliza la clase general de degeneraciones, delimita el dominio de validez, y responde a veinte objeciones previsibles. Se presenta explícitamente como *Perspective*, no como *Original Research*.
+### 3.3 No-identificabilidad de los parámetros de la ecuación de Hill en régimen subsaturado
 
-*The third paper extracts the epistemological thesis: identifiability diagnosis must precede fitting, not follow it. It is explicitly presented as a Perspective, not Original Research.*
+**ES.** Analiza la degeneración entre la constante de semisaturación y el coeficiente de Hill cuando las observaciones permanecen en régimen subsaturado. Incluye derivación asintótica, FIM, simulaciones y materiales de reproducción. El manuscrito contiene apéndices en inglés, pero no una versión inglesa integral.
 
-**Palabras clave:** identificabilidad · degeneración paramétrica · diagnóstico pre-ajuste · invariante de degeneración · parámetro fantasma
-**Tipo:** Perspective
-**Categoría epistémica dominante:** A (formalización), B (inferencia), C (propuestas para discusión)
+**EN.** Analyses the degeneracy between the half-saturation constant and Hill coefficient when observations remain in the subsaturated regime. It includes an asymptotic derivation, Fisher information analysis, simulations, and reproducibility materials. The manuscript contains English appendices, but not a complete English version.
 
----
+- [Manuscrito fuente y apéndices canónicos / Source manuscript and canonical appendices](papers/identificabilidad/03-hill-subsaturado.es.md)
+- [English narrative edition](papers/identificabilidad/03-hill-equation-subsaturated-non-identifiability.en.md)
+- Estado lingüístico / Language status: texto científico completo en inglés; implementaciones y apéndices técnicos conservados en la fuente canónica / Scientific text fully available in English; implementations and technical appendices retained in the canonical source.
 
-### 4. Tratado del Periplo y del Método: De la Ambición Total a la Precisión Local
+### 3.4 Protocolo de validación de identificabilidad estructural en 50 dominios
 
-**Archivo / File:** [`Tratado del Periplo y del Método.md`](Tratado%20del%20Periplo%20y%20del%20Método.md)
+**ES.** Describe la versión 1.2.0 de un protocolo que combina FIM, SVD, ETL local, análisis simbólico tipo STRIKE-GOLDD y pruebas de causalidad transversal. Conserva hashes de código y pre-registro y delimita los resultados obtenidos en los dominios y datasets incorporados.
 
-**Resumen / Abstract:** Este tratado no reproduce el corpus original. Lo narra desde fuera. Narra el periplo del PUSFRE desde su ambición total hasta la contracción que produjo los tres documentos anteriores, y extrae de esa contracción el método que estaba latente en todas las piezas. El método se formaliza en **7 fases operativas** y **4 principios meta-metodológicos**. Identifica las **tres deudas** pendientes (pre-registro ejecutado, validación empírica externa, comparación con modelos alternativos) y las **tres fortalezas** del método (falsabilidad, honestidad estructural, delimitación operativa). **Incluye un anexo ejecutable completo** que convierte las tres deudas en código auditable, con los archivos de configuración, los scripts en Python, y el script de reproducción. La Parte VII del tratado contiene los archivos embebidos listos para copiar y pegar.
+**EN.** Describes version 1.2.0 of a protocol combining Fisher information, SVD, local ETL, STRIKE-GOLDD-style symbolic analysis, and cross-domain causality tests. It preserves code and pre-registration hashes and limits its findings to the domains and datasets actually included.
 
-*This treatise does not reproduce the original corpus. It narrates it from the outside. The method is formalized in 7 operational phases and 4 meta-methodological principles. It includes a complete executable annex that converts the three debts into auditable code, with configuration files, Python scripts, and a reproduction script. Part VII of the treatise contains all embedded files ready to copy and paste.*
+- [Manuscrito bilingüe / Bilingual manuscript](papers/identificabilidad/04-protocolo-50-dominios.bilingual.md)
+- Estado lingüístico / Language status: partes en castellano e inglés / Spanish and English sections in one manuscript.
 
-**Palabras clave:** genealogía · contracción · formalización · método · diagnóstico pre-ajuste · pre-registro · matriz de confusión · PUSFRE · anexo ejecutable
-**Tipo:** Tratado de síntesis / Meta-metodología / Anexo ejecutable
-**Categoría epistémica dominante:** A (formalización lógica), B (inferencia), C (validación pendiente)
+## 4. Testing y calidad de software / Software testing and quality
 
-**Nota sobre el corpus original.** El corpus PUSFRE que este tratado describe no está incluido en este repositorio. Vive en otro repositorio del mismo autor. Este tratado no lo cita en extenso, no lo verifica, no lo reproduce. Lo narra desde fuera y extrae de él un método formalizado.
+### 4.1 Protocolo de Testing 1310
 
----
+**ES.** Manual operativo para tests tipados, refutables, íntegros y auditables, con modelos Pydantic, criterios de severidad, validación semántica y asistencia multiagente. Debe entenderse como especificación/protocolo; su presencia no acredita por sí sola una implementación o certificación.
 
-## 🎯 ¿Qué es esto? / What is this?
+**EN.** An operational manual for typed, falsifiable, integrity-preserving, auditable tests, using Pydantic models, severity criteria, semantic validation, and multi-agent assistance. It should be read as a protocol/specification; publication of the document alone does not establish implementation or certification.
 
-Este repositorio contiene **cuatro documentos** organizados en tres capas, más un **anexo ejecutable embebido en el tratado**:
+- [Manuscrito en castellano / Spanish manuscript](papers/testing/01-protocolo-testing-1310.es.md)
+- [English edition](papers/testing/01-testing-protocol-1310.en.md)
+- Estado lingüístico / Language status: explicación operativa y secciones narrativas traducidas; código y modelos Pydantic se conservan en la fuente para no alterar la API / Operational prose and narrative sections translated; code and Pydantic models remain in the source to preserve the API.
 
-1. **Capa técnica (Papers 1 y 2).** Dos artículos que formalizan y resuelven la no-identificabilidad en dos dominios específicos: la ecuación de Hill y los modelos PBPK. Ambos usan la misma metodología: FIM + SVD + umbrales calibrados + protocolo operativo.
+## 5. Modelos de lenguaje diminutos / Tiny language models
 
-2. **Capa epistemológica (Paper 3).** Una *Perspective* que extrae la tesis que subyace a los dos papers técnicos: el diagnóstico de identificabilidad debe preceder al ajuste, no seguirlo.
+Esta serie reconstruye experimentos de MINIRONIN, RONIN-IA, HERETIC-RONIN y RONINIA. Los manuscritos son borradores exploratorios: separan métricas observables, resultados de entrenamiento, inferencia, linaje de checkpoints y estado de los workflows. No atribuyen razonamiento ni capacidad general a los modelos.
 
-3. **Capa de síntesis (Paper 4).** Un tratado que narra el periplo del programa de investigación original y formaliza el método que emerge de él. **El tratado incluye un anexo ejecutable** que convierte las tres deudas pendientes en código reproducible, con archivos de configuración, scripts en Python, y un script de reproducción completo.
+This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONIN, and RONINIA. These are exploratory drafts: they separate observable metrics, training outcomes, inference, checkpoint lineage, and workflow status. They do not claim reasoning or general capability.
 
-La tesis que unifica los cuatro documentos:
+### 5.1 The Loss–Behavior Gap in Tiny Language Models
 
-> **Múltiples parámetros en un modelo no lineal pueden ser estructuralmente no identificables. Un parámetro reportado sin diagnóstico de identificabilidad no es una medición — es una afirmación sin fuente identificada. El diagnóstico debe preceder al ajuste, no seguirlo.**
+**ES.** Examina si la pérdida de entrenamiento predice el comportamiento observable en generación. Contrasta trazas de optimización con terminación, truncamiento, repetición y diversidad en evaluaciones externas.
 
-*This repository contains four documents organized in three layers, plus an executable annex embedded in the treatise. The unifying thesis is stated above.*
+**EN.** Examines whether training loss predicts observable generation behavior, contrasting optimization traces with termination, truncation, repetition, and diversity in external evaluations.
 
----
+- [English manuscript](papers/modelos-diminutos/01-loss-behavior-gap.en.md)
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/01-loss-behavior-gap.es.md)
+- Language status: full English and Spanish versions available.
 
-## 🔬 Contribuciones Principales / Core Contributions
+### 5.2 Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints
 
-| Contribución / Contribution | Hill Paper | PBPK Paper | Epistemology Paper | Treatise |
-|-----------------------------|------------|------------|---------------------|----------|
-| **Problema / Problem** | Degeneración K–n_H | Degeneración Vt–Kp | Cuándo un parámetro no es una medición | Cómo madura un programa de investigación |
-| **Formalización / Formalization** | FIM + SVD | FIM + SVD | Clase de degeneración + invariante | 7 fases + 4 principios |
-| **Umbrales / Thresholds** | 3 órdenes de Ω | Condición 1e3, 1e6 | Operador Δ | Matriz de confusión |
-| **Protocolo / Protocol** | 5 pasos | 5 pasos | Inversión del orden | Diagnosticar, categorizar, delimitar, pre-registrar |
-| **Validación / Validation** | qHTS, Holling | PK-DB, HCTZ, Bosentan, Theophylline | 20 objeciones | Análisis del corpus original + anexo ejecutable |
-| **Anexo ejecutable / Executable annex** | — | — | — | **Sí (Parte VII)** |
-| **Tipo / Type** | Original Research | Original Research | Perspective | Tratado de síntesis |
-| **Categoría dominante** | A + B | A + B | A + B + C | A + B + C |
+**ES.** Trata los checkpoints como una serie longitudinal y describe cambios no monótonos en respuestas vacías, límites de generación y diversidad textual. No convierte diferencias descriptivas en una explicación causal.
 
----
+**EN.** Treats checkpoints as a longitudinal series and describes non-monotonic changes in empty outputs, generation caps, and textual diversity. Descriptive differences are not presented as causal explanations.
 
-## 🧪 Anexo ejecutable del tratado / Executable annex of the treatise
+- [English manuscript](papers/modelos-diminutos/02-longitudinal-behavior.en.md)
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/02-longitudinal-behavior.es.md)
+- Language status: full English and Spanish versions available.
 
-**Ubicación:** Parte VII del [`Tratado del Periplo y del Método.md`](Tratado%20del%20Periplo%20y%20del%20Método.md).
+### 5.3 CPU-Constrained Training of Small Language Models
 
-**Qué contiene:** los archivos completos para reproducir el experimento que convierte las tres deudas del método en resultados auditables.
+**ES.** Documenta comparaciones preliminares de rendimiento en CPU y runners CI, con atención a hilos, tamaño del modelo y diseño del workflow. Las mediciones son específicas de las configuraciones ensayadas.
 
-**Archivos embebidos:**
+**EN.** Documents preliminary CPU and CI-runner throughput comparisons, focusing on thread count, model size, and workflow design. Measurements are specific to the tested configurations.
 
-```
-ronin_annex/
-├── requirements.txt
-├── reproduce_experiment.sh           # script único de reproducción
-├── config/
-│   ├── pre_registration.yaml        # 31 dominios pre-declarados
-│   └── criteria.yaml                 # criterios a priori
-├── src/
-│   ├── debt_1_preregistration.py    # ejecución del pre-registro
-│   ├── debt_2_external_validation.py # validación externa
-│   ├── debt_3_model_comparison.py   # comparación con alternativas
-│   ├── generate_debt_3_data.py      # generador de datos para Deuda 3
-│   └── pipeline.py                  # pipeline completo
-├── data/
-│   └── README.md                    # instrucciones para datos reales
-└── reports/
-    └── (outputs generados)
-```
+- [English manuscript](papers/modelos-diminutos/03-cpu-constrained-training.en.md)
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/03-cpu-constrained-training.es.md)
+- Language status: full English and Spanish versions available.
 
-**Reproducción:**
+### 5.4 Checkpoint Lineage and Failure-Tolerant Experimentation
 
-```bash
-bash reproduce_experiment.sh
-```
+**ES.** Distingue entrenamiento completado, checkpoint válido, verificación de linaje, finalización de workflow y evaluación. Propone un modelo de procedencia que evita tratar un workflow fallido como prueba automática de que no hubo resultado útil.
 
-**Qué ejecuta:**
+**EN.** Separates completed training, valid checkpoints, lineage verification, workflow completion, and evaluation. Proposes a provenance model that avoids treating a failed workflow as automatic proof that no useful result was produced.
 
-1. **Deuda 1** — Pre-registro sobre 31 dominios. Modo plumbing (fontanería) + modos perturbados (heteroscedástico, contaminado, oscilante). Reporta matriz de confusión, precisión, recall, F1, accuracy.
-2. **Deuda 2** — Validación externa. Requiere `data/production_logs.csv`. Si no existe, reporta `NO_DATA` sin romper el pipeline.
-3. **Deuda 3** — Comparación de modelos. Ejecuta el pipeline sobre 5 estructuras (multiplicativa, aditiva, ponderada, mínimo, mixta) y verifica que el modelo ganador coincide con la estructura generadora.
+- [English manuscript](papers/modelos-diminutos/04-checkpoint-lineage.en.md)
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/04-checkpoint-lineage.es.md)
+- Language status: full English and Spanish versions available.
 
-**Resultados obtenidos:**
+### 5.5 Corpus Scale Is Not Learning
 
-| Deuda | Estado | Resultado |
-|-------|--------|-----------|
-| Deuda 1 plumbing | Cerrado | 100% accuracy por construcción (test de fontanería, no validación) |
-| Deuda 1 perturbados | Parcial | 100% en tres perturbaciones que no atacan el test de saturación |
-| Deuda 2 | Pendiente | `NO_DATA` — requiere logs reales |
-| Deuda 3 | **Cerrado** | Validación genuina: M0 gana contra M1, M2, M3 en estructura multiplicativa; M1 gana en aditiva; M2 en ponderada; M3 en mínimo; margen estrecho en mixta |
+**ES.** Estudia la relación entre composición del corpus, exposición a tokens, entrenamiento y evaluación de HERETIC-RONIN. Mantiene como provisionales las interpretaciones cuyo JSON bruto o manifiesto no se han auditado.
 
-**Lo que el anexo cierra:** la Deuda 3 (comparación con alternativas) está genuinamente validada. El pipeline distingue estructuras, no confirma la que le metiste.
+**EN.** Studies the relationship between corpus composition, token exposure, training, and evaluation in HERETIC-RONIN. Interpretations remain provisional where raw JSON or manifests have not yet been audited.
 
-**Lo que el anexo deja abierto:** la Deuda 2 (validación externa sobre logs reales), y un modo `trend` faltante en Deuda 1 para atacar el test de saturación con tendencia sistemática.
+- [English manuscript](papers/modelos-diminutos/05-heretic-corpus-and-learning.en.md)
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/05-heretic-corpus-and-learning.es.md)
+- Language status: full English and Spanish versions available.
 
-*This annex converts the three pending debts into auditable code. Deuda 3 is genuinely validated. Deuda 2 remains pending. Deuda 1 lacks the `trend` mode.*
+### 5.6 MINIRONIN enano: arquitectura integrada de tokenización, memoria documental y entrenamiento con evidencia
 
----
+**ES.** Nota técnica que propone separar capacidad paramétrica, memoria documental externa e interfaz/tokenización reversible. BACKDOOR_BPE se define expresamente como una tabla de secuencias frecuentes, no como BPE completo; la propuesta no afirma mejoras empíricas todavía.
 
-## 💻 Código / Code
+**EN.** A technical design note proposing a separation between parametric capacity, external documentary memory, and a reversible tokenization/interface layer. BACKDOOR_BPE is explicitly defined as a frequent-byte-sequence table, not a complete BPE tokenizer; the proposal does not yet claim empirical gains.
 
-**En los papers técnicos:** el código está embebido en los apéndices.
+- [Manuscrito en castellano / Spanish manuscript](papers/modelos-diminutos/06-minironin-arquitectura-integrada.es.md)
+- [English translation](papers/modelos-diminutos/06-minironin-arquitectura-integrada.en.md)
+- Language status: full English and Spanish versions available.
 
-- `pbpk_identifiability.py` — Protocolo de diagnóstico PBPK
-- `hill_degeneracy.py` — Protocolo de diagnóstico Hill
-- `data_acquisition.py` — Descarga de PK-DB, HCTZ, Bosentan, Theophylline, CvTdb
-- `hill_degeneracy.stan` — Modelo bayesiano
-- `HillDegeneracy.jl` — Implementación Julia
+## 6. Transpilación COBOL / COBOL transpilation
 
-**En el tratado:** el anexo ejecutable contiene el pipeline completo de las tres deudas (ver sección anterior).
+### 6.1 La semántica no es la sintaxis: preservación de la lógica de negocio en COBOL→Python
 
-**Dependencias:** numpy, scipy, pandas, scikit-learn, pyyaml. Opcional: SALib, cmdstanpy, PyMC.
+**ES.** Perspectiva con estudio de caso en desarrollo sobre por qué una transpilación debe preservar resultados observables y reglas de negocio, no solo sintaxis o estructura. Distingue coincidencia operacional de equivalencia semántica y documenta el benchmark 263/500 con sus límites.
 
----
+**EN.** A perspective and developing case study on why transpilation must preserve observable outcomes and business rules, not merely syntax or structure. It distinguishes operational agreement from semantic equivalence and documents the 263/500 benchmark with its limitations.
 
-## 📊 Dashboard Interactivo / Interactive Dashboard
+- [Manuscrito bilingüe / Bilingual manuscript](papers/transpilacion-cobol/01-semantic-preservation-cobol-to-python.bilingual.md)
+- [Registro de evidencia / Evidence register](papers/transpilacion-cobol/02-evidence-register.es.md)
+- Language status: bilingual working paper; evidence register in Spanish.
 
-**Archivo / File:** [`dashboard.html`](dashboard.html) — renombrable a `index.html` para GitHub Pages
+## 7. Datos y materiales reproducibles / Data and reproducibility materials
 
-Dashboard HTML autocontenido que visualiza los resultados de los papers técnicos. Sin dependencias externas excepto Chart.js (CDN).
+Los materiales auxiliares no se presentan como papers independientes. Se conservan para poder auditar los manuscritos y reconstruir las métricas.
 
-**Secciones:**
+Supporting materials are not presented as independent papers. They are retained to audit the manuscripts and reconstruct reported metrics.
 
-| Sección | Contenido |
-|---------|-----------|
-| **Overview** | Resumen de los papers, comparación lado a lado |
-| **Hill Equation** | Condición 1.22e+16, Proposición 5.1, tabla qHTS, chart de recuperación |
-| **PBPK Models** | Condición 1.15e+11, 4 casos sintéticos, bootstrap CI |
-| **Sobol Analysis** | Índices S1 con barras coloreadas por influencia |
-| **D-Optimal** | Chart logarítmico de tiempos óptimos de muestreo |
-| **Code** | Snippets copiables con botón "copiar" |
+- [Registro de evidencia de modelos diminutos / Tiny-model evidence ledger](research/modelos-diminutos/evidence-ledger.md)
+- [Bibliografía metodológica de modelos diminutos / Tiny-model related literature](research/modelos-diminutos/related-literature.md)
+- [Matriz de experimentos / Experiment matrix](research/modelos-diminutos/experiment-matrix.csv)
+- [Métricas de checkpoints RONINIA / RONINIA checkpoint metrics](research/modelos-diminutos/roninia-checkpoint-metrics.csv)
+- [Métricas por dominio RONINIA / RONINIA domain metrics](research/modelos-diminutos/roninia-domain-metrics.csv)
+- [Auditoría de workflows / Workflow audit](research/modelos-diminutos/workflow-audit.csv)
+- [Dashboard de identificabilidad / Identifiability dashboard](research/identificabilidad/dashboard-identificabilidad.html)
+- [Scripts de puntuación](scripts/)
 
-**Uso:**
+## 8. Política editorial / Editorial policy
 
-- **Local:** Abrir `dashboard.html` en cualquier navegador moderno.
-- **GitHub Pages:** Renombrar a `index.html` en la raíz del repo, activar Pages en Settings → Pages.
+1. **No se elevan borradores a resultados confirmados. / Drafts are not promoted to confirmed findings.**
+2. **Cada cifra debe enlazar con un run, commit, artefacto o dataset identificable. / Every numerical claim should point to an identifiable run, commit, artifact, or dataset.**
+3. **Los holdouts reutilizados se describen como corpus fijo o benchmark de regresión, no como holdouts vírgenes. / Reused holdouts are described as fixed evaluation corpora or regression benchmarks, not pristine holdouts.**
+4. **Las especificaciones no se describen como implementaciones. / Specifications are not described as implementations.**
+5. **Las traducciones deben conservar ecuaciones, tablas, referencias, hashes, limitaciones y estatus epistémico. / Translations must preserve equations, tables, references, hashes, limitations, and epistemic status.**
+6. **Cuando una traducción integral no esté terminada, se declara expresamente. / Incomplete full translations are labelled explicitly.**
 
----
+## 9. Estructura del repositorio / Repository structure
 
-## 📚 Preguntas Frecuentes / FAQ
-
-### ¿Qué es la no-identificabilidad?
-
-La no-identificabilidad ocurre cuando múltiples combinaciones de parámetros producen la misma salida. Si dos parámetros son estructuralmente no identificables, ninguna cantidad de datos puede distinguirlos.
-
-*Non-identifiability occurs when multiple combinations of parameters produce the same output. If two parameters are structurally non-identifiable, no amount of data can distinguish them.*
-
-### ¿Qué es la matriz de información de Fisher?
-
-La FIM cuantifica cuánta información contienen los datos sobre cada parámetro. Su inversa es la cota inferior de Cramér-Rao. Una FIM singular indica no-identificabilidad estructural. Una FIM mal condicionada indica no-identificabilidad práctica.
-
-*The FIM quantifies how much information the data contain about each parameter. Its inverse is the Cramér-Rao lower bound.*
-
-### ¿Qué es la degeneración K–n_H?
-
-En la ecuación de Hill, cuando la concentración Ω es mucho menor que la constante de semi-saturación K, los parámetros K y n_H se vuelven estructuralmente indistinguibles. Los datos solo pueden identificar la constante combinada A = K^(−n_H).
-
-*In the Hill equation, when concentration Ω is much smaller than half-saturation constant K, parameters K and n_H become structurally indistinguishable.*
-
-### ¿Qué es la degeneración Vt–Kp?
-
-En modelos PBPK, cuando solo se mide concentración plasmática, el volumen tisular Vt y el coeficiente de partición Kp son estructuralmente indistinguibles. Solo aparecen como el producto Vt · Kp.
-
-*In PBPK models, when only plasma concentration is measured, tissue volume Vt and partition coefficient Kp are structurally indistinguishable.*
-
-### ¿Qué es un parámetro fantasma?
-
-Un parámetro no identificable en un experimento dado, sin prior explícito ni justificación paramétrica documentada. Aparece en el modelo pero no en los datos.
-
-*A non-identifiable parameter without explicit prior or documented parametric justification. It appears in the model but not in the data.*
-
-### ¿Qué es la "inversión del orden"?
-
-La práctica estándar es: `datos → modelo → ajuste → diagnóstico`. La inversión propuesta es: `modelo → diagnóstico → datos → ajuste`. El diagnóstico debería preceder al ajuste por defecto.
-
-*Standard practice: `data → model → fit → diagnosis`. Proposed inversion: `model → diagnosis → data → fit`.*
-
-### ¿Qué es el PUSFRE y por qué el tratado lo menciona?
-
-El PUSFRE (Principio Universal de Sistemas Finitos con Recursos Escasos) es el corpus original del que surgieron los tres papers. Intentó modelar todo sistema finito con recursos escasos mediante una ecuación maestra. El corpus completo —19 documentos, 288 reducciones, 74 teoremas, un lenguaje de programación— vive en **otro repositorio** del mismo autor. Este repositorio es su contracción: menos ambición, más rigor.
-
-*PUSFRE is the original corpus from which the three papers emerged. The complete corpus lives in another repository. This repository is its contraction: less ambition, more rigor.*
-
-### ¿Qué es el anexo ejecutable del tratado?
-
-Es la Parte VII del tratado. Contiene los archivos completos para reproducir el experimento que convierte las tres deudas del método en resultados auditables. Incluye: pre-registro sobre 31 dominios, validación externa (con placeholder para logs reales), y comparación del modelo multiplicativo contra tres alternativas. Se reproduce con un solo comando: `bash reproduce_experiment.sh`.
-
-*It is Part VII of the treatise. It contains the complete files to reproduce the experiment. It runs with a single command: `bash reproduce_experiment.sh`.*
-
-### ¿Qué cierra el anexo ejecutable?
-
-Cierra la **Deuda 3** (comparación con alternativas) con validación genuina: el pipeline distingue estructuras, no confirma la que le metiste. Deja **abiertas** la Deuda 2 (requiere logs reales) y un modo `trend` en la Deuda 1.
-
-*Closes Debt 3 (comparison with alternatives) with genuine validation. Leaves Debt 2 and a `trend` mode in Debt 1 open.*
-
-### ¿Estos artículos están revisados por pares?
-
-No. Son autopublicados. El código está disponible para replicación. La revisión por pares está pendiente. El tercer artículo es *Perspective*. El cuarto es tratado de síntesis.
-
-*No. Self-published. Code available for replication. Peer review pending.*
-
-### ¿Cuál es la revista objetivo?
-
-Para Hill: *CPT*, *JPKPD*, o *PLOS ONE*.
-Para PBPK: *CPT*, *JPKPD*, o *Bulletin of Mathematical Biology*.
-Para epistemología: *EJPS*, *Philosophy of Science*, *Synthese*, o *Perspectives on Science*.
-Para el tratado: sin revista definida.
-
----
-
-## 📖 Cómo leer estos documentos / How to Read
-
-### Para farmacólogos y bioquímicos
-Empieza con el artículo de Hill. Secciones 1, 4, 5.
-
-### Para científicos farmacéuticos
-Empieza con el artículo de PBPK. Secciones 1, 4, 5.
-
-### Para bioestadísticos
-Empieza con la Sección 3 (Marco Teórico) de cualquiera de los dos papers técnicos.
-
-### Para filósofos de la ciencia
-Empieza con el tercer artículo. Secciones 1.2, 2, 7.
-
-### Para metodólogos e investigadores autodidactas
-Empieza con el cuarto documento. Narra el periplo y formaliza el método. La Parte VII contiene el anexo ejecutable.
-
-### Para desarrolladores
-Empieza con los apéndices de los papers técnicos. El anexo ejecutable está en la Parte VII del tratado. El dashboard está en `dashboard.html`.
-
-### Para críticos
-Empieza con la Sección 7 (Limitaciones) de los papers técnicos, y Sección 7 (Objeciones) del tercer paper. La Parte VIII del tratado documenta honestamente qué se cerró y qué queda abierto.
-
----
-
-## 🏗️ Estructura del Repositorio / Repository Structure
-
-```
-.
-├── README.md                                    # Este archivo / This file
-├── dashboard.html                               # Dashboard interactivo (Chart.js)
-├── No-Identificabilidad Estructural y Práctica
-│   en Modelos PBPK_ Diagnóstico mediante
-│   Matriz de Información de Fisher, Umbrales
-│   Calibrados .md                               # Artículo PBPK (ES + EN)
-├── No-Identificabilidad de los Parámetros
-│   de la Ecuación de Hill en el Régimen
-│   Sub-Saturado_ Análisis Estructural,
-│   Protocolo de Diagnóstico e Implicaciones
-│   Regulatorias.md                              # Artículo Hill (ES + EN)
-├── Epistemología de la Degeneración_
-│   Cuándo un Parámetro No Es una Medición.md    # Artículo epistemología (ES + EN)
-├── Tratado del Periplo y del Método.md          # Tratado + anexo ejecutable (Parte VII)
-├── LICENSE
-└── (opcional) code/, data/, tests/              # Extraído de los apéndices
-```
-
-**Nota sobre el corpus PUSFRE original:** El corpus PUSFRE que el tratado describe no está incluido en este repositorio. Vive en otro repositorio del mismo autor. Consúltalo por separado si quieres verificar las afirmaciones sobre él.
-
----
-
-## 📊 Reproducibilidad / Reproducibility
-
-### Reproducir el anexo ejecutable completo
-
-El tratado incluye los archivos embebidos en la Parte VII. Para reproducir el experimento:
-
-1. Copiar los 9 archivos embebidos a la estructura `ronin_annex/`.
-2. Ejecutar:
-
-```bash
-bash reproduce_experiment.sh
-```
-
-Esto crea la estructura, instala dependencias, ejecuta las tres deudas, y genera reportes en `reports/`.
-
-**Reportes generados:**
-
-- `reports/debt_1_diagnostic_report.json` — plumbing + perturbados
-- `reports/debt_2_system_1.json` — o `NO_DATA` si no hay logs
-- `reports/debt_3_report.json` — comparación de modelos
-
-### Artículo de Hill
-
-```bash
-pip install numpy scipy pandas scikit-learn
-python hill_degeneracy.py
-```
-
-Salida esperada: `regime = "non_identifiable"`, `condition = 1.15e+11`, `problematic = ['Vt', 'Kp']`.
-
-### Artículo de PBPK
-
-```bash
-pip install numpy scipy pandas requests
-python pbpk_identifiability.py
-```
-
-Salida esperada: `regime = "non_identifiable"`, `condition = 1.15e+11`, `problematic = ['Vt', 'Kp']`.
-
-### Dashboard
-
-Abrir `dashboard.html` en cualquier navegador moderno. Renombrar a `index.html` para GitHub Pages.
-
----
-
-## 📝 Citación / Citation
-
-```bibtex
-@article{ferrandez2026pbpk,
-  title={No-Identificabilidad Estructural y Práctica en Modelos PBPK},
-  author={Ferrandez Canalis, David},
-  journal={Agencia RONIN Preprints},
-  year={2026},
-  doi={10.1310/ronin-pbpk-identifiability-2026}
-}
-
-@article{ferrandez2026hill,
-  title={No-Identificabilidad de los Parámetros de la Ecuación de Hill en el Régimen Sub-Saturado},
-  author={Ferrandez Canalis, David},
-  journal={Agencia RONIN Preprints},
-  year={2026},
-  doi={10.1310/ronin-hill-degeneracy-2026}
-}
-
-@article{ferrandez2026epistemology,
-  title={Epistemología de la Degeneración: Cuándo un Parámetro No Es una Medición},
-  author={Ferrandez Canalis, David},
-  journal={Agencia RONIN Preprints},
-  year={2026},
-  doi={10.1310/ronin-degeneracy-epistemology-2026},
-  note={Perspective}
-}
-
-@article{ferrandez2026treatise,
-  title={Tratado del Periplo y del Método: De la Ambición Total a la Precisión Local},
-  author={Ferrandez Canalis, David},
-  journal={Agencia RONIN Preprints},
-  year={2026},
-  doi={10.1310/ronin-periplo-metodo-2026},
-  note={Tratado de síntesis con anexo ejecutable}
-}
+```text
+papers/
+  epistemologia/
+  linguistica-computacional/
+  identificabilidad/
+  testing/
+  modelos-diminutos/
+  transpilacion-cobol/
+research/
+  identificabilidad/
+  modelos-diminutos/
+scripts/
+README.md
 ```
 
 ---
 
-## 🤝 Contribuciones / Contributing
-
-Este es un repositorio autopublicado. El autor agradece:
-
-- Reportes de errores.
-- Correcciones matemáticas.
-- Sugerencias de extensiones.
-- Replicación independiente.
-- Feedback de expertos de dominio.
-- Objeciones al marco epistemológico.
-- **Ejecución del anexo ejecutable sobre datos reales.**
-- **Añadir el modo `trend` a la Deuda 1.**
-- **Proporcionar logs reales para la Deuda 2.**
-
-Para contribuir, abre un issue o envía un pull request.
-
----
-
-## 📜 Licencia / License
-
-CC BY-NC-SA 4.0 + Cláusula Comercial Ronin.
-
-Eres libre de:
-- **Compartir** — copiar y redistribuir el material.
-- **Adaptar** — remezclar, transformar y construir sobre el material.
-
-Bajo los términos de:
-- **Atribución**, **NoComercial**, **CompartirIgual**.
-
-Para uso comercial, contacta con el autor.
-
----
-
-## 🔗 Recursos Relacionados / Related Resources
-
-### Identificabilidad estructural y práctica
-- **Godfrey & DiStefano (1987):** Identifiability of model parameters.
-- **Ljung (1999):** *System Identification: Theory for the User*.
-- **Walter & Pronzato (1997):** *Identification of Parametric Models*.
-- **Raue et al. (2009):** Profile likelihood. *Bioinformatics*.
-- **Villaverde et al. (2019):** STRIKE-GOLDD. *Complexity*.
-
-### Aplicaciones
-- **Weiss (1997):** The Hill equation revisited.
-- **Goutelle et al. (2008):** The Hill equation: a review.
-- **Bonate (2011):** *Pharmacokinetic-Pharmacodynamic Modeling*.
-- **Brown et al. (2022):** Practical non-identifiability in PBPK.
-- **Kechagia et al. (2025):** Model identifiability in PBPK.
-- **Lavezzi et al. (2025):** Identifiability in mPBPK-TMDD.
-
-### Filosofía y metodología
-- **Frigg (2010):** Models and fiction. *Synthese*.
-- **Gelman (2013):** Bayesian inference. *The American Statistician*.
-- **Parker (2020):** Model evaluation. *Philosophy of Science*.
-- **Lakatos (1970):** Falsification and research programmes.
-
-### Herramientas
-- **SALib:** [GitHub](https://github.com/SALib/SALib)
-- **PK-DB:** [pk-db.com](https://pk-db.com)
-- **CvTdb:** [Figshare](https://doi.org/10.23645/epacomptox.29610452)
-- **StructuralIdentifiability.jl:** [GitHub](https://github.com/SciML/StructuralIdentifiability.jl)
-- **GenSSI 2.0:** [GitHub](https://github.com/genssi-developer/GenSSI)
-
-### Corpus PUSFRE original
-Vive en otro repositorio del mismo autor. Consúltalo por separado.
-
----
-
-## 👤 Autor / Author
-
-**David Ferrandez Canalis**
-Agencia RONIN, Sabadell, España.
-
-Investigador autodidacta. Sin afiliación institucional. Sin financiación externa. El trabajo se hizo con pocos recursos: un móvil, paciencia, y la convicción de que la matemática de frontera no necesita un clúster para ser cierta.
-
-*Self-taught researcher. No institutional affiliation. No external funding. The work was done with few resources: a phone, patience, and the conviction that frontier mathematics does not require a cluster to be true.*
-
----
-
-## 🕐 Última Actualización / Last Updated
-
-14 de noviembre de 2026 / November 14, 2026.
-
----
-
-
----
-
-## 🧠 Nueva línea de investigación: modelos de lenguaje pequeños / New research track: tiny language models
-
-Este repositorio incorpora una segunda línea de trabajo empírico dedicada al entrenamiento y evaluación de modelos de lenguaje pequeños bajo restricciones de datos, cómputo y reproducibilidad. La documentación reúne cinco manuscritos de trabajo, un libro mayor de evidencias y artefactos de evaluación reproducibles.
-
-1. **[The Loss–Behavior Gap in Tiny Language Models](docs/tiny-models/01-loss-behavior-gap.md)** — separa pérdida de entrenamiento y comportamiento observable.
-2. **[Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints](docs/tiny-models/02-longitudinal-behavior.md)** — sigue cambios de terminación, diversidad, longitud y respuestas vacías entre checkpoints.
-3. **[CPU-Constrained Training of Small Language Models](docs/tiny-models/03-cpu-constrained-training.md)** — documenta rendimiento y costes de entrenamiento en CPU.
-4. **[Checkpoint Lineage and Failure-Tolerant Experimentation](docs/tiny-models/04-checkpoint-lineage.md)** — reconstruye linaje, recuperación y fallos parciales de workflows.
-5. **[Corpus Scale Is Not Learning](docs/tiny-models/05-heretic-corpus-and-learning.md)** — examina exposición a datos, composición del corpus y resultados negativos de holdout.
-
-**Índice y estado de la evidencia:** [Tiny-models research dossier](docs/tiny-models/README.md) · [Evidence ledger](docs/tiny-models/evidence-ledger.md) · [Experiment matrix](docs/tiny-models/experiment-matrix.csv) · [Workflow audit](docs/tiny-models/workflow-audit.csv) · [Related literature](docs/tiny-models/related-literature.md).
-
-**Nota de alcance:** son manuscritos en desarrollo, no artículos revisados por pares. Las cifras descriptivas no equivalen a exactitud, capacidad general ni ausencia de contaminación. Las limitaciones y verificaciones pendientes se mantienen explícitas en cada documento.
-
-*This repository now includes a second empirical research track on small language models trained and evaluated under data, compute, and reproducibility constraints. The five manuscripts remain works in progress, not peer-reviewed publications.*
-
+**Nota de alcance / Scope note:** Esta reorganización conserva el contenido fuente y su evidencia; no reescribe retrospectivamente resultados ni elimina manuscritos por no estar todavía traducidos. Las versiones completas en ambos idiomas se irán incorporando como archivos paralelos, sin sustituir ni degradar los originales.

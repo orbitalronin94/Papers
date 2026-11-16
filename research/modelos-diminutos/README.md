@@ -8,21 +8,21 @@ Five connected working manuscripts reconstruct a series of small-language-model 
 
 | Manuscript | Main question | Principal evidence | Current maturity |
 |---|---|---|---|
-| [01 — The Loss–Behavior Gap](01-loss-behavior-gap.md) | Does optimization loss predict useful generation behavior? | MINIRONIN termination results; RONINIA checkpoint holdouts | Exploratory; raw holdout audit required |
-| [02 — Longitudinal Behavioral Change](02-longitudinal-behavior.md) | How do observable behaviors change across checkpoints? | RONINIA 100k–330k; MINIRONIN 810k–910k | Descriptive series; comparability checks pending |
-| [03 — CPU-Constrained Training](03-cpu-constrained-training.md) | What governs throughput on low-cost CPU runners? | RONIN-IA thread comparison; MINIRONIN and HERETIC performance records | Preliminary benchmark; controlled reruns needed |
-| [04 — Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md) | How should partial success and artifact provenance be reported? | RONINIA and MINIRONIN post-training failures | Case-study evidence; five workflow paths audited |
-| [05 — Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Corpus gates verified; exact-match scorer source recovered; paired JSON and exposure audit pending |
+| [01 — The Loss–Behavior Gap](../../papers/modelos-diminutos/01-loss-behavior-gap.en.md) | Does optimization loss predict useful generation behavior? | MINIRONIN termination results; RONINIA checkpoint holdouts | Exploratory; raw holdout audit required |
+| [02 — Longitudinal Behavioral Change](../../papers/modelos-diminutos/02-longitudinal-behavior.en.md) | How do observable behaviors change across checkpoints? | RONINIA 100k–330k; MINIRONIN 810k–910k | Descriptive series; comparability checks pending |
+| [03 — CPU-Constrained Training](../../papers/modelos-diminutos/03-cpu-constrained-training.en.md) | What governs throughput on low-cost CPU runners? | RONIN-IA thread comparison; MINIRONIN and HERETIC performance records | Preliminary benchmark; controlled reruns needed |
+| [04 — Checkpoint Lineage and Failure-Tolerant Experimentation](../../papers/modelos-diminutos/04-checkpoint-lineage.en.md) | How should partial success and artifact provenance be reported? | RONINIA and MINIRONIN post-training failures | Case-study evidence; five workflow paths audited |
+| [05 — Corpus Scale Is Not Learning](../../papers/modelos-diminutos/05-heretic-corpus-and-learning.en.md) | What does corpus size tell us about actual learning? | HERETIC corpus manifest, token budget, 0/120 holdout | Corpus gates verified; exact-match scorer source recovered; paired JSON and exposure audit pending |
 
 The five papers are related, but each has a distinct contribution. Paper 1 concerns measurement validity; paper 2 treats checkpoints as a longitudinal series; paper 3 concerns compute economics; paper 4 concerns experimental provenance; paper 5 concerns data exposure and the interpretation of negative results.
 
 ## Manuscripts
 
-1. **[The Loss–Behavior Gap in Tiny Language Models](01-loss-behavior-gap.md)** — argues for reporting optimization metrics separately from externally measured generation outcomes. It examines cases where loss and visible behavior may diverge, without treating either as a proxy for general intelligence.
-2. **[Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints](02-longitudinal-behavior.md)** — tracks termination, empty outputs, cap hits, repetition, and response diversity across checkpoints. Its central methodological point is that a final checkpoint alone can conceal reversals and trade-offs.
-3. **[CPU-Constrained Training of Small Language Models](03-cpu-constrained-training.md)** — documents measured throughput and the practical costs of data preparation, training, checkpointing, and evaluation on hosted CPU infrastructure.
-4. **[Checkpoint Lineage and Failure-Tolerant Experimentation](04-checkpoint-lineage.md)** — separates successful optimization, valid checkpoint creation, artifact upload, provenance verification, and overall workflow status.
-5. **[Corpus Scale Is Not Learning](05-heretic-corpus-and-learning.md)** — reconstructs HERETIC-RONIN corpus composition and token exposure, and asks what a negative holdout can and cannot establish.
+1. **[The Loss–Behavior Gap in Tiny Language Models](../../papers/modelos-diminutos/01-loss-behavior-gap.en.md)** — argues for reporting optimization metrics separately from externally measured generation outcomes. It examines cases where loss and visible behavior may diverge, without treating either as a proxy for general intelligence.
+2. **[Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints](../../papers/modelos-diminutos/02-longitudinal-behavior.en.md)** — tracks termination, empty outputs, cap hits, repetition, and response diversity across checkpoints. Its central methodological point is that a final checkpoint alone can conceal reversals and trade-offs.
+3. **[CPU-Constrained Training of Small Language Models](../../papers/modelos-diminutos/03-cpu-constrained-training.en.md)** — documents measured throughput and the practical costs of data preparation, training, checkpointing, and evaluation on hosted CPU infrastructure.
+4. **[Checkpoint Lineage and Failure-Tolerant Experimentation](../../papers/modelos-diminutos/04-checkpoint-lineage.en.md)** — separates successful optimization, valid checkpoint creation, artifact upload, provenance verification, and overall workflow status.
+5. **[Corpus Scale Is Not Learning](../../papers/modelos-diminutos/05-heretic-corpus-and-learning.en.md)** — reconstructs HERETIC-RONIN corpus composition and token exposure, and asks what a negative holdout can and cannot establish.
 
 ## Current evidence snapshot
 
