@@ -47,7 +47,8 @@
 **EN.** A narrative account of the contraction of the PUSFRE programme, from universal ambition to local, auditable claims. It extracts a research method, states its unresolved obligations and strengths, and includes an executable annex. It does not reproduce or independently validate the original PUSFRE corpus.
 
 - [Manuscrito en castellano / Spanish manuscript](papers/epistemologia/03-tratado-del-periplo-y-del-metodo.es.md)
-- Estado lingüístico / Language status: original en castellano; traducción integral pendiente / Spanish original; full translation pending.
+- [English narrative edition](papers/epistemologia/03-treatise-on-the-periplus-and-the-method.en.md)
+- Estado lingüístico / Language status: narración y análisis completos en inglés; listados ejecutables y comentarios de código conservados en la fuente canónica / Narrative and analysis fully available in English; executable listings and code comments retained in the canonical source.
 
 ## 2. Lingüística computacional / Computational linguistics
 
