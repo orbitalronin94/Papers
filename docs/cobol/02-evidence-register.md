@@ -35,6 +35,10 @@ Los siguientes artefactos del run #43592015588 estaban disponibles y no expirado
 
 Los cuatro jobs de evaluación y el job `holdout-topography` aparecen completados con éxito en el registro de jobs. «Éxito» significa que el proceso de evaluación se ejecutó y produjo el informe; no significa que los 500 programas fueran traducidos correctamente.
 
+### Reconstrucción independiente realizada el 16-11-2026
+
+Se descargaron los cuatro artefactos JSON compactos y se agregaron localmente por ID. El resultado reproduce exactamente **500 filas, 500 IDs únicos, 500 hashes de fuente únicos, 263 estados `passed` y 237 `failed`**. Los cuatro informes declaran `sample_complete=true`, `archive_md5_verified=true` y el mismo MD5 esperado. En los 263 casos `passed`, los campos `stdout_match` y `returncode_match` son ambos `true`. Los aciertos por shard reconstruidos son 63, 55, 72 y 73. Esta comprobación valida la aritmética del score a partir de los JSON publicados; no constituye una repetición limpia del benchmark ni una auditoría independiente del compilador/oráculo.
+
 ## 3. No confundir estas cifras
 
 | Cifra | Qué representa | Cómo citarla |
@@ -89,11 +93,10 @@ La especificación `docs/experiments/PR2_FIXED_POINT_NUMERIC_SEMANTICS.md` exige
 
 ## 8. Pendiente antes de una versión de publicación
 
-1. Adjuntar o archivar localmente los cinco artefactos citados y verificar sus digests contra los ZIP descargados.
-2. Extraer los JSON por ID y reconstruir de forma independiente los 263 aciertos y el desglose de los cuatro shards.
-3. Reproducir la evaluación desde el SHA congelado en un entorno limpio, si el archivo externo y sus condiciones siguen disponibles.
-4. Añadir fixtures COBOL/Python mínimas y resultados GnuCOBOL para al menos una discrepancia real por cada familia semántica que el artículo trate como ejemplo.
-5. Añadir una tabla de cobertura que separe implementado, parcialmente implementado, rechazado y no probado para las cláusulas numéricas y de control de flujo.
-6. Revisar las referencias bibliográficas contra los textos completos y completar DOI/páginas cuando proceda.
+1. **Completado parcialmente:** descargar los cuatro JSON compactos, verificar la identidad de los artefactos ZIP y reconstruir 500/500, 263 aciertos y los cuatro shards. Los digests de GitHub quedan registrados arriba.
+2. Reproducir la evaluación desde el SHA congelado en un entorno limpio, si el archivo externo y sus condiciones siguen disponibles; la agregación local no sustituye esa repetición.
+3. Añadir fixtures COBOL/Python mínimas y resultados GnuCOBOL para al menos una discrepancia real por cada familia semántica que el artículo trate como ejemplo.
+4. Añadir una tabla de cobertura que separe implementado, parcialmente implementado, rechazado y no probado para las cláusulas numéricas y de control de flujo.
+5. Revisar las referencias bibliográficas contra los textos completos y completar DOI/páginas cuando proceda.
 
 Hasta completar esos pasos, el manuscrito debe conservar el rótulo **working paper / estudio de caso en desarrollo**.
