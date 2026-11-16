@@ -48,7 +48,7 @@
 
 - [Manuscrito en castellano / Spanish manuscript](papers/epistemologia/03-tratado-del-periplo-y-del-metodo.es.md)
 - [English narrative edition](papers/epistemologia/03-treatise-on-the-periplus-and-the-method.en.md)
-- Estado lingüístico / Language status: narración y análisis completos en inglés; listados ejecutables y comentarios de código conservados en la fuente canónica / Narrative and analysis fully available in English; executable listings and code comments retained in the canonical source.
+- Estado lingüístico / Language status: edición narrativa completa en inglés; listados ejecutables reproducidos literalmente para preservar reproducibilidad; comentarios y mensajes de runtime siguen en castellano / Complete English narrative edition; executable listings reproduced verbatim for reproducibility; code comments and runtime messages remain in Spanish.
 
 ## 2. Lingüística computacional / Computational linguistics
 
