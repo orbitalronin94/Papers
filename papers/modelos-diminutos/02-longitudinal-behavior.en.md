@@ -24,7 +24,7 @@ This study examines how observable generation properties vary across checkpoints
 | 250,000 | 2 | 45 | 96 | 23.13 | 0.274788 |
 | 330,000 | 1 | 21 | 99 | 19.88 | 0.323478 |
 
-The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. Workflow-step and artifact metadata are also catalogued in `workflow-audit.csv`. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified. Per-domain counts and metrics are published in `roninia-domain-metrics.csv`.
+The five rows are recomputed from the raw JSON inside the official ZIP artifacts; the archive SHA-256 values were checked against GitHub's artifact API. Workflow-step and artifact metadata are also catalogued in `../../research/modelos-diminutos/workflow-audit.csv`. All five workflow revisions use the same prompt-set hash, tokenizer hash, inference-script blob, seed, greedy decoding, two threads, 32-token/128-byte limits, and disabled KV cache/RAG. “Distinct response” means exact textual uniqueness, without semantic deduplication. The common prompt file's absence from each training corpus remains to be verified. Per-domain counts and metrics are published in `../../research/modelos-diminutos/roninia-domain-metrics.csv`.
 
 The 205k and 250k evaluations also yielded preliminary adjacent-bigram repetition estimates of 0.96 and 1.83 per response respectively. The denominator and implementation require verification.
 
@@ -67,7 +67,7 @@ A higher unique-output rate is not necessarily better; it may reflect instabilit
 - Document failed and missing evaluations.
 
 ### 8. Planned artifacts
-The raw-JSON metric table is available in `roninia-checkpoint-metrics.csv`; the 65-row per-domain table is `roninia-domain-metrics.csv`; the reproducible scorer is `scripts/score_roninia_holdouts.py`. Remaining artifacts: `checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
+The raw-JSON metric table is available in `../../research/modelos-diminutos/roninia-checkpoint-metrics.csv`; the 65-row per-domain table is `roninia-domain-metrics.csv`; the reproducible scorer is `../../scripts/score_roninia_holdouts.py`. Remaining artifacts: `checkpoint_panel.csv`, `prompt_level_transitions.csv`, `metrics_definition.md`, `plot_longitudinal_metrics.py`, and immutable artifact manifest.
 
 ### References to add
 Methodological anchors: [HELM](https://arxiv.org/abs/2211.09110) for scenario/metric coverage; [HELMET](https://arxiv.org/abs/2410.02694) for benchmark coverage and metric reliability; [Li et al. (2024)](https://aclanthology.org/2024.findings-emnlp.30/) for contamination auditing. The project holdouts are much smaller and narrower than these benchmark suites. Cite exact repository runs and artifacts as primary evidence.
