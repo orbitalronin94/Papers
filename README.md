@@ -121,7 +121,8 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 **EN.** Examines whether training loss predicts observable generation behavior, contrasting optimization traces with termination, truncation, repetition, and diversity in external evaluations.
 
 - [English manuscript](papers/modelos-diminutos/01-loss-behavior-gap.en.md)
-- Language status: English original; Spanish full translation pending.
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/01-loss-behavior-gap.es.md)
+- Language status: full English and Spanish versions available.
 
 ### 5.2 Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints
 
@@ -130,7 +131,8 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 **EN.** Treats checkpoints as a longitudinal series and describes non-monotonic changes in empty outputs, generation caps, and textual diversity. Descriptive differences are not presented as causal explanations.
 
 - [English manuscript](papers/modelos-diminutos/02-longitudinal-behavior.en.md)
-- Language status: English original; Spanish full translation pending.
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/02-longitudinal-behavior.es.md)
+- Language status: full English and Spanish versions available.
 
 ### 5.3 CPU-Constrained Training of Small Language Models
 
@@ -139,7 +141,8 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 **EN.** Documents preliminary CPU and CI-runner throughput comparisons, focusing on thread count, model size, and workflow design. Measurements are specific to the tested configurations.
 
 - [English manuscript](papers/modelos-diminutos/03-cpu-constrained-training.en.md)
-- Language status: English original; Spanish full translation pending.
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/03-cpu-constrained-training.es.md)
+- Language status: full English and Spanish versions available.
 
 ### 5.4 Checkpoint Lineage and Failure-Tolerant Experimentation
 
@@ -148,7 +151,8 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 **EN.** Separates completed training, valid checkpoints, lineage verification, workflow completion, and evaluation. Proposes a provenance model that avoids treating a failed workflow as automatic proof that no useful result was produced.
 
 - [English manuscript](papers/modelos-diminutos/04-checkpoint-lineage.en.md)
-- Language status: English original; Spanish full translation pending.
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/04-checkpoint-lineage.es.md)
+- Language status: full English and Spanish versions available.
 
 ### 5.5 Corpus Scale Is Not Learning
 
@@ -157,7 +161,8 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 **EN.** Studies the relationship between corpus composition, token exposure, training, and evaluation in HERETIC-RONIN. Interpretations remain provisional where raw JSON or manifests have not yet been audited.
 
 - [English manuscript](papers/modelos-diminutos/05-heretic-corpus-and-learning.en.md)
-- Language status: English original; Spanish full translation pending.
+- [Traducción castellana / Spanish translation](papers/modelos-diminutos/05-heretic-corpus-and-learning.es.md)
+- Language status: full English and Spanish versions available.
 
 ### 5.6 MINIRONIN enano: arquitectura integrada de tokenización, memoria documental y entrenamiento con evidencia
 
@@ -166,7 +171,8 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 **EN.** A technical design note proposing a separation between parametric capacity, external documentary memory, and a reversible tokenization/interface layer. BACKDOOR_BPE is explicitly defined as a frequent-byte-sequence table, not a complete BPE tokenizer; the proposal does not yet claim empirical gains.
 
 - [Manuscrito en castellano / Spanish manuscript](papers/modelos-diminutos/06-minironin-arquitectura-integrada.es.md)
-- Language status: Spanish original; full English translation pending.
+- [English translation](papers/modelos-diminutos/06-minironin-arquitectura-integrada.en.md)
+- Language status: full English and Spanish versions available.
 
 ## 6. Transpilación COBOL / COBOL transpilation
 
