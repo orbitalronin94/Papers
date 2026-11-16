@@ -180,3 +180,16 @@ Before submission or public claims of a result:
 ## 9. Interpretation principle
 
 The object of study is not merely a model checkpoint. It is the complete experimental chain: data, tokenizer, optimization, checkpoint lineage, inference, scoring, and artifact preservation. A result is only as interpretable as the weakest unverified link in that chain.
+
+### 5.1 Case-specific rule: RONINIA inference holdout
+
+A checksum-verified benchmark file is not, by itself, proof of train/evaluation separation. For the RONINIA series, the evaluation workflow verifies the SHA-256 of MINIRONIN/benchmarks/inference-holdout-v1.jsonl, while the training projection uses a separate generic source-path/metadata filter. That filter does not explicitly denylist the benchmark hash or prompt IDs, and its recognized split values do not include inference_only.
+
+Before assigning contamination-audit status to this series:
+- inspect the exact unified corpus artifact used by each training lineage, not merely the current source repository;
+- recover its source manifest and every included shard;
+- search all 100 questions and rubrics by exact bytes, normalized text, and declared near-duplicate methods;
+- inspect synthetic generators and authored training material for template/answer overlap;
+- record corpus and holdout hashes, scan code revision, thresholds, and reviewed candidate matches.
+
+Until this is complete, use “holdout file identity verified; holdout independence not established.” Do not state that contamination occurred unless a match is found and reviewed.
