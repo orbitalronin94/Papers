@@ -58,6 +58,6 @@ All denominators are 100. The rows are repeated evaluations of the same fixed pr
 
 ## Holdout-separation status
 
-The evaluation workflows verify the benchmark file SHA-256. That confirms the identity of the file evaluated, not its absence from training. The audited RONINIA training projection excludes selected path/metadata values but does not explicitly denylist the benchmark hash or prompt IDs; its exclusion vocabulary does not include `inference_only`. No contamination finding is asserted. Raw corpus and source-shard scans remain required before holdout independence can be claimed.
+The evaluation workflows verify the benchmark file SHA-256. That confirms the identity of the file evaluated, not its absence from training. The audited RONINIA token-cache preparation run 42890884432 applies scripts/prepare_corpus.py (blob `1e63690abd1be96a6974760dcb329234054ae510`) to the source corpus before tokenization. Its filter excludes selected path/metadata values but does not explicitly denylist the benchmark hash or prompt IDs; its exclusion vocabulary does not include `inference_only`. The later training continuation consumes this cache. No contamination finding is asserted. Raw corpus and source-shard scans remain required before holdout independence can be claimed.
 
 See [the evidence ledger](evidence-ledger.md), [the replication and audit protocol](replication-and-audit-protocol.md), and [the longitudinal manuscript](02-longitudinal-behavior.md).
