@@ -77,8 +77,8 @@
 
 **EN.** Develops a FIM-based diagnostic protocol with calibrated thresholds for physiologically based pharmacokinetic models. It distinguishes structural from practical identifiability and examines sensitivity, bootstrap, D-optimal design, and applied data. Existing English sections are partial and should not be mistaken for a complete translation.
 
-- [Manuscrito fuente con secciones en inglés / Source manuscript with English sections](papers/identificabilidad/02-pbpk-identificabilidad.mixed.md)
-- Estado lingüístico / Language status: texto mixto; completar traducción paralela / Mixed-language source; parallel translation required.
+- [Manuscrito fuente con edición inglesa completa del texto principal / Source manuscript with full English main-text edition](papers/identificabilidad/02-pbpk-identificabilidad.mixed.md)
+- Estado lingüístico / Language status: texto principal completo en ambos idiomas dentro del mismo archivo; revisar por separado la paridad de apéndices y código / Complete main text in both languages in one file; appendices and code parity tracked separately.
 
 ### 3.3 No-identificabilidad de los parámetros de la ecuación de Hill en régimen subsaturado
 
@@ -86,8 +86,8 @@
 
 **EN.** Analyses the degeneracy between the half-saturation constant and Hill coefficient when observations remain in the subsaturated regime. It includes an asymptotic derivation, Fisher information analysis, simulations, and reproducibility materials. The manuscript contains English appendices, but not a complete English version.
 
-- [Manuscrito fuente / Source manuscript](papers/identificabilidad/03-hill-subsaturado.es.md)
-- Estado lingüístico / Language status: principalmente castellano; traducción integral pendiente / Mainly Spanish; full translation pending.
+- [Manuscrito con edición inglesa completa del texto principal / Manuscript with full English main-text edition](papers/identificabilidad/03-hill-subsaturado.es.md)
+- Estado lingüístico / Language status: texto principal completo en ambos idiomas dentro del mismo archivo; revisar por separado la paridad de apéndices y código / Complete main text in both languages in one file; appendices and code parity tracked separately.
 
 ### 3.4 Protocolo de validación de identificabilidad estructural en 50 dominios
 
