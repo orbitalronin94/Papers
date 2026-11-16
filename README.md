@@ -542,3 +542,18 @@ Este repositorio incorpora una segunda línea de trabajo empírico dedicada al e
 
 *This repository now includes a second empirical research track on small language models trained and evaluated under data, compute, and reproducibility constraints. The five manuscripts remain works in progress, not peer-reviewed publications.*
 
+
+
+---
+
+## 🏛️ Nueva línea de investigación: preservación semántica en COBOL / New research track: semantic preservation in COBOL
+
+Esta línea estudia un problema distinto de la mera traducción de código: cómo preservar las decisiones, transformaciones y efectos observables que constituyen la lógica de negocio de un sistema COBOL al transpilarlo a Python. El manuscrito combina una perspectiva metodológica con un estudio de caso empírico en desarrollo sobre `orbitalronin94/cobol2py`.
+
+**[La semántica no es la sintaxis: preservación de la lógica de negocio en la transpilación de COBOL a Python](docs/cobol/01-semantic-preservation-cobol-to-python.md)** — distingue validez sintáctica, correspondencia estructural, coincidencia operacional observada y equivalencia semántica dentro de un dominio declarado. Propone evaluación diferencial contra GnuCOBOL, control de deriva del oráculo, análisis de regresiones y trazabilidad de reglas de negocio.
+
+**Estado de evidencia:** manuscrito v0.1, no revisado por pares. El documento registra el baseline histórico de 263/500 (52,6 %) documentado el 14 de noviembre de 2026, y advierte que la muestra fija se reutiliza como benchmark de regresión, no como holdout estadístico intacto. No se presenta esa cifra como equivalencia general ni como estado necesariamente vigente del traductor.
+
+**Material primario:** [repositorio cobol2py](https://github.com/orbitalronin94/cobol2py) · `docs/experiments/PR2_FIXED_POINT_NUMERIC_SEMANTICS.md` · `docs/EXTERNAL_BENCHMARK_FAILURE_ANALYSIS.md`.
+
+*This research track asks how to preserve the decisions, transformations, and observable effects that constitute a COBOL system's business logic when transpiling it to Python. The manuscript is a working Perspective supported by an ongoing empirical case study; it is not peer-reviewed and makes no claim of general semantic equivalence.*
