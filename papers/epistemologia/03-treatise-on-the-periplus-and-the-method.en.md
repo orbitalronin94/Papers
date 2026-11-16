@@ -1,4 +1,4 @@
- > **Language note:** This is the complete English narrative edition. Executable source listings, configuration files, and data schemas are retained verbatim in the canonical Spanish manuscript and linked by filename; code identifiers, comments, and runtime messages remain in Spanish intentionally to prevent code drift. The scientific claims, explanations, results, limitations, and closing sections are translated.
+> **Language note:** This is the complete English narrative edition. Executable source listings, configuration files, and data schemas are reproduced verbatim below to preserve reproducibility; code identifiers, comments, and runtime messages remain in Spanish intentionally to prevent code drift. The scientific claims, explanations, results, limitations, and closing sections are translated.
 
 # TREATISE ON THE PERIPLUS AND THE METHOD
 
