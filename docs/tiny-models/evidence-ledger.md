@@ -265,3 +265,18 @@ An Actions artifact API digest identifies the uploaded ZIP archive. A checkpoint
 The original chunk job log also prints the full `progress.json` summary: 500,102,144 parameters; 512,000 processed tokens; mean loss/token 2.2688384374; first/last 100-micro-step means 2.3491757298 and 2.1918858504; 0/120 before and after; 0/20 in each of the six domains; 17,105.5139746 seconds; checkpoint SHA-256 `c81edf6658ed208cf4848c831336d427df4464eb725d158fdf827b99910ba5a2`. The same log prints the global audit gate values: 256,305 documents audited, 68 near-duplicate pairs found, zero exact holdout-question matches, and `training_authorized=true`. These are log-verified values; the paired JSON and audit JSON remain unextracted from the 6GB artifact.
 
 Post-hoc canonical prompt-set SHA-256 (JSONL of `domain` and `question`, compact UTF-8 serialization): `5fe85ea2e921165743e4ef4b2000204ee62725930ed91d4343ee7d87aa0aa177`. This hash was computed from the recovered generator and was not recorded by the original workflow.
+
+
+## G. HERETIC-RONIN: source-level audit of the holdout gate
+
+A source audit of the exact training revision narrows the meaning of the successful holdout-isolation check:
+
+- Training workflow commit: `1acc15ed5ee14e1a485b84d86562216e7f1be8c9`.
+- Training wrapper: `scripts/heretic_train_accum40.py`, blob SHA `49539e577e9ef09372326c90d58202875eed4608`.
+- Imported evaluator and corpus loader: `scripts/heretic_train_real_corpus_250k.py`, blob SHA `5749d09a16a6c6c57523776ff9aff60e2742863a`.
+- Audit workflow run: [42362365327](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42362365327), source commit `c3129e18096acc54107c3389a7e1c3af7f772ebc).
+- Audit script blob at the training revision: `b5d2085f56083b3a92e06e9486d9bc2a00c95d12`.
+
+The audit normalizes case and whitespace in corpus text and searches for each generated holdout question (at least 24 characters) as a substring. It does not test reference answers, paraphrases, prompt-template variants, or near-duplicate similarity between holdout items and training documents. The script's SimHash pass finds near-duplicate pairs within the training corpus only. Therefore the workflow gate supports the narrow statement “zero exact normalized question-substring matches found under the implemented audit”; it does not establish comprehensive holdout independence.
+
+The evaluation artifact is artifact ID `13578607392`, size 6,001,746,291 bytes, platform digest `9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468`. Its workflow upload includes checkpoint, progress, paired before/after holdout JSON, and chunk report. The multi-gigabyte archive has not yet been extracted for independent row-level recomputation.
