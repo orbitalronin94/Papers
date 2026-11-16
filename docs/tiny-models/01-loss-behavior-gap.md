@@ -93,3 +93,16 @@ A later recovery sequence reached 330k by recovering the latest valid checkpoint
 The RONIN-IA 10× expansion case provides a different kind of negative result: the 64-question MMLU-Pro screening score remained 5/64 before and after 500 steps. The workflow's own status was SCREENING_ONLY and G0 FAIL, with automatic promotion disabled. This does not show that expansion is ineffective in general. It shows that this particular short continuation did not improve this small screening score, under the recorded experiment design.
 
 The broader lesson is methodological: loss, output-shape metrics, screening accuracy, and workflow completion are separate observables. They should be reported side by side, not substituted for one another.
+
+### 3.6 RONINIA holdout isolation: source-level limitation
+
+A source-level inspection of the training and evaluation code found an unresolved contamination-control gap. The official inference set is downloaded from orbitalronin94/MINIRONIN/benchmarks/inference-holdout-v1.jsonl and its SHA-256 is checked by the evaluation workflow. The training workflow, however, imports a unified MINIRONIN corpus artifact and applies scripts/prepare_corpus.py. That filter excludes records when their source path matches a list of evaluation-like directory names or when selected metadata fields equal values such as test, eval, benchmark, validation, or holdout. It does not explicitly compare record IDs or content against the official inference file, and the value inference_only is not in the filter's exclusion set.
+
+This does not establish that any holdout item was present in the training corpus. It establishes that the visible source code does not, by itself, prove its absence. The unified corpus artifact must be inspected and the 100 questions and rubrics searched against it, its source shards, and the synthetic generators before the series can be described as contamination-audited. Until then, holdout independence remains unverified and the results are descriptive observations on a fixed prompt set, not an independently validated benchmark result.
+
+The relevant source revisions and run identities are:
+- RONINIA training run [43098824973](https://github.com/orbitalronin94/RONINIA/actions/runs/43098824973), using the 90k→100k continuation workflow.
+- Source corpus run [42523463620](https://github.com/orbitalronin94/MINIRONIN/actions/runs/42523463620), artifact ID 13633839535, 776,739,403 bytes, archive digest sha256:e02fa1240a0457310cacf1406f641c720942a41abc48d83f3e4c730506b691fc.
+- Training projection source: RONINIA/scripts/prepare_corpus.py at the audited main revision; benchmark source: MINIRONIN/benchmarks/inference-holdout-v1.jsonl.
+
+A further instrumentation distinction matters: the evaluator checks EOS before appending the next token, and checks the 128-byte ceiling before appending a token that would exceed it. Therefore an output containing exactly 32 appended token IDs has exhausted the 32-iteration token loop; shorter outputs may have stopped on EOS or on the byte ceiling. Since the JSON does not record a stop-reason field, EOS counts cannot be recovered from these output lengths.
