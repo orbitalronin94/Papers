@@ -1,6 +1,8 @@
-```markdown
 # Corpus RONIN — Artículos sobre No-Identificabilidad y Tratado del Método
 # RONIN Corpus — Papers on Non-Identifiability and Treatise on Method
+
+> **Research repository / Repositorio de investigación.** Technical papers and working manuscripts on structural and practical non-identifiability, mathematical modelling, epistemology, falsifiable computational linguistics, and empirical research on small language models. / Artículos y manuscritos de trabajo sobre no-identificabilidad estructural y práctica, modelización matemática, epistemología, lingüística computacional falsable e investigación empírica de modelos de lenguaje pequeños.
+
 
 **Autor / Author:** David Ferrandez Canalis — Agencia RONIN
 **Fecha / Date:** Septiembre 2026 / September 2026
@@ -540,4 +542,3 @@ Este repositorio incorpora una segunda línea de trabajo empírico dedicada al e
 
 *This repository now includes a second empirical research track on small language models trained and evaluated under data, compute, and reproducibility constraints. The five manuscripts remain works in progress, not peer-reviewed publications.*
 
-```
