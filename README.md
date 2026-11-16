@@ -80,8 +80,9 @@
 
 **EN.** Develops a FIM-based diagnostic protocol with calibrated thresholds for physiologically based pharmacokinetic models. It distinguishes structural from practical identifiability and examines sensitivity, bootstrap, D-optimal design, and applied data. Existing English sections are partial and should not be mistaken for a complete translation.
 
-- [Manuscrito fuente / Source manuscript](papers/identificabilidad/02-pbpk-identificabilidad.mixed.md)
-- Estado lingüístico / Language status: original principalmente en castellano, con materiales parciales en inglés; traducción integral pendiente / Primarily Spanish source with partial English material; full translation pending.
+- [Manuscrito fuente y apéndices canónicos / Source manuscript and canonical appendices](papers/identificabilidad/02-pbpk-identificabilidad.mixed.md)
+- [English narrative edition](papers/identificabilidad/02-structural-practical-non-identifiability-pbpk.en.md)
+- Estado lingüístico / Language status: texto científico principal completo en inglés; implementaciones y apéndices técnicos conservados en la fuente canónica / Main scientific text fully available in English; implementations and technical appendices retained in the canonical source.
 
 ### 3.3 No-identificabilidad de los parámetros de la ecuación de Hill en régimen subsaturado
 
