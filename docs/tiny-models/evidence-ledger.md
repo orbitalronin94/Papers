@@ -280,3 +280,18 @@ A source audit of the exact training revision narrows the meaning of the success
 The audit normalizes case and whitespace in corpus text and searches for each generated holdout question (at least 24 characters) as a substring. It does not test reference answers, paraphrases, prompt-template variants, or near-duplicate similarity between holdout items and training documents. The script's SimHash pass finds near-duplicate pairs within the training corpus only. Therefore the workflow gate supports the narrow statement “zero exact normalized question-substring matches found under the implemented audit”; it does not establish comprehensive holdout independence.
 
 The evaluation artifact is artifact ID `13578607392`, size 6,001,746,291 bytes, platform digest `9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468`. Its workflow upload includes checkpoint, progress, paired before/after holdout JSON, and chunk report. The multi-gigabyte archive has not yet been extracted for independent row-level recomputation.
+
+## H. RONINIA: source-level audit of holdout separation
+
+The official 100-question inference set is downloaded from orbitalronin94/MINIRONIN/benchmarks/inference-holdout-v1.jsonl; each evaluation workflow verifies its SHA-256 (3cd8c1eb3142ebf9c6cc17d2e19353be3472d61ac7b7cfb6de0cbb233cf4a535). This verifies which file was evaluated, not whether its contents were absent from training.
+
+The 90k→100k RONINIA training run is [43098824973](https://github.com/orbitalronin94/RONINIA/actions/runs/43098824973). Its imported source corpus is MINIRONIN run [42523463620](https://github.com/orbitalronin94/MINIRONIN/actions/runs/42523463620), artifact ID 13633839535, size 776,739,403 bytes, platform digest sha256:e02fa1240a0457310cacf1406f641c720942a41abc48d83f3e4c730506b691fc.
+
+Source inspection of RONINIA/scripts/prepare_corpus.py found that its is_eval predicate excludes records based on selected source-path patterns or metadata values in test, tests, eval, evaluation, benchmark, benchmarks, validation, valid, dev, and holdout. It does not compare the official holdout's content hash or IDs. The label inference_only is not in that exclusion set. Consequently, if an evaluation record with that label were present in the imported unified corpus, this predicate would not exclude it on the label alone. This is a source-level weakness in the proof of separation, not evidence that contamination actually occurred. The source corpus archive and all contributing shards still require exact, normalized, near-duplicate, rubric, and generator-template scans.
+
+The RONINIA holdout evaluator (scripts/checkpoint_holdout.py) checks EOS before appending the predicted token, then checks whether appending the token would exceed max_new_bytes=128, and only then appends it. It stores generated_token_ids and decoded answers but no termination enum. Therefore:
+- exactly 32 appended token IDs means the 32-iteration token loop was exhausted;
+- fewer than 32 tokens can reflect EOS or the byte ceiling;
+- EOS emissions cannot be counted from the stored JSON.
+
+This narrows the meaning of the existing metric: token_limit_hits_32 is a count of outputs with exactly 32 appended IDs, not a general stop-reason metric. EOS remains unavailable. The five-point longitudinal series should remain marked **holdout independence unverified** until raw corpus scanning is completed.
