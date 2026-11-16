@@ -1,3 +1,5 @@
+> **Translation status: INCOMPLETE WORKING DRAFT.** This file currently translates the prologue and Parts I–V only. The executable annex and closing sections have not yet been translated. Do not cite or treat this file as a complete English edition.
+
 # TREATISE ON THE PERIPLUS AND THE METHOD
 
 **From total ambition to local precision: genealogy, contraction, formalization, and execution of a self-taught research programme**
