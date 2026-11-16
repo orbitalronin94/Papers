@@ -1,6 +1,6 @@
 # Registro de evidencia — estudio de caso cobol2py
 
-**Manuscrito asociado:** [La semántica no es la sintaxis](01-semantic-preservation-cobol-to-python.md)  
+**Manuscrito asociado:** [La semántica no es la sintaxis](01-semantic-preservation-cobol-to-python.bilingual.md)  
 **Versión del registro:** 0.1 — 16 de noviembre de 2026  
 **Propósito:** separar afirmaciones respaldadas por artefactos, diagnósticos históricos, especificaciones de trabajo y cuestiones todavía abiertas. Este registro no convierte el benchmark en una prueba formal.
 
