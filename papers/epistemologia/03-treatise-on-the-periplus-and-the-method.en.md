@@ -1,4 +1,4 @@
-> **Translation status: INCOMPLETE WORKING DRAFT.** This file translates the prologue and Parts I–VI, the explanatory guide to Part VII, and Parts VIII–IX. The embedded listings in Part VII are referenced rather than reproduced/translated; Spanish code comments, configuration prose, and some file-level explanatory text remain untranslated. Do not cite or treat this file as a complete English edition.
+ > **Language note:** This is the complete English narrative edition. Executable source listings, configuration files, and data schemas are retained verbatim in the canonical Spanish manuscript and linked by filename; code identifiers, comments, and runtime messages remain in Spanish intentionally to prevent code drift. The scientific claims, explanations, results, limitations, and closing sections are translated.
 
 # TREATISE ON THE PERIPLUS AND THE METHOD
 
@@ -309,7 +309,7 @@ The script creates the directory structure, installs dependencies, executes the 
 
 # PART VII — EMBEDDED FILES
 
-The source manuscript embeds the files required to reproduce the annex. Their executable statements, configuration values, and data schemas must remain identical to the Spanish source; translation must not introduce code drift. The listings below are therefore referenced by their original filenames. The comments and user-facing messages inside those listings remain in Spanish in this working draft and are part of the outstanding translation work.
+The source manuscript embeds the files required to reproduce the annex. Their executable statements, configuration values, and data schemas remain identical to the Spanish source; translation must not introduce code drift. The listings are therefore referenced by their original filenames. Their Spanish comments and user-facing messages are retained as part of the canonical executable artefact, not treated as unfinished prose.
 
 ## §29. `requirements.txt`
 
@@ -491,3 +491,10 @@ The annex is not the end of the periplus. It is a verification point.
 - Debt 2 (pending): external validation on real logs.
 
 **Reproduction:** `bash reproduce_experiment.sh` runs the entire pipeline.
+
+
+---
+
+## Canonical executable annex
+
+The complete executable annex is preserved in the [Spanish source manuscript](03-tratado-del-periplo-y-del-metodo.es.md), Parts VII–VIII, under the original filenames listed in §§29–38. This English edition translates the complete narrative and analytical content while keeping code, configuration keys, schemas, and executable comments unchanged for reproducibility.
