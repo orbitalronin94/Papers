@@ -18,7 +18,7 @@
 
 The philosophy of science has devoted considerable effort to criteria for the **verification** and **refutation** of hypotheses (Popper, 1959; Lakatos, 1970; Mayo, 1996). Comparatively less attention has been paid to the criteria for **generating** falsifiable hypotheses, a subject addressed mainly by cognitive psychology (Newell & Simon, 1972; Klahr & Simon, 1999; Dunbar, 1995) and artificial intelligence (Langley et al., 1987; Darden, 1991).
 
-This paper proposes an operational protocol—Generative Epistemology (GE)—for producing falsifiable propositions at scale. The protocol has four components: (1) a **falsifiable-thesis structure** consisting of five parts (S, F, O, G, R); (2) a four-level **epistemic categorization system** (A/B/C/D); (3) a **preregistration protocol** with a confusion matrix for the mechanism; and (4) a **generative-formal cycle** between an exploratory layer (Layer 0) and a formal layer (Layer 1).
+This paper proposes an operational protocol—Generative Epistemology (GE)—for producing falsifiable propositions at scale. The protocol has four components: (1) a **falsifiable-thesis structure** consisting of five parts (E, O, F, P, R); (2) a four-level **epistemic categorization system** (A/B/C/D); (3) a **preregistration protocol** with a confusion matrix for the mechanism; and (4) a **generative-formal cycle** between an exploratory layer (Layer 0) and a formal layer (Layer 1).
 
 The protocol is **illustrated** through an **autoethnography** of the PUSFRE/RONIN corpus, a self-directed research programme that produced, in approximately two months, 28 operational falsifiable theses (Motor Cascabel), a preregistration covering 30 candidate domains, 17 of which have been verified, and one documented counterexample. The choice of autoethnography is justified by the nature of the object of study: independent research conducted outside an institution.
 
@@ -104,38 +104,38 @@ The asymmetry was identified by Reichenbach (1938) and discussed by Hoyningen-Hu
 
 ### 3.1 Definition
 
-**Definition 3.1 (Falsifiable thesis).** A falsifiable thesis is a tuple (S, F, O, G, R), where:
+**Definition 3.1 (Falsifiable thesis).** A falsifiable thesis is a tuple (E, O, F, P, R), where:
 
-- **S (Statement)** is a statement in natural language.
-- **F (Formal object)** is a computable operation F: M → D.
-- **O (Output signature)** is the formal representation of the expected result.
-- **G (Guess/prediction)** is a prediction G(F(M)) → B.
+- **E (Statement)** is a statement in natural language.
+- **O (Formal object)** is a computable operation F: M → D.
+- **F (Signature)** is the formal representation of the expected result.
+- **P (Prediction)** is a prediction G(F(M)) → B.
 - **R (Refuter)** is a transformation R: M → M such that, if F(R(M)) violates G, the thesis is considered refuted.
 
-*Translator's note:* The source uses the Spanish initials (E, O, F, P, R) for *enunciado, objeto formal, firma, predicción, refutador*. The English labels above are explanatory; the underlying five-part structure is unchanged.
+*Translator's note:* The source uses the Spanish initials (E, O, F, P, R) for *enunciado, objeto formal, firma, predicción, refutador*. The original initials (E, O, F, P, R) are retained alongside their English meanings.
 
 ### 3.2 Example 1: Motor Cascabel Thesis 3
 
-- **S.** The stylometric self-consistency of a corpus is measured as H(layer | axis), and this entropy is an invariant of the generator, not of the corpus.
-- **F.** Generate n texts with a fixed seed, calculate empirical H(C|E), and compare it with the corpus value.
-- **O.** ΔH = H_gen − H_corpus. The expected result is |ΔH| < ε.
-- **G.** If ΔH varies with the topic, invariance is refuted.
+- **E.** The stylometric self-consistency of a corpus is measured as H(layer | axis), and this entropy is an invariant of the generator, not of the corpus.
+- **O.** Generate n texts with a fixed seed, calculate empirical H(C|E), and compare it with the corpus value.
+- **F.** ΔH = H_gen − H_corpus. The expected result is |ΔH| < ε.
+- **P.** If ΔH varies with the topic, invariance is refuted.
 - **R.** Vary the thematic axis and recalculate ΔH.
 
 ### 3.3 Example 2: Motor Cascabel Thesis 7
 
-- **S.** Every text has an eight-dimensional signature, stable under paraphrase and unstable under a change of axis.
+- **E.** Every text has an eight-dimensional signature, stable under paraphrase and unstable under a change of axis.
 - **F.** Calculate f(x) = (ℓ̄, σ_ℓ, TTR, δ_p, ρ_c, ρ_l, ℓ̄_p, n_p) for each text.
 - **O.** Within/between ratio.
-- **G.** If the ratio is approximately 1, the thesis is refuted.
+- **P.** If the ratio is approximately 1, the thesis is refuted.
 - **R.** Apply syntactic paraphrase and measure the distance.
 
 ### 3.4 Example 3: Motor Cascabel Thesis 13 (partially refuted)
 
-- **S.** Under stylistic constraints, a text with gaps has a single valid reconstruction.
+- **E.** Under stylistic constraints, a text with gaps has a single valid reconstruction.
 - **F.** Enumeration filtered by validators over the gaps.
 - **O.** |R(x)| versus k.
-- **G.** If |R(x)| grows linearly with k, the thesis is refuted.
+- **P.** If |R(x)| grows linearly with k, the thesis is refuted.
 - **R.** Increase the number of gaps k and measure |R(x)|.
 
 **Epistemic category:** C. The corpus reports that this thesis was partially refuted in practice.
@@ -150,7 +150,7 @@ The asymmetry was identified by Reichenbach (1938) and discussed by Hoyningen-Hu
 
 ### 3.6 Acknowledgement: the structure is not new
 
-The falsifiable-thesis structure (S, F, O, G, R) is not new. It formalizes standard scientific practice. Any paper that specifies a hypothesis, method, expected result, and refutation criterion is applying something similar.
+The falsifiable-thesis structure (E, O, F, P, R) is not new. It formalizes standard scientific practice. Any paper that specifies a hypothesis, method, expected result, and refutation criterion is applying something similar.
 
 What is new is its **systematic application at scale**. Motor Cascabel contains 28 theses using this structure, each with its operation, signature, prediction, and refuter. The contribution lies not in the structure itself, but in the **density** with which it is applied.
 
@@ -393,7 +393,7 @@ This paper uses **autoethnography** to document an independent research programm
 
 ### 7.3 Applying the GE protocol
 
-**Falsifiable-thesis structure.** The corpus contains 28 operational theses (Motor Cascabel) using the five-part structure (S, F, O, G, R).
+**Falsifiable-thesis structure.** The corpus contains 28 operational theses (Motor Cascabel) using the five-part structure (E, O, F, P, R).
 
 **Epistemic categorization.** The corpus applies the A/B/C/D system across its documents. The Self-Review reclassifies more than 50 items.
 
@@ -567,7 +567,7 @@ The autoethnography of the PUSFRE/RONIN corpus illustrates the protocol's applic
 
 **What this paper has established (Category A):**
 
-1. The falsifiable-thesis structure (S, F, O, G, R).
+1. The falsifiable-thesis structure (E, O, F, P, R).
 2. The epistemic categorization system (A/B/C/D).
 3. The preregistration protocol with a confusion matrix.
 
