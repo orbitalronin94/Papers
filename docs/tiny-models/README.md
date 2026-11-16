@@ -16,6 +16,11 @@ Five connected working manuscripts reconstruct a series of small-language-model 
 
 The five papers are related, but each has a distinct contribution. Paper 1 concerns measurement validity; paper 2 treats checkpoints as a longitudinal series; paper 3 concerns compute economics; paper 4 concerns experimental provenance; paper 5 concerns data exposure and the interpretation of negative results.
 
+
+## Audit and replication protocol
+
+The [replication and raw-artifact audit protocol](replication-and-audit-protocol.md) converts the remaining evidence gaps into an ordered work queue. It defines evidence states (reported through independently replicated), immutable run manifests, archive verification, metric semantics, contamination checks, and manuscript-specific claim guardrails. It is a protocol proposal, not a claim that the pending audits have already been completed.
+
 ## Manuscripts
 
 1. **[The Loss–Behavior Gap in Tiny Language Models](01-loss-behavior-gap.md)** — argues for reporting optimization metrics separately from externally measured generation outcomes. It examines cases where loss and visible behavior may diverge, without treating either as a proxy for general intelligence.
