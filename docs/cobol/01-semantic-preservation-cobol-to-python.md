@@ -4,7 +4,7 @@
 **Autor:** David Ferrandez Canalis — Agencia RONIN  
 **Tipo:** Perspective con estudio de caso empírico en desarrollo  
 **Estado:** Manuscrito de trabajo; no revisado por pares  
-**Versión:** 0.1 — 16 de noviembre de 2026
+**Versión:** 0.2 — 16 de noviembre de 2026
 
 ---
 
@@ -14,7 +14,7 @@ La modernización de sistemas COBOL suele describirse como un problema de traduc
 
 Este manuscrito propone tratar la preservación semántica como el criterio rector de una migración COBOL→Python. Distingue cuatro niveles que a menudo se confunden: equivalencia sintáctica, equivalencia estructural, equivalencia de ejecución en una muestra y equivalencia semántica dentro de un dominio explícitamente definido. Examina las fuentes de divergencia más relevantes —aritmética decimal, cláusulas PIC, almacenamiento y movimientos de datos, control de flujo, estado mutable, archivos y entorno de ejecución— y propone un protocolo de evaluación diferencial frente a GnuCOBOL. El protocolo registra resultados exactos, códigos de retorno, errores, timeouts, identidad de fuentes y huellas del oráculo; además, exige que cada discrepancia pueda convertirse en un caso de regresión reproducible.
 
-El estudio de caso procede de `orbitalronin94/cobol2py`. La documentación del proyecto registra un baseline de 263 coincidencias exactas en una muestra fija de 500 programas (52,6 %) en una medición del 14 de noviembre de 2026. La muestra se utiliza repetidamente y, por tanto, no debe describirse como un holdout estadístico intacto. La cifra tampoco demuestra equivalencia general: es una medida operacional de una versión, una selección y un protocolo concretos. El valor científico del proyecto reside precisamente en conservar ese límite, analizar los fallos y evitar que una mejora local se confunda con una garantía universal.
+El estudio de caso procede de `orbitalronin94/cobol2py`. La documentación vigente registra una medición de `main` de **263/500 coincidencias exactas (52,6 %)** en el run [#43592015588](https://github.com/orbitalronin94/cobol2py/actions/runs/43592015588), sobre el commit `8ecabaaa7b50d01e9649814a989bbbac7491adef`. La ejecución verificó el archivo X-COBOL v2 (MD5 `cbd974caed72b0836777dc2305928ed3`), evaluó `skip=500, target=500` y completó cuatro shards de 125 casos (63, 55, 72 y 73 coincidencias): 500 IDs únicos, hashes de fuente y fingerprints del oráculo GnuCOBOL. La selección se reutiliza durante el desarrollo; es un **corpus fijo de evaluación**, no un holdout estadístico intacto. La política de promoción conserva además un baseline histórico distinto de 250/500 (50,0 %) procedente del run #41602383991; no debe confundirse con esta medición posterior de `main` ni con el récord histórico 257/500. Ninguna de estas cifras demuestra equivalencia general. El valor científico del proyecto reside precisamente en conservar ese límite, analizar los fallos y evitar que una mejora local se confunda con una garantía universal.
 
 La contribución propuesta no es un nuevo teorema de equivalencia ni una afirmación de que la transpilación actual preserve toda lógica de negocio. Es un marco empírico y metodológico para estudiar qué significa preservar comportamiento, cómo medirlo y cómo comunicar honestamente el alcance de la evidencia.
 
@@ -150,7 +150,7 @@ El proyecto `orbitalronin94/cobol2py` ofrece un caso de estudio en curso. Su doc
 
 El historial documentado también muestra por qué el control del oráculo importa. Variaciones de reloj, aleatoriedad o entorno produjeron fingerprints GnuCOBOL distintos entre ejecuciones. Una candidata puede parecer ganar o perder si se compara contra un oráculo recién generado en lugar de contra la referencia congelada. El proyecto incorporó comparaciones por ID, hashes de fuente y fingerprints de referencia para impedir que esa deriva se confunda con un cambio del traductor.
 
-La investigación de fallos ha abarcado familias concretas: aritmética de punto fijo, presentación posicional de terminal, índices de cláusulas `OCCURS`, operaciones de archivos, `UNSTRING`, `INSPECT`, movimientos de grupos y control de flujo. La documentación de experimentos numéricos especifica una adaptación gradual: definir escala, precisión, signo, truncamiento, redondeo y overflow; implementar operaciones decimales explícitas; migrar solo las rutas cubiertas por pruebas; y confrontar `MOVE`, `ADD`, `SUBTRACT`, `MULTIPLY`, `DIVIDE`, `COMPUTE` y salida editada con GnuCOBOL.
+La investigación y el plan de trabajo documentados abarcan aritmética de punto fijo, presentación posicional de terminal, índices de cláusulas `OCCURS`, operaciones de archivos, `UNSTRING`, `INSPECT`, movimientos de grupos y control de flujo. Conviene distinguir evidencia de diagnóstico y especificación de implementación: el protocolo del torneo del 3 de noviembre registra, para una candidata concreta, 250/500 coincidencias, 169 diferencias de salida/código, 39 errores de sintaxis Python, 38 timeouts de programas traducidos, tres salidas que excedieron el límite de captura y dos timeouts del traductor. Esos recuentos no atribuyen por sí solos cada fallo a un verbo COBOL. Por su parte, `PR2_FIXED_POINT_NUMERIC_SEMANTICS.md` define entregables y criterios para escala, precisión, signo, truncamiento, redondeo, overflow y operaciones decimales; es una especificación experimental, no evidencia de que toda esa semántica esté implementada.
 
 Estos datos no autorizan a afirmar que todas esas familias estén resueltas. Describen una agenda de ingeniería y evaluación, con resultados de cada candidata sujetos a su SHA y a la integridad de sus artefactos. El baseline de 52,6 % tampoco debe confundirse con el récord histórico del proyecto ni con otros rankings internos: son registros con protocolos y denominadores diferentes.
 
@@ -295,11 +295,11 @@ Report the complete denominator, exclusions, pipeline failures, and incomplete s
 
 ## 6. Case study: cobol2py
 
-The `orbitalronin94/cobol2py` project provides an ongoing case study. Its November 2026 documentation describes an external evaluation of 500 programs, exact comparison against frozen GnuCOBOL fingerprints, and four contiguous shards. The main snapshot documented on 14 November records 263/500 exact matches (52.6%). The fixed sample has been used across multiple iterations and is therefore treated here as a repeated regression benchmark, not a pristine holdout.
+The `orbitalronin94/cobol2py` project provides an ongoing case study. Its November 2026 documentation describes an external evaluation of 500 programs, exact comparison against frozen GnuCOBOL fingerprints, and four contiguous shards. The latest documented main measurement, run [#43592015588](https://github.com/orbitalronin94/cobol2py/actions/runs/43592015588) on SHA `8ecabaaa7b50d01e9649814a989bbbac7491adef`, records 263/500 exact matches (52.6%). The run verified the published X-COBOL v2 checksum, completed four 125-case shards (63, 55, 72, and 73 matches), and produced 500 unique IDs, source hashes, and GnuCOBOL oracle fingerprints. The selection is repeatedly reused and is therefore called a fixed evaluation corpus. The promotion policy still cites an earlier 250/500 baseline (run #41602383991); that is a historical gate reference, not the latest main measurement.
 
 The documented history also shows why oracle control matters. Clock, randomness, or environment variation produced different GnuCOBOL fingerprints between runs. A candidate can appear to gain or lose if it is compared with a freshly generated oracle instead of the frozen reference. The project introduced per-ID comparisons, source hashes, and reference fingerprints to prevent oracle drift from being mistaken for a transpiler change.
 
-Failure investigation has covered concrete families: fixed-point arithmetic, positional terminal display, indexes in `OCCURS` clauses, file operations, `UNSTRING`, `INSPECT`, group moves, and control flow. The numeric experiment specification calls for a staged adaptation: define scale, precision, sign, truncation, rounding, and overflow; implement explicit decimal operations; migrate only tested paths; and compare `MOVE`, `ADD`, `SUBTRACT`, `MULTIPLY`, `DIVIDE`, `COMPUTE`, and edited output against GnuCOBOL.
+The documented investigation and engineering plan cover fixed-point arithmetic, positional terminal display, indexes in `OCCURS` clauses, file operations, `UNSTRING`, `INSPECT`, group moves, and control flow. Diagnostic evidence must be distinguished from implementation status: the 3 November tournament protocol records, for one specific candidate, 250/500 matches, 169 output/return-code mismatches, 39 generated-Python syntax errors, 38 translated-program timeouts, three capture-limit failures, and two transpiler timeouts. These counts do not by themselves attribute each failure to a COBOL verb. Separately, `PR2_FIXED_POINT_NUMERIC_SEMANTICS.md` specifies deliverables and acceptance criteria for scale, precision, sign, truncation, rounding, overflow, and decimal operations; it is an experiment specification, not proof that all such semantics are implemented.
 
 These records do not establish that all such families have been solved. They describe an engineering and evaluation agenda, with each candidate's results tied to its SHA and artifact integrity. Nor should the 52.6% baseline be confused with the project's historical record or other internal rankings: those are distinct records with different protocols and denominators.
 
@@ -322,7 +322,9 @@ This would move reporting from “the program matches in N cases” to “these 
 
 Semantic preservation and validation of COBOL translations are established research problems. IBM has published work on automated validation of COBOL-to-Java transformations using symbolic execution and equivalent test generation, as well as experience testing industrial translations. IBM has also presented translation pipelines augmented with program analysis and language models.
 
-In October 2026, Dominik Blain published IRONPROOF, a COBOL-to-Python system that translates through an intermediate representation and uses Z3 to produce equivalence certificates or counterexamples within the modeled fragment. The paper carefully limits what its certificate establishes: equivalence relative to the intermediate representation, not necessarily equivalence to every behavior of a COBOL implementation. This distinction is central to the present manuscript.
+In October 2026, Dominik Blain introduced IRONPROOF, a COBOL-to-Python system that translates through an intermediate representation and uses Z3 to produce equivalence certificates or counterexamples within the modeled fragment. Its abstract reports 606 proofs among 782 programs entering the checking path, but also documents severe scope limits: the certificate establishes agreement with the IR's encoding, not necessarily with a COBOL implementation; two public business-application corpora were not modeled end to end, and an earlier GnuCOBOL confrontation found disagreements on some proved variables. These caveats make the boundary between a model-relative proof and implementation-level behavior especially important here.
+
+SEDCoT (Entin, Gu, Knapp, and Chen, 2026) takes a different route for COBOL-to-C: LLM-generated translations are coupled with symbolic execution, test generation, iterative repair, and delta debugging of counterexamples. IBM's ASE 2024 and FSE 2025 work similarly uses symbolic execution to generate tests and validate COBOL-to-Java transformations, while its ICSE 2026 work studies a hybrid static-analysis/LLM translation pipeline at enterprise scale. These efforts share the goal of semantic reliability but differ in target language, verification boundary, and evaluation setting.
 
 The proposed line is complementary, not a replacement: it emphasizes operational differential evaluation of an evolving transpiler, oracle freezing, exact comparison of observables, regression analysis, and traceability of rules. Differential tests are not claimed to replace formal verification. Nor is limited formal verification claimed to replace confrontation with the reference compiler and environment.
 
@@ -353,15 +355,19 @@ The methodological rule is straightforward:
 1. Blain, D. (2026). *IRONPROOF: COBOL-to-Python Transpilation with SMT-Based Equivalence Checking*. arXiv:2610.11073. https://arxiv.org/abs/2610.11073
 2. Kumar, A., Saha, D., Yasue, T., Ono, K., Krishnan, S., et al. (2024). *Automated Validation of COBOL to Java Transformation*. ASE 2024. IBM Research: https://research.ibm.com/publications/automated-validation-of-cobol-to-java-transformation
 3. Hans, S., Kumar, A., Yasue, T., Ono, K., Krishnan, S., et al. (2025). *Automated Testing of COBOL to Java Transformation*. FSE 2025. IBM Research: https://research.ibm.com/publications/automated-testing-of-cobol-to-java-transformation
-4. Chakravarthy, V., Choudhury, A. R., Garg, D., Kanvar, V., et al. (2026). *Enterprise-Scale COBOL-to-Java Translation: LLMs Augmented with Program Analysis*. ICSE 2026. IBM Research: https://research.ibm.com/publications/enterprise-scale-cobol-to-java-translation-llms-augmented-with-program-analysis
-5. GnuCOBOL project. *GnuCOBOL Programmer's Guide and compiler documentation*. https://gnucobol.sourceforge.io/
+4. Entin, P., Gu, W., Knapp, A., & Chen, C. (2026). *SEDCoT: Enhancing LLM-Based COBOL Code Translation via Symbolic Execution and Delta Debugging*. arXiv:2607.04092. https://arxiv.org/abs/2607.04092
+5. Chakravarthy, V., Choudhury, A. R., Garg, D., Kanvar, V., et al. (2026). *Enterprise-Scale COBOL-to-Java Translation: LLMs Augmented with Program Analysis*. ICSE 2026. IBM Research: https://research.ibm.com/publications/enterprise-scale-cobol-to-java-translation-llms-augmented-with-program-analysis
+6. GnuCOBOL project. *GnuCOBOL Programmer's Guide and compiler documentation*. https://gnucobol.sourceforge.io/
 
 ## Material primario del estudio de caso / Primary case-study materials
 
 - Repository: https://github.com/orbitalronin94/cobol2py
 - Numeric semantics experiment specification: `docs/experiments/PR2_FIXED_POINT_NUMERIC_SEMANTICS.md`
 - External benchmark failure analysis and November 2026 snapshots: `docs/EXTERNAL_BENCHMARK_FAILURE_ANALYSIS.md`
-- Evaluation policy and tournament specification: consult the repository's current documentation before reproducing any score.
+- Evaluation policy: `docs/HOLDOUT_ONLY_EVALUATION_POLICY.md`
+- Tournament protocol: `docs/EXPERIMENT_TOURNAMENT_2026-11.md`
+- Verified main measurement: [run #43592015588](https://github.com/orbitalronin94/cobol2py/actions/runs/43592015588), SHA `8ecabaaa7b50d01e9649814a989bbbac7491adef`.
+- Evidence register and claim-by-claim verification: `docs/cobol/02-evidence-register.md`.
 
 ## Nota de reproducibilidad
 
