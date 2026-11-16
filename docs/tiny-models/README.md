@@ -16,6 +16,11 @@ Five connected working manuscripts reconstruct a series of small-language-model 
 
 The five papers are related, but each has a distinct contribution. Paper 1 concerns measurement validity; paper 2 treats checkpoints as a longitudinal series; paper 3 concerns compute economics; paper 4 concerns experimental provenance; paper 5 concerns data exposure and the interpretation of negative results.
 
+
+## Audit and replication protocol
+
+The [replication and raw-artifact audit protocol](replication-and-audit-protocol.md) converts the remaining evidence gaps into an ordered work queue. It defines evidence states (reported through independently replicated), immutable run manifests, archive verification, metric semantics, contamination checks, and manuscript-specific claim guardrails. It is a protocol proposal, not a claim that the pending audits have already been completed.
+
 ## Manuscripts
 
 1. **[The Loss–Behavior Gap in Tiny Language Models](01-loss-behavior-gap.md)** — argues for reporting optimization metrics separately from externally measured generation outcomes. It examines cases where loss and visible behavior may diverge, without treating either as a proxy for general intelligence.
@@ -32,7 +37,7 @@ The following is a navigation-level summary of the extraction ledger, **not a fi
 
 Five official 100-response holdouts now provide a raw-artifact-backed descriptive series:
 
-| Cumulative checkpoint | Empty outputs | Reached generation cap | Distinct responses |
+| Cumulative checkpoint | Empty outputs | 32-token loop exhausted | Distinct responses |
 |---:|---:|---:|---:|
 | 100k | 1 | 22 | 100 |
 | 137.5k | 0 | 42 | 96 |
@@ -40,7 +45,7 @@ Five official 100-response holdouts now provide a raw-artifact-backed descriptiv
 | 250k | 2 | 45 | 96 |
 | 330k | 1 | 21 | 99 |
 
-The five ZIP artifacts were recovered and their archive SHA-256 values verified against GitHub's artifact API. The counts shown were recomputed from each raw JSON using one versioned script. A provenance audit of all five exact workflow revisions has verified the same 100-question prompt SHA-256, 8k tokenizer SHA-256, inference-script blob SHA, deterministic seed (20261110), greedy decoding, two CPU threads, 32-token/128-byte generation limits, and disabled KV cache/RAG. The 205k, 250k, and 330k workflows omit the limit flags but use the same script revision whose defaults match the earlier workflows. This establishes protocol consistency and supports the descriptive counts, but it does not establish answer correctness or freedom from training-data leakage. A response being distinct does not imply that it is correct, useful, or non-repetitive. The JSON does not record a stop reason or EOS event; exactly 32 generated token IDs is therefore reported as a token-limit hit, not as an EOS measurement.
+The five ZIP artifacts were recovered and their archive SHA-256 values verified against GitHub's artifact API. The counts shown were recomputed from each raw JSON using one versioned script. A provenance audit of all five exact workflow revisions has verified the same 100-question prompt SHA-256, 8k tokenizer SHA-256, inference-script blob SHA, deterministic seed (20261110), greedy decoding, two CPU threads, 32-token/128-byte generation limits, and disabled KV cache/RAG. The 205k, 250k, and 330k workflows omit the limit flags but use the same script revision whose defaults match the earlier workflows. This establishes protocol consistency and supports the descriptive counts, but it does not establish answer correctness or freedom from training-data leakage. A response being distinct does not imply that it is correct, useful, or non-repetitive. The JSON does not record a stop reason or EOS event; exactly 32 appended token IDs means the token loop was exhausted, while shorter outputs may have stopped on EOS or the byte ceiling. See the [metric dictionary and stop-semantics note](roninia-metrics-and-stop-semantics.md). Source inspection also found that the training filter does not explicitly denylist the benchmark hash/IDs and does not recognize the split label `inference_only`; holdout independence is therefore unverified pending raw corpus scans.
 
 The 250k training record reports 9,757,440 parameters, 920,277,537 processed tokens, validation loss 0.4032951621, and checkpoint SHA-256 `95d89f3030d3611c2dc5df26b83fc44b6c4ac3b924bc3a0862149952de4d3e38`. The run reached its target and produced artifacts, while a later lineage-verification stage failed. This is a key example for Paper 4: a post-training workflow error must not erase a recoverable checkpoint, nor should it be hidden.
 
@@ -61,6 +66,7 @@ One extracted training chunk contains 512,000 tokens across 50 optimizer steps (
 - **[Evidence ledger](evidence-ledger.md)** — source run links, extracted facts, hashes, caveats, and pending verification tasks.
 - **[Experiment matrix](experiment-matrix.csv)** — tabular snapshot with run/job identity, checkpoint and corpus metadata, plus holdout artifact and protocol provenance.
 - **[Recomputed RONINIA metrics](roninia-checkpoint-metrics.csv)** — five-checkpoint raw-JSON metrics, including archive and checkpoint hashes.
+- **[RONINIA metric dictionary](roninia-metrics-and-stop-semantics.md)** — operational definitions, generation-loop semantics, and the unresolved holdout-separation check.
 - **[Per-domain RONINIA metrics](roninia-domain-metrics.csv)** — 65 checkpoint-by-domain rows for empty outputs, token-limit hits, exact uniqueness, length, and latency.
 - **[Workflow and artifact audit](workflow-audit.csv)** — run/job status, step-level outcomes, commit identity, and retained artifact digests.
 - **[Related literature](related-literature.md)** — selected evaluation, contamination, scaling, and CPU-threading references with notes on their limits.

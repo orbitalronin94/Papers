@@ -123,3 +123,14 @@ The workflow run title is “HERETIC — 500M pilot (500 optimizer steps),” bu
 
 
 **Post-hoc prompt identity:** the recovered generator was independently re-executed and canonicalized as JSONL (`domain` and `question` only, UTF-8, compact separators, trailing newline per row). This yields SHA-256 `5fe85ea2e921165743e4ef4b2000204ee62725930ed91d4343ee7d87aa0aa177`. This is a post-hoc canonical hash, not a hash recorded by the original workflow. The full question-plus-reference-answer JSONL hash is `493f3f8955cd1807687c452188cda1a9f87b923c286693cfe3a5976313c31430`.
+
+
+### 2.2 What the holdout-isolation gate actually checks
+
+The exact workflow revision used for the 512k-token chunk is **.github/workflows/train-pilot-500-optimizer-steps.yml** at commit **1acc15ed5ee14e1a485b84d86562216e7f1be8c9**. It invokes **scripts/heretic_train_accum40.py**, which imports **build_corpus** and **evaluate** from **scripts/heretic_train_real_corpus_250k.py**. The latter file at that commit has blob SHA **5749d09a16a6c6c57523776ff9aff60e2742863a**; the accumulation wrapper has blob SHA **49539e577e9ef09372326c90d58202875eed4608**.
+
+The audit workflow supplied to the training job is run [42362365327](https://github.com/orbitalronin94/HERETIC-RONIN/actions/runs/42362365327), whose source revision is **c3129e18096acc54107c3389a7e1c3af7f772ebc**. Its audit script at the training workflow's source commit has blob SHA **b5d2085f56083b3a92e06e9486d9bc2a00c95d12**. Inspection of that source narrows the meaning of the successful isolation gate: it normalizes whitespace and case in corpus text, then checks whether each generated holdout **question** (length at least 24 characters) occurs as a substring. It does not test holdout reference answers, semantic or near-duplicate paraphrases of the questions, or prompt-template variants. The SimHash procedure in that script is used to find near-duplicate pairs **within the training corpus**, not between holdout items and training documents.
+
+This is useful evidence, but the safe conclusion is bounded: the audit found zero exact normalized question-substring matches under that implementation. It does not establish comprehensive holdout independence. The audit artifact and paired evaluation JSON still need inspection before the reported 0/120 is upgraded to an independently recomputed result.
+
+The training workflow's artifact API record identifies artifact **13578607392**, named **heretic-500m-accum40-micro-4600**, with a reported size of **6,001,746,291 bytes** and digest **9ff1ac4a96df57cd721291c47acec0889638be5a38ea4fc7335737031fe37468**. The workflow uploads the checkpoint, progress report, before/after holdout JSON, and chunk report together. The archive is therefore a multi-gigabyte training artifact, not a small evaluation-only bundle; its contents have not yet been extracted and independently inspected.

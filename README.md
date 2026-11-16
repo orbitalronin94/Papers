@@ -541,3 +541,18 @@ Este repositorio incorpora una segunda línea de trabajo empírico dedicada al e
 *This repository now includes a second empirical research track on small language models trained and evaluated under data, compute, and reproducibility constraints. The five manuscripts remain works in progress, not peer-reviewed publications.*
 
 ```
+
+---
+
+## Investigación sobre modelos de lenguaje pequeños / Tiny language-model research
+
+Además del corpus de no-identificabilidad, este repositorio mantiene un dossier experimental independiente sobre entrenamiento de modelos pequeños bajo recursos limitados. Reúne cinco manuscritos de trabajo sobre la brecha entre loss y comportamiento, evolución longitudinal entre checkpoints, entrenamiento en CPU, linaje de checkpoints y relación entre tamaño del corpus y aprendizaje.
+
+- **[Índice del programa de investigación](docs/tiny-models/README.md)** — mapa de los cinco manuscritos, resultados provisionales y artefactos reproducibles.
+- **[Libro de evidencias](docs/tiny-models/evidence-ledger.md)** — runs, jobs, hashes, artefactos, procedencia y límites de cada afirmación.
+- **[Protocolo de auditoría y replicación](docs/tiny-models/replication-and-audit-protocol.md)** — estados de evidencia, manifiestos, controles de contaminación y lista de trabajo.
+- **[Métricas y semántica de parada de RONINIA](docs/tiny-models/roninia-metrics-and-stop-semantics.md)** — definiciones operativas y límites de lo que permiten inferir los JSON.
+
+**Estado:** borradores exploratorios, no revisados por pares. Los resultados de MINIRONIN, RONIN-IA, HERETIC-RONIN y RONINIA se presentan con sus identificadores y limitaciones; no se atribuyen capacidades generales ni independencia de holdout sin la auditoría correspondiente.
+
+*Alongside the non-identifiability corpus, this repository contains a separate experimental dossier on resource-constrained small language models. It consists of five working manuscripts and a traceable evidence ledger. These are exploratory, non-peer-reviewed drafts; claims remain bounded by the available run logs, artifacts, and unresolved audits.*
