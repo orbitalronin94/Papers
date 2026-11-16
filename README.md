@@ -59,7 +59,8 @@
 **EN.** Presents MOTOR CASCABEL v0.1.0 as an experimental system that turns 28 claims about language and text generation into computable, refutable operations. Its contribution is the measurement and falsification protocol; claims must be interpreted within the manuscript’s stated corpus, implementation, and validation limits.
 
 - [Manuscrito en castellano / Spanish manuscript](papers/linguistica-computacional/01-veintiocho-tesis-linguistica-computacional.es.md)
-- Estado lingüístico / Language status: original en castellano; traducción integral pendiente / Spanish original; full translation pending.
+- [English main-text edition](papers/linguistica-computacional/01-towards-falsifiable-computational-linguistics-28-operational-theses.en.md)
+- Estado lingüístico / Language status: texto principal completo en ambos idiomas; apéndices A–E (arquitectura, glosario, código y protocolo de refutación) pendientes de traducción / Complete main text in both languages; Appendices A–E (architecture, glossary, code, and refutation protocol) remain to be translated.
 
 ## 3. Identificabilidad matemática y aplicada / Mathematical and applied identifiability
 
