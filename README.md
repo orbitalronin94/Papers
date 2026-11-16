@@ -28,7 +28,8 @@
 **EN.** Proposes an operational protocol for turning exploratory inquiry into falsifiable propositions. It combines a structured claim format, epistemic categories, pre-registration, and an iterative process between exploratory generation and formalization. The PUSFRE/RONIN programme is used as an autoethnographic case; external replication remains necessary.
 
 - [Manuscrito en castellano / Spanish manuscript](papers/epistemologia/01-epistemologia-generativa.es.md)
-- Estado lingüístico / Language status: original en castellano; traducción integral al inglés pendiente / Spanish original; full English translation pending.
+- [English translation](papers/epistemologia/01-epistemologia-generativa.en.md)
+- Estado lingüístico / Language status: versiones completas paralelas / Full parallel versions available.
 
 ### 1.2 Epistemología de la Degeneración: cuándo un parámetro no es una medición
 
