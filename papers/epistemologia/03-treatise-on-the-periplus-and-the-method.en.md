@@ -1,4 +1,4 @@
-> **Translation status: INCOMPLETE WORKING DRAFT.** This file currently translates the prologue and Parts I–V only. The executable annex and closing sections have not yet been translated. Do not cite or treat this file as a complete English edition.
+> **Translation status: INCOMPLETE WORKING DRAFT.** This file translates the prologue and Parts I–V, plus Parts VIII–IX (execution results and closing). Parts VI–VII, including the embedded executable files and their explanatory material, are not yet translated. Do not cite or treat this file as a complete English edition.
 
 # TREATISE ON THE PERIPLUS AND THE METHOD
 
