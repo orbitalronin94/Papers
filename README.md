@@ -90,8 +90,9 @@
 
 **EN.** Analyses the degeneracy between the half-saturation constant and Hill coefficient when observations remain in the subsaturated regime. It includes an asymptotic derivation, Fisher information analysis, simulations, and reproducibility materials. The manuscript contains English appendices, but not a complete English version.
 
-- [Manuscrito con edición inglesa completa del texto principal / Manuscript with full English main-text edition](papers/identificabilidad/03-hill-subsaturado.es.md)
-- Estado lingüístico / Language status: texto principal completo en ambos idiomas dentro del mismo archivo; revisar por separado la paridad de apéndices y código / Complete main text in both languages in one file; appendices and code parity tracked separately.
+- [Manuscrito fuente y apéndices canónicos / Source manuscript and canonical appendices](papers/identificabilidad/03-hill-subsaturado.es.md)
+- [English narrative edition](papers/identificabilidad/03-hill-equation-subsaturated-non-identifiability.en.md)
+- Estado lingüístico / Language status: texto científico completo en inglés; implementaciones y apéndices técnicos conservados en la fuente canónica / Scientific text fully available in English; implementations and technical appendices retained in the canonical source.
 
 ### 3.4 Protocolo de validación de identificabilidad estructural en 50 dominios
 
