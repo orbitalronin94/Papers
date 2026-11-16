@@ -37,7 +37,7 @@ Los cuatro jobs de evaluación y el job `holdout-topography` aparecen completado
 
 ### Reconstrucción independiente realizada el 16-11-2026
 
-Se descargaron los cuatro artefactos JSON compactos y se agregaron localmente por ID. El resultado reproduce exactamente **500 filas, 500 IDs únicos, 500 hashes de fuente únicos, 263 estados `passed` y 237 `failed`**. Los cuatro informes declaran `sample_complete=true`, `archive_md5_verified=true` y el mismo MD5 esperado. En los 263 casos `passed`, los campos `stdout_match` y `returncode_match` son ambos `true`. Los aciertos por shard reconstruidos son 63, 55, 72 y 73. Esta comprobación valida la aritmética del score a partir de los JSON publicados; no constituye una repetición limpia del benchmark ni una auditoría independiente del compilador/oráculo.
+Se descargaron los cuatro artefactos JSON compactos. Se calculó localmente el SHA-256 de cada ZIP y los cuatro digests coincidieron exactamente con los publicados por GitHub en la tabla anterior. Después se agregaron los JSON por ID. El resultado reproduce exactamente **500 filas, 500 IDs únicos, 500 hashes de fuente únicos, 263 estados `passed` y 237 `failed`**. Los cuatro informes declaran `sample_complete=true`, `archive_md5_verified=true` y el mismo MD5 esperado. En los 263 casos `passed`, los campos `stdout_match` y `returncode_match` son ambos `true`. Los aciertos por shard reconstruidos son 63, 55, 72 y 73. Esta comprobación valida la aritmética del score a partir de los JSON publicados; no constituye una repetición limpia del benchmark ni una auditoría independiente del compilador/oráculo.
 
 ## 3. No confundir estas cifras
 
