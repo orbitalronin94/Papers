@@ -370,6 +370,9 @@ The methodological rule is straightforward:
 - External benchmark failure analysis and November 2026 snapshots: `docs/EXTERNAL_BENCHMARK_FAILURE_ANALYSIS.md`
 - Evaluation policy: `docs/HOLDOUT_ONLY_EVALUATION_POLICY.md`
 - Tournament protocol: `docs/EXPERIMENT_TOURNAMENT_2026-11.md`
+- Semantic implementation-gap inventory (historical design baseline): `docs/SEVEN_HYPOTHESES_COVERAGE_EXPANSION.md`
+- External recovery priorities: `docs/EXTERNAL_BENCHMARK_RECOVERY_PLAN.md`
+- Sequential file-status experiment: `docs/experiments/file-status.md`
 - Verified main measurement: [run #43592015588](https://github.com/orbitalronin94/cobol2py/actions/runs/43592015588), SHA `8ecabaaa7b50d01e9649814a989bbbac7491adef`.
 - Evidence register and claim-by-claim verification: `docs/cobol/02-evidence-register.md`.
 
