@@ -263,6 +263,94 @@ The papers compare the CES-saturated model with MLP, Translog, and GSE. But they
 
 ---
 
+
+# PART VI — THE EXECUTABLE ANNEX
+
+## §26. The Executor's prologue
+
+The treatise ended with an admission: the method has been formalized, but not executed. The three debts have been declared, but not settled.
+
+This annex is the attempt at execution.
+
+It does not claim to settle those debts. It aims to turn them into auditable code, so that anyone—including the author—can run them, obtain results, and report the mechanism's confusion matrix.
+
+## §27. Annex architecture
+
+The annex is organized as follows:
+
+```text
+ronin_annex/
+├── requirements.txt
+├── reproduce_experiment.sh           # single reproduction script
+├── config/
+│   ├── pre_registration.yaml          # 31 pre-declared domains
+│   └── criteria.yaml                  # a priori criteria
+├── src/
+│   ├── debt_1_preregistration.py      # preregistration execution
+│   ├── debt_2_external_validation.py  # external validation
+│   ├── debt_3_model_comparison.py     # comparison with alternatives
+│   ├── generate_debt_3_data.py        # data generator for Debt 3
+│   └── pipeline.py                    # complete pipeline
+├── data/
+│   └── README.md                      # real-data instructions
+└── reports/
+    └── (generated outputs)
+```
+
+## §28. Reproducing the experiment
+
+To reproduce the complete experiment, run:
+
+```bash
+bash reproduce_experiment.sh
+```
+
+The script creates the directory structure, installs dependencies, executes the three debts, and reports the results.
+
+# PART VII — EMBEDDED FILES
+
+The source manuscript embeds the files required to reproduce the annex. Their executable statements, configuration values, and data schemas must remain identical to the Spanish source; translation must not introduce code drift. The listings below are therefore referenced by their original filenames. The comments and user-facing messages inside those listings remain in Spanish in this working draft and are part of the outstanding translation work.
+
+## §29. `requirements.txt`
+
+The dependency manifest specifies NumPy, SciPy, pandas, scikit-learn, and PyYAML, with minimum versions declared in the source listing.
+
+## §30. `reproduce_experiment.sh`
+
+The single reproduction script creates the directory structure, installs the declared dependencies, runs Debt 1 in full preregistration mode, attempts external validation for Debt 2, and compares five candidate structures for Debt 3: multiplicative, additive, weighted, minimum, and mixed. It writes the generated reports under `reports/`.
+
+## §31. `config/pre_registration.yaml`
+
+The preregistration file declares the RONIN structural-diagnosis protocol, its signature date (2026-09-14), the 31 candidate domains, and the rule used to calculate the confusion matrix. Marginal expected regimes are reported separately.
+
+## §32. `config/criteria.yaml`
+
+This file contains the a priori decision criteria used by the annex. The criteria are configuration, not post-hoc interpretations of the observed results.
+
+## §33. `src/debt_1_preregistration.py`
+
+Implements the preregistration execution and diagnostic modes, including the plumbing and perturbation runs.
+
+## §34. `src/debt_2_external_validation.py`
+
+Implements external validation against production logs when those data are supplied. Missing data must be reported as `NO_DATA`, not silently replaced with synthetic observations.
+
+## §35. `src/debt_3_model_comparison.py`
+
+Compares candidate model structures using the criteria and metrics defined in the source implementation.
+
+## §36. `src/generate_debt_3_data.py`
+
+Generates controlled data for the alternative structures used in Debt 3.
+
+## §37. `src/pipeline.py`
+
+Orchestrates the three debts, records skipped steps when required external data are absent, and writes a pipeline summary.
+
+## §38. `data/README.md`
+
+The data guide specifies the required CSV schemas for external validation and model comparison. The source requires production logs with timestamps, agent identifiers, and success indicators, and comparison data with `phi`, `psi`, `omega`, and `y`. Recommended minimum sizes and missing-data behaviour are specified in the source manuscript.
+
 # PART VIII — EXECUTION RESULTS
 
 ## §39. Debt 1 — Results
