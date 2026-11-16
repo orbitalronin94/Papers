@@ -87,3 +87,11 @@ The strongest defensible result is not a monotonic improvement or decline. It is
 The 330k checkpoint is not a simple continuation from an uninterrupted 250k training job. Its ancestry includes a cancelled continuation, a partial artifact, and a recovery job that selected the latest valid checkpoint and reused the existing token cache. Longitudinal plots should mark this recovery boundary. A checkpoint count is not a sufficient description of training history.
 
 The small per-domain groups are exploratory. Most domains have only two to six items, and even the larger CI/CD and personality/troll groups are too small for fine-grained claims. The domain table should be used to identify where manual inspection is warranted, not to rank domain capability.
+
+### 11. Source-level holdout-isolation audit
+
+The 100-question file is fetched from the MINIRONIN benchmark path and verified by SHA-256 in each checkpoint-evaluation workflow. That protects the identity of the evaluation file; it does not prove that its contents were excluded from the model's training corpus. The RONINIA training projection uses a generic source-path/metadata filter. It does not denylist the benchmark hash or IDs, and its recognized evaluation labels do not include inference_only. If records carrying that label were present in the imported corpus, the inspected filter would not reject them on that label alone.
+
+No claim is made here that leakage occurred. The conclusion is narrower: the workflow code and benchmark checksum are insufficient to certify holdout independence. The unified corpus and source shards must be searched for exact and normalized questions and rubrics, near duplicates, and generator-template overlap. Until that scan is completed, the five-checkpoint series remains a fixed-prompt descriptive study with unresolved contamination status.
+
+The evaluation loop's stopping behavior also constrains interpretation. It checks EOS before appending a token and checks whether the next token would exceed 128 UTF-8 bytes before appending it. Thus a recorded length of exactly 32 generated token IDs indicates that all 32 token iterations appended a token; shorter outputs may have ended through EOS or the byte limit. The JSON stores neither stop reason, so EOS emissions cannot be counted retrospectively.
