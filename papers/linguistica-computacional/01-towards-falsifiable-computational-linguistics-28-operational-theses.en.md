@@ -134,7 +134,7 @@ Each thesis is presented in five parts: statement, formal object, operation, sig
 
 **Statement.** A voice's canon is defined by what it has rejected, not by what it has accepted.
 
-**Formal object.** Let `R = {r_1, …, r_n}` be the set of rejected texts, with rejection reason `m(r) ∈ {sty, rep, tic}`. The negative canon is `K⁻ = { (m, f(r)) : r ∈ R }`.
+**Formal object.** Let `R = {r_1, …, r_n}` be the set of rejected texts, with rejection reason `m(r) ∈ {est, rep, tic}`. The negative canon is `K⁻ = { (m, f(r)) : r ∈ R }`.
 
 **Operation.** Each rejection is stored with its signature and reason. When the canon is expanded, `K⁻` acts as a negative constraint.
 
@@ -208,7 +208,7 @@ Each thesis is presented in five parts: statement, formal object, operation, sig
 
 #### Thesis 8 — Antithesis as an involution (`--espejo`)
 
-**Statement.** There exists an operator `E` such that `E² = id`, `f(E(x)) ≈ f(x)`, and `polarity(E(x)) = −polarity(x)`.
+**Statement.** There exists an operator `E` such that `E² = id`, `f(E(x)) ≈ f(x)`, and `polaridad(E(x)) = −polaridad(x)`.
 
 **Formal object.** `E: Text → Text`, involutive, stylometrically neutral, and polarity-reversing.
 
@@ -234,7 +234,7 @@ Each thesis is presented in five parts: statement, formal object, operation, sig
 
 **Statement.** A generator's intrinsic bias is the difference between its blind and validated distributions.
 
-**Formal object.** `bias(G) = D_KL(p_blind || p_validated)`.
+**Formal object.** `bias(G) = D_KL(p_ciego || p_validado)`.
 
 **Operation.** Generate `n` texts with validators and `n` without them. Compare signatures.
 
@@ -452,7 +452,7 @@ Each thesis is presented in five parts: statement, formal object, operation, sig
 
 **Statement.** Structural censorship can be distinguished from lexical censorship through its stylometric signature.
 
-**Formal object.** `f(C_lex(x)) ≠ f(C_struct(x))`.
+**Formal object.** `f(C_lex(x)) ≠ f(C_est(x))`.
 
 **Operation.** Apply both types of censorship and compare signatures.
 
