@@ -13,6 +13,7 @@
 
 - [Epistemología y método / Epistemology and method](papers/epistemologia/)
 - [Lingüística computacional / Computational linguistics](papers/linguistica-computacional/)
+- [Neurociencia y neuroingeniería / Neuroscience and neuroengineering](papers/neurociencia/)
 - [Identificabilidad matemática y aplicada / Mathematical and applied identifiability](papers/identificabilidad/)
 - [Testing y calidad de software / Software testing and quality](papers/testing/)
 - [Modelos de lenguaje diminutos / Tiny language models](papers/modelos-diminutos/)
@@ -62,7 +63,19 @@
 - [English main-text edition](papers/linguistica-computacional/01-towards-falsifiable-computational-linguistics-28-operational-theses.en.md)
 - Estado lingüístico / Language status: texto principal completo en ambos idiomas; apéndices A–E (arquitectura, glosario, código y protocolo de refutación) pendientes de traducción / Complete main text in both languages; Appendices A–E (architecture, glossary, code, and refutation protocol) remain to be translated.
 
-## 3. Identificabilidad matemática y aplicada / Mathematical and applied identifiability
+## 3. Neurociencia y neuroingeniería / Neuroscience and neuroengineering
+
+### 3.1 Cerebro a Código — libro técnico de neurociencia computacional
+
+**ES.** Obra propia en formato de compendio monográfico, organizada en 300 entradas sobre memoria y engramas, plasticidad, RNN/SNN, predictive coding, neuromodulación, circuitos neuronales, BCI, neuroprótesis y computación neuromórfica. Cada entrada combina una afirmación, un mecanismo, ejemplos formales o de código y sus límites. Los ejemplos son didácticos y no constituyen por sí mismos validación experimental; el manuscrito no se presenta como revisión sistemática ni como publicación revisada por pares.
+
+**EN.** An original Spanish-language technical compendium of 300 entries covering memory and engrams, plasticity, RNNs/SNNs, predictive coding, neuromodulation, neural circuits, BCIs, neuroprosthetics, and neuromorphic computing. Each entry combines a claim, a mechanism, formal or code examples, and stated limitations. The examples are educational and do not independently establish experimental validity; the manuscript is not presented as a systematic review or peer-reviewed publication.
+
+- [Libro completo en castellano / Complete Spanish book](papers/neurociencia/CEREBRO-A-CODIGO-LIBRO-COMPLETO-FINAL.md)
+- [Ficha editorial, alcance y criterios de lectura / Editorial record and reading scope](papers/neurociencia/README.md)
+- Estado lingüístico / Language status: manuscrito completo en castellano; no se anuncia traducción inglesa.
+
+## 4. Identificabilidad matemática y aplicada / Mathematical and applied identifiability
 
 ### 3.1 No-identificabilidad estructural en modelos epidemiológicos con subreporte
 
@@ -103,7 +116,7 @@
 - [Manuscrito bilingüe / Bilingual manuscript](papers/identificabilidad/04-protocolo-50-dominios.bilingual.md)
 - Estado lingüístico / Language status: partes en castellano e inglés / Spanish and English sections in one manuscript.
 
-## 4. Testing y calidad de software / Software testing and quality
+## 5. Testing y calidad de software / Software testing and quality
 
 ### 4.1 Protocolo de Testing 1310
 
@@ -115,7 +128,7 @@
 - [English edition](papers/testing/01-testing-protocol-1310.en.md)
 - Estado lingüístico / Language status: explicación operativa y secciones narrativas traducidas; código y modelos Pydantic se conservan en la fuente para no alterar la API / Operational prose and narrative sections translated; code and Pydantic models remain in the source to preserve the API.
 
-## 5. Modelos de lenguaje diminutos / Tiny language models
+## 6. Modelos de lenguaje diminutos / Tiny language models
 
 Esta serie reconstruye experimentos de MINIRONIN, RONIN-IA, HERETIC-RONIN y RONINIA. Los manuscritos son borradores exploratorios: separan métricas observables, resultados de entrenamiento, inferencia, linaje de checkpoints y estado de los workflows. No atribuyen razonamiento ni capacidad general a los modelos.
 
@@ -181,7 +194,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [English translation](papers/modelos-diminutos/06-minironin-arquitectura-integrada.en.md)
 - Language status: full English and Spanish versions available.
 
-## 6. Transpilación COBOL / COBOL transpilation
+## 7. Transpilación COBOL / COBOL transpilation
 
 ### 6.1 La semántica no es la sintaxis: preservación de la lógica de negocio en COBOL→Python
 
@@ -193,7 +206,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [Registro de evidencia / Evidence register](papers/transpilacion-cobol/02-evidence-register.es.md)
 - Language status: bilingual working paper; evidence register in Spanish.
 
-## 7. Datos y materiales reproducibles / Data and reproducibility materials
+## 8. Datos y materiales reproducibles / Data and reproducibility materials
 
 Los materiales auxiliares no se presentan como papers independientes. Se conservan para poder auditar los manuscritos y reconstruir las métricas.
 
@@ -208,7 +221,7 @@ Supporting materials are not presented as independent papers. They are retained 
 - [Dashboard de identificabilidad / Identifiability dashboard](research/identificabilidad/dashboard-identificabilidad.html)
 - [Scripts de puntuación](scripts/)
 
-## 8. Política editorial / Editorial policy
+## 9. Política editorial / Editorial policy
 
 1. **No se elevan borradores a resultados confirmados. / Drafts are not promoted to confirmed findings.**
 2. **Cada cifra debe enlazar con un run, commit, artefacto o dataset identificable. / Every numerical claim should point to an identifiable run, commit, artifact, or dataset.**
@@ -217,12 +230,13 @@ Supporting materials are not presented as independent papers. They are retained 
 5. **Las traducciones deben conservar ecuaciones, tablas, referencias, hashes, limitaciones y estatus epistémico. / Translations must preserve equations, tables, references, hashes, limitations, and epistemic status.**
 6. **Cuando una traducción integral no esté terminada, se declara expresamente. / Incomplete full translations are labelled explicitly.**
 
-## 9. Estructura del repositorio / Repository structure
+## 10. Estructura del repositorio / Repository structure
 
 ```text
 papers/
   epistemologia/
   linguistica-computacional/
+  neurociencia/
   identificabilidad/
   testing/
   modelos-diminutos/
