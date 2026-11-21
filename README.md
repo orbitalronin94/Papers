@@ -77,7 +77,7 @@
 
 ## 4. Identificabilidad matemática y aplicada / Mathematical and applied identifiability
 
-### 3.1 No-identificabilidad estructural en modelos epidemiológicos con subreporte
+### 4.1 No-identificabilidad estructural en modelos epidemiológicos con subreporte
 
 **ES.** Estudia la degeneración entre parámetros epidemiológicos en fases tempranas de brotes con subreporte. Combina análisis asintótico, matriz de información de Fisher, Jacobiano y comparación bayesiana, e introduce el protocolo EPIDEMIC-ID. Los resultados cuantitativos y el alcance de la validación deben interpretarse según los escenarios y supuestos declarados.
 
@@ -87,7 +87,7 @@
 - [English edition](papers/identificabilidad/01-structural-non-identifiability-epidemic-under-reporting.en.md)
 - Estado lingüístico / Language status: texto principal traducido íntegramente; el apéndice de código se conserva sin cambios en la fuente española / Main text fully translated; executable code appendix is retained verbatim in the Spanish source.
 
-### 3.2 No-identificabilidad estructural y práctica en modelos PBPK
+### 4.2 No-identificabilidad estructural y práctica en modelos PBPK
 
 **ES.** Desarrolla un protocolo de diagnóstico basado en FIM y umbrales calibrados para modelos fisiológicos farmacocinéticos. Distingue identificabilidad estructural y práctica y estudia sensibilidad, bootstrap, diseño D-óptimo y datos de aplicación. La parte inglesa existente no debe confundirse con una traducción integral si faltan secciones.
 
@@ -97,7 +97,7 @@
 - [English narrative edition](papers/identificabilidad/02-structural-practical-non-identifiability-pbpk.en.md)
 - Estado lingüístico / Language status: texto científico principal completo en inglés; implementaciones y apéndices técnicos conservados en la fuente canónica / Main scientific text fully available in English; implementations and technical appendices retained in the canonical source.
 
-### 3.3 No-identificabilidad de los parámetros de la ecuación de Hill en régimen subsaturado
+### 4.3 No-identificabilidad de los parámetros de la ecuación de Hill en régimen subsaturado
 
 **ES.** Analiza la degeneración entre la constante de semisaturación y el coeficiente de Hill cuando las observaciones permanecen en régimen subsaturado. Incluye derivación asintótica, FIM, simulaciones y materiales de reproducción. El manuscrito contiene apéndices en inglés, pero no una versión inglesa integral.
 
@@ -107,7 +107,7 @@
 - [English narrative edition](papers/identificabilidad/03-hill-equation-subsaturated-non-identifiability.en.md)
 - Estado lingüístico / Language status: texto científico completo en inglés; implementaciones y apéndices técnicos conservados en la fuente canónica / Scientific text fully available in English; implementations and technical appendices retained in the canonical source.
 
-### 3.4 Protocolo de validación de identificabilidad estructural en 50 dominios
+### 4.4 Protocolo de validación de identificabilidad estructural en 50 dominios
 
 **ES.** Describe la versión 1.2.0 de un protocolo que combina FIM, SVD, ETL local, análisis simbólico tipo STRIKE-GOLDD y pruebas de causalidad transversal. Conserva hashes de código y pre-registro y delimita los resultados obtenidos en los dominios y datasets incorporados.
 
@@ -118,7 +118,7 @@
 
 ## 5. Testing y calidad de software / Software testing and quality
 
-### 4.1 Protocolo de Testing 1310
+### 5.1 Protocolo de Testing 1310
 
 **ES.** Manual operativo para tests tipados, refutables, íntegros y auditables, con modelos Pydantic, criterios de severidad, validación semántica y asistencia multiagente. Debe entenderse como especificación/protocolo; su presencia no acredita por sí sola una implementación o certificación.
 
@@ -134,7 +134,7 @@ Esta serie reconstruye experimentos de MINIRONIN, RONIN-IA, HERETIC-RONIN y RONI
 
 This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONIN, and RONINIA. These are exploratory drafts: they separate observable metrics, training outcomes, inference, checkpoint lineage, and workflow status. They do not claim reasoning or general capability.
 
-### 5.1 The Loss–Behavior Gap in Tiny Language Models
+### 6.1 The Loss–Behavior Gap in Tiny Language Models
 
 **ES.** Examina si la pérdida de entrenamiento predice el comportamiento observable en generación. Contrasta trazas de optimización con terminación, truncamiento, repetición y diversidad en evaluaciones externas.
 
@@ -144,7 +144,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [Traducción castellana / Spanish translation](papers/modelos-diminutos/01-loss-behavior-gap.es.md)
 - Language status: full English and Spanish versions available.
 
-### 5.2 Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints
+### 6.2 Longitudinal Behavioral Change Across Tiny Language-Model Checkpoints
 
 **ES.** Trata los checkpoints como una serie longitudinal y describe cambios no monótonos en respuestas vacías, límites de generación y diversidad textual. No convierte diferencias descriptivas en una explicación causal.
 
@@ -154,7 +154,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [Traducción castellana / Spanish translation](papers/modelos-diminutos/02-longitudinal-behavior.es.md)
 - Language status: full English and Spanish versions available.
 
-### 5.3 CPU-Constrained Training of Small Language Models
+### 6.3 CPU-Constrained Training of Small Language Models
 
 **ES.** Documenta comparaciones preliminares de rendimiento en CPU y runners CI, con atención a hilos, tamaño del modelo y diseño del workflow. Las mediciones son específicas de las configuraciones ensayadas.
 
@@ -164,7 +164,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [Traducción castellana / Spanish translation](papers/modelos-diminutos/03-cpu-constrained-training.es.md)
 - Language status: full English and Spanish versions available.
 
-### 5.4 Checkpoint Lineage and Failure-Tolerant Experimentation
+### 6.4 Checkpoint Lineage and Failure-Tolerant Experimentation
 
 **ES.** Distingue entrenamiento completado, checkpoint válido, verificación de linaje, finalización de workflow y evaluación. Propone un modelo de procedencia que evita tratar un workflow fallido como prueba automática de que no hubo resultado útil.
 
@@ -174,7 +174,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [Traducción castellana / Spanish translation](papers/modelos-diminutos/04-checkpoint-lineage.es.md)
 - Language status: full English and Spanish versions available.
 
-### 5.5 Corpus Scale Is Not Learning
+### 6.5 Corpus Scale Is Not Learning
 
 **ES.** Estudia la relación entre composición del corpus, exposición a tokens, entrenamiento y evaluación de HERETIC-RONIN. Mantiene como provisionales las interpretaciones cuyo JSON bruto o manifiesto no se han auditado.
 
@@ -184,7 +184,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 - [Traducción castellana / Spanish translation](papers/modelos-diminutos/05-heretic-corpus-and-learning.es.md)
 - Language status: full English and Spanish versions available.
 
-### 5.6 MINIRONIN enano: arquitectura integrada de tokenización, memoria documental y entrenamiento con evidencia
+### 6.6 MINIRONIN enano: arquitectura integrada de tokenización, memoria documental y entrenamiento con evidencia
 
 **ES.** Nota técnica que propone separar capacidad paramétrica, memoria documental externa e interfaz/tokenización reversible. BACKDOOR_BPE se define expresamente como una tabla de secuencias frecuentes, no como BPE completo; la propuesta no afirma mejoras empíricas todavía.
 
@@ -196,7 +196,7 @@ This series reconstructs experiments involving MINIRONIN, RONIN-IA, HERETIC-RONI
 
 ## 7. Transpilación COBOL / COBOL transpilation
 
-### 6.1 La semántica no es la sintaxis: preservación de la lógica de negocio en COBOL→Python
+### 7.1 La semántica no es la sintaxis: preservación de la lógica de negocio en COBOL→Python
 
 **ES.** Perspectiva con estudio de caso en desarrollo sobre por qué una transpilación debe preservar resultados observables y reglas de negocio, no solo sintaxis o estructura. Distingue coincidencia operacional de equivalencia semántica y documenta el benchmark 263/500 con sus límites.
 
